@@ -1,0 +1,573 @@
+PRIMERA Beam-8 + DPP Summarization Results (Generate-then-Optimize)
+Generator: primera_multinews
+Method: dpp
+Objective variant: Tri-metric unified objective (ROUGE + MiniCheck + Redundancy)
+Model: allenai/PRIMERA-multinews
+Dataset: multi_news
+Split: test
+Samples: 5622
+Sample mode: shuffle
+Sample seed: 42
+Beam size: 8
+Budget: 8 sentences
+Runtime generation batch size: 2
+Runtime utility batch size: 32
+Runtime eval batch size: 64
+Runtime dtype: bf16
+ROUGE sentence split: nltk
+Ordering: source_similarity
+Stage output trace: <SOURCE_EXPERIMENT_ROOT>/outputs/multi_news/primera_multinews/dpp/full_multi_news_co_tri_metric_requested_full_resume_primera_multinews_co/beam8_dpp_tri_metric_hfrouge_shuffle_seed42_stage_outputs.jsonl
+Stage1 reuse source: <SOURCE_EXPERIMENT_ROOT>/outputs/multi_news/primera_multinews/ilp/full_multi_news_co_tri_metric_requested_full_resume_primera_multinews_co/beam8_ilp_tri_metric_hfrouge_shuffle_seed42_stage_outputs.jsonl
+Started at: 2026-05-11T02:04:31.217774
+Finished at: 2026-05-11T08:58:58.923005
+Runtime total seconds (this process): 24867.71
+Stage seconds: generation=15736.09 (cumulative across resumes), evaluation=9121.96
+Resume: resumed=False, resumed_from=0, prior_gen_seconds=0.00
+Eval suite: full
+ROUGE implementation: huggingface_evaluate
+DocSeparatorToken: <doc-sep>
+LenPenalty: None
+NoRepeatNgram: None
+EarlyStopping: None
+MaxDecode: None, MinDecode: None
+Tri-metric weights: rouge=0.010000, minicheck=0.495000, redundancy=0.495000
+Paper metrics: ['rouge', 'bertscore']
+Extra metrics: ['factcc', 'minicheck', 'alignscore', 'factgraph', 'factkb']
+ROUGE sentence split: nltk
+============================================================
+
+
+Paper Metrics:
+ROUGE Scores (F1 only, impl=huggingface_evaluate):
+  rouge1    F1=34.31%
+  rouge2    F1=10.99%
+  rougeL    F1=18.90%
+  rougeLsum  F1=31.05%
+BERTScore (roberta-large):
+  Precision=84.81%  Recall=83.26%  F1=84.02%
+
+Extra Metrics:
+FactCC (manueldeprada/FactCC):
+  SentenceAvgCorrect: 40.10%
+MiniCheck (EMNLP 2024, MiniCheck-RoBERTa-Large):
+  SummaryAvgConsistent: 77.88%
+AlignScore (ACL 2023, yzha/AlignScore-base, nli_sp):
+  SummaryAvg: 65.98%
+FactGraph: unavailable (FileNotFoundError('FACTGRAPH repo dir not configured. Set $FACTGRAPH_REPO_DIR or pass repo_dir explicitly. Clone https://github.com/amazon-science/fact-graph first.'))
+FactKB (bunsenfeng/FactKB):
+  FactualProb: 89.20%
+
+Runtime:
+  StartedAt: 2026-05-11T02:04:31.217774
+  FinishedAt: 2026-05-11T08:58:58.923005
+  MethodTotalSeconds: 24867.71
+  GenerationSeconds: 15736.09
+  EvaluationSeconds: 9121.96
+  Resume: resumed=False, resumed_from=0, prior_generation_seconds=0.00
+  MetricSeconds: rouge=75.88s, bertscore=252.58s, factcc=329.52s, minicheck=5133.42s, alignscore=3266.30s, factgraph=0.00s, factkb=63.67s
+  COTimingSeconds:
+    Samples: 5622
+    Total: 15669.62s MeanPerSample: 2.787198s
+
+============================================================
+Detailed selection logs (first 10 samples):
+============================================================
+
+--- Sample 1 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (14 sentences):
+    [0] Utility=0.1136 | – Voters in 11 states will pick their governors tonight, and Republicans appear on track to increase their numbers by at least one, with the potential to extend their hold to more than two-thirds of the nation's top state offices, NPR reports.
+    [1] Utility=0.4971 | Eight of the gubernatorial seats up for grabs are now held by Democrats; three are in Republican hands.
+    [2] Utility=0.4978 | Republicans currently hold 29 governorships, Democrats have 20, and Rhode Island's Gov. Lincoln Chafee is an Independent.
+    [3] Utility=0.5018 | Polls and race analysts suggest that only three of tonight's contests are considered competitive, all in states where incumbent Democratic governors aren't running again: Montana, New Hampshire, and Washington.
+    [4] Utility=0.4883 | While those state races remain too close to call,
+    [5] Utility=0.1387 | – Voters in 11 states will pick their governors tonight, and Republicans appear on track to increase their numbers by at least one, NPR reports.
+    [6] Utility=0.4996 | While those state races remain too close to call, Republicans are expected to wrest the North Carolina governorship from Democratic control, and to easily win GOP-held
+    [7] Utility=0.0100 | – Voters in 11 states will pick their governors tonight, and Republicans appear on track to increase their numbers by at least one, with the potential to extend their hold to more than two-thirds of the nation's top state offices, reports NPR.
+    [8] Utility=0.4484 | While the occupant of the governor's office is historically
+    [9] Utility=0.5019 | Polls and race analysts suggest that only three of tonight's contests are considered competitive, all in states where incumbent Democratic governors aren't running again: Montana, New Hampshire and Washington.
+    [10] Utility=0.4871 | While those state races remain too close to call, Republicans
+    [11] Utility=0.5008 | – Voters in 11 states will pick their governors tonight, and Republicans appear on track to increase their numbers by at least one, with the potential to extend their hold to more than two-thirds of the nation's top state offices.
+    [12] Utility=0.2258 | Eight of the gubernatorial seats up for grabs are now held by Democrats; three are in Republican hands, NPR reports.
+    [13] Utility=0.4148 | NPR reports that eight of the gubernatorial seats up for grabs are now held by Democrats; three are in Republican hands.
+(c) Redundancy matrix shape: (14, 14)
+    Highest redundancy pair: [3] vs [9], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.0100, minicheck=0.4950, redundancy=0.4950
+(d-timing) CO total seconds: 2.973180
+(d) Selected indices: [1, 2, 3, 4, 6, 8, 9, 11], utility sum: 3.9358
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [11, 1, 2, 3, 9, 4, 6, 8]
+    selected=[11] -> source_sent=[2] ROUGE-L=1.0000
+      selected: – Voters in 11 states will pick their governors tonight, and Republicans appear on track to increase their numbers by at least one, with the potential to extend their hold to more than two-thirds of the nation's top state offices.
+      source:   Voters in 11 states will pick their governors tonight, and Republicans appear on track to increase their numbers by at least one, with the potential to extend their hold to more than two-thirds of the nation's top state offices.
+    selected=[1] -> source_sent=[3] ROUGE-L=1.0000
+      selected: Eight of the gubernatorial seats up for grabs are now held by Democrats; three are in Republican hands.
+      source:   Eight of the gubernatorial seats up for grabs are now held by Democrats; three are in Republican hands.
+    selected=[2] -> source_sent=[4] ROUGE-L=1.0000
+      selected: Republicans currently hold 29 governorships, Democrats have 20, and Rhode Island's Gov. Lincoln Chafee is an Independent.
+      source:   Republicans currently hold 29 governorships, Democrats have 20, and Rhode Island's Gov. Lincoln Chafee is an Independent.
+    selected=[3] -> source_sent=[5] ROUGE-L=1.0000
+      selected: Polls and race analysts suggest that only three of tonight's contests are considered competitive, all in states where incumbent Democratic governors aren't running again: Montana, New Hampshire, and Washington.
+      source:   Polls and race analysts suggest that only three of tonight's contests are considered competitive, all in states where incumbent Democratic governors aren't running again: Montana, New Hampshire and Washington.
+    selected=[9] -> source_sent=[5] ROUGE-L=1.0000
+      selected: Polls and race analysts suggest that only three of tonight's contests are considered competitive, all in states where incumbent Democratic governors aren't running again: Montana, New Hampshire and Washington.
+      source:   Polls and race analysts suggest that only three of tonight's contests are considered competitive, all in states where incumbent Democratic governors aren't running again: Montana, New Hampshire and Washington.
+    selected=[4] -> source_sent=[6] ROUGE-L=0.4186
+      selected: While those state races remain too close to call,
+      source:   While those state races remain too close to call, Republicans are expected to wrest the North Carolina governorship from Democratic control, and to easily win GOP-held seats in Utah, North Dakota and Indiana.
+    selected=[6] -> source_sent=[6] ROUGE-L=0.8852
+      selected: While those state races remain too close to call, Republicans are expected to wrest the North Carolina governorship from Democratic control, and to easily win GOP-held
+      source:   While those state races remain too close to call, Republicans are expected to wrest the North Carolina governorship from Democratic control, and to easily win GOP-held seats in Utah, North Dakota and Indiana.
+    selected=[8] -> source_sent=[9] ROUGE-L=0.4082
+      selected: While the occupant of the governor's office is historically
+      source:   While the occupant of the governor's office is historically far less important than the party that controls the state legislature, top state officials in coming years are expected to wield significant influence in at least one major area.
+(h) Final summary: – Voters in 11 states will pick their governors tonight, and Republicans appear on track to increase their numbers by at least one, with the potential to extend their hold to more than two-thirds of the nation's top state offices. Eight of the gubernatorial seats up for grabs are now held by Democrats; three are in Republican hands. Republicans currently hold 29 governorships, Democrats have 20, and Rhode Island's Gov. Lincoln Chafee is an Independent. Polls and race analysts suggest that only three of tonight's contests are considered competitive, all in states where incumbent Democratic governors aren't running again: Montana, New Hampshire, and Washington. Polls and race analysts suggest that only three of tonight's contests are considered competitive, all in states where incumbent Democratic governors aren't running again: Montana, New Hampshire and Washington. While those state races remain too close to call, While those state races remain too close to call, Republicans are expected to wrest the North Carolina governorship from Democratic control, and to easily win GOP-held While the occupant of the governor's office is historically
+    Reference: – It's a race for the governor's mansion in 11 states today, and the GOP could end the night at the helm of more than two-thirds of the 50 states. The GOP currently controls 29 of the country's top state offices; it's expected to keep the three Republican ones that are up for grabs (Utah, North Dakota, and Indiana), and wrest North Carolina from the Dems. That brings its toll to 30, with the potential to take three more, reports NPR. Races in Montana, New Hampshire, and Washington are still too close to call, and in all three, Democrat incumbents aren't seeking reelection. The results could have a big impact on health care, since a Supreme Court ruling grants states the ability to opt out of ObamaCare's Medicaid expansion. "A Romney victory would dramatically empower Republican governors," said one analyst. Click for NPR's state-by-state breakdown of what could happen.
+
+--- Sample 2 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (10 sentences):
+    [0] Utility=0.0100 | – A Facebook page protesting a London pub’s decision to eject a same-sex couple for kissing has been removed, the New York Post reports.
+    [1] Utility=0.5003 | The Dangerous Minds Facebook page was set up to promote a “gay kiss-in” demonstration in London to protest the pub.
+    [2] Utility=0.4947 | The page used a photo of two men kissing to promote the event.
+    [3] Utility=0.5023 | “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook,” the page said.
+    [4] Utility=0.4964 | The decision to remove the photo has prompted scores of people to post their own kissing in protest.
+    [5] Utility=0.3879 | – A Facebook page protesting a London pub’s decision to eject a same-sex couple for kissing has been removed.
+    [6] Utility=0.0150 | “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook,” a Facebook spokesperson tells the New York Post.
+    [7] Utility=0.5033 | “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook,” the page states.
+    [8] Utility=0.0111 | – A Facebook page protesting a London pub’s decision to eject a same-sex couple for kissing has been removed, the New York Daily News reports.
+    [9] Utility=0.1851 | “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook,” a Facebook spokesperson said.
+(c) Redundancy matrix shape: (10, 10)
+    Highest redundancy pair: [3] vs [7], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.0100, minicheck=0.4950, redundancy=0.4950
+(d-timing) CO total seconds: 0.974183
+(d) Selected indices: [1, 2, 3, 4, 5, 6, 7, 9], utility sum: 3.0850
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [5, 1, 2, 3, 6, 7, 9, 4]
+    selected=[5] -> source_sent=[23] ROUGE-L=0.6154
+      selected: – A Facebook page protesting a London pub’s decision to eject a same-sex couple for kissing has been removed.
+      source:   UPDATED: A photo of two men kissing that was posted on a Facebook page protesting a London pub’s decision to eject a same-sex couple for kissing has been removed by the social networking site, an error, according to a rep for the company.
+    selected=[1] -> source_sent=[26] ROUGE-L=1.0000
+      selected: The Dangerous Minds Facebook page was set up to promote a “gay kiss-in” demonstration in London to protest the pub.
+      source:   The Dangerous Minds Facebook page was set up to promote a “gay kiss-in” demonstration in London to protest the pub.
+    selected=[2] -> source_sent=[27] ROUGE-L=1.0000
+      selected: The page used a photo of two men kissing to promote the event.
+      source:   The page used a photo of two men kissing to promote the event.
+    selected=[3] -> source_sent=[28] ROUGE-L=0.5902
+      selected: “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook,” the page said.
+      source:   According to NYULocal.com, the photo was quickly removed and the following e-mail was sent to administrators of the Facebook page: “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook.”
+    selected=[6] -> source_sent=[28] ROUGE-L=0.5455
+      selected: “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook,” a Facebook spokesperson tells the New York Post.
+      source:   According to NYULocal.com, the photo was quickly removed and the following e-mail was sent to administrators of the Facebook page: “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook.”
+    selected=[7] -> source_sent=[28] ROUGE-L=0.5902
+      selected: “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook,” the page states.
+      source:   According to NYULocal.com, the photo was quickly removed and the following e-mail was sent to administrators of the Facebook page: “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook.”
+    selected=[9] -> source_sent=[28] ROUGE-L=0.5806
+      selected: “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook,” a Facebook spokesperson said.
+      source:   According to NYULocal.com, the photo was quickly removed and the following e-mail was sent to administrators of the Facebook page: “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook.”
+    selected=[4] -> source_sent=[29] ROUGE-L=0.7500
+      selected: The decision to remove the photo has prompted scores of people to post their own kissing in protest.
+      source:   The decision to remove the photo has prompted scores of people to post their own pictures of same-sex couples kissing in protest — dozens in the last few hours alone.
+(h) Final summary: – A Facebook page protesting a London pub’s decision to eject a same-sex couple for kissing has been removed. The Dangerous Minds Facebook page was set up to promote a “gay kiss-in” demonstration in London to protest the pub. The page used a photo of two men kissing to promote the event. “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook,” the page said. “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook,” a Facebook spokesperson tells the New York Post. “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook,” the page states. “Shares that contain nudity, or any kind of graphic or sexually suggestive content, are not permitted on Facebook,” a Facebook spokesperson said. The decision to remove the photo has prompted scores of people to post their own kissing in protest.
+    Reference: – It turns out Facebook is only guilty of about half of what it’s been accused of in the gay kiss incident. The social networking site apologized yesterday for taking down an image used to promote a “kiss-in” event in London. “The photo in question does not violate our Statement of Rights and Responsibilities, and was removed in error,” the site said in a statement, according to the Advocate. But Facebook did not, as has been reported in several places, take down the kiss-in event itself. Here’s what happened: The photo Facebook took down was posted by the Dangerous Minds blog to promote the event. In its initial write-up about the incident, the blog observed that the page organizing the protest had been taken down. But it was actually the organizer himself who "removed" the event, Dangerous Minds clarified. Organizer Paul Shetler explains that he decided to switch it from a public event to a private one, as "there were starting to be trolls posting abusive nonsense on it."
+
+--- Sample 3 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (14 sentences):
+    [0] Utility=0.3094 | – The Siskiyou County Board of Supervisors voted 4-1 yesterday to pursue seceding from California and forming a new state called Jefferson with other counties in Northern California and Southern Oregon, the Redding Record Searchlight reports.
+    [1] Utility=0.4929 | More than 100 people filled the supervisors' chambers, many of whom indicated support for the declaration.
+    [2] Utility=0.4898 | When a speaker asked those in the audience who was in favor, "nearly every hand in the room was raised," the newspaper said.
+    [3] Utility=0.4323 | Proponents cited a lack of representation in Sacramento and insufficient attention to major issues for the county, such as water rights and a rural fire prevention fee.
+    [4] Utility=0.4734 | "We need our own state so we can make laws that fit our way of
+    [5] Utility=0.4273 | Proponents cited a lack of representation in Sacramento and insufficient attention to major issues for the county, including water rights and a rural fire prevention fee.
+    [6] Utility=0.4958 | "We need our own state so we can make laws that fit our way of life
+    [7] Utility=0.0016 | "We have to have government that's local, understands our issues, and has
+    [8] Utility=0.4914 | "We have to have government that's local, understands our issues, and has empathy
+    [9] Utility=0.4928 | "We have to have government that's local, understands our issues and has empathy
+    [10] Utility=0.4299 | Proponents cited a lack of representation in Sacramento and insufficient attention to major issues for the county, such as water rights and a rural fire prevention fee, the Searchlight reported.
+    [11] Utility=0.4954 | "We need our own state so we can make laws
+    [12] Utility=0.4941 | "We have to have government that's local, understands
+    [13] Utility=0.4928 | "We have to have government that's local, understands our issues and has empathy,"
+(c) Redundancy matrix shape: (14, 14)
+    Highest redundancy pair: [8] vs [9], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.0100, minicheck=0.4950, redundancy=0.4950
+(d-timing) CO total seconds: 2.620362
+(d) Selected indices: [1, 2, 3, 6, 9, 11, 12, 13], utility sum: 3.8859
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [1, 2, 6, 11, 3, 9, 12, 13]
+    selected=[1] -> source_sent=[4] ROUGE-L=0.8649
+      selected: More than 100 people filled the supervisors' chambers, many of whom indicated support for the declaration.
+      source:   On Tuesday more than 100 people filled the supervisors' chambers, many of whom indicated support for the declaration, the Searchlight reported.
+    selected=[2] -> source_sent=[5] ROUGE-L=1.0000
+      selected: When a speaker asked those in the audience who was in favor, "nearly every hand in the room was raised," the newspaper said.
+      source:   When a speaker asked those in the audience who was in favor, "nearly every hand in the room was raised," the newspaper said.
+    selected=[6] -> source_sent=[7] ROUGE-L=1.0000
+      selected: "We need our own state so we can make laws that fit our way of life
+      source:   "We need our own state so we can make laws that fit our way of life."
+    selected=[11] -> source_sent=[7] ROUGE-L=0.7692
+      selected: "We need our own state so we can make laws
+      source:   "We need our own state so we can make laws that fit our way of life."
+    selected=[3] -> source_sent=[9] ROUGE-L=0.8621
+      selected: Proponents cited a lack of representation in Sacramento and insufficient attention to major issues for the county, such as water rights and a rural fire prevention fee.
+      source:   Resident complaints include a lack of representation in Sacramento and insufficient attention to major issues for the county, such as water rights and a rural fire prevention fee, the Searchlight reported.
+    selected=[9] -> source_sent=[10] ROUGE-L=0.6829
+      selected: "We have to have government that's local, understands our issues and has empathy
+      source:   "We have to have government that's local, understands our issues and has empathy," said Mark Baird, a rancher who the Searchlight said was heading the effort.
+    selected=[12] -> source_sent=[10] ROUGE-L=0.5000
+      selected: "We have to have government that's local, understands
+      source:   "We have to have government that's local, understands our issues and has empathy," said Mark Baird, a rancher who the Searchlight said was heading the effort.
+    selected=[13] -> source_sent=[10] ROUGE-L=0.6829
+      selected: "We have to have government that's local, understands our issues and has empathy,"
+      source:   "We have to have government that's local, understands our issues and has empathy," said Mark Baird, a rancher who the Searchlight said was heading the effort.
+(h) Final summary: More than 100 people filled the supervisors' chambers, many of whom indicated support for the declaration. When a speaker asked those in the audience who was in favor, "nearly every hand in the room was raised," the newspaper said. "We need our own state so we can make laws that fit our way of life "We need our own state so we can make laws Proponents cited a lack of representation in Sacramento and insufficient attention to major issues for the county, such as water rights and a rural fire prevention fee. "We have to have government that's local, understands our issues and has empathy "We have to have government that's local, understands "We have to have government that's local, understands our issues and has empathy,"
+    Reference: – Not a big fan of Southern California? Neither is Northern California, apparently. Supervisors in rural Siskiyou County voted 4-1 Tuesday in favor of seceding from the state, reports the Times-Standard. The county thinks state officials in Sacramento are too focused on the big metro areas of the south and thus want to form a state of its own—to be called Jefferson. Supporters want to invite other northern counties, and perhaps a few from Oregon, to join, too, notes the Los Angeles Times. ”We have to have government that's local, understands our issues, and has empathy,” says one local rancher. It's clearly a very long-shot bid, one that would eventually require the blessing of both the state legislature and the US Congress. Still, neighboring Humboldt County is expected to meet soon to consider the idea. (Meanwhile, some counties in Colorado want to form a new state of their own.)
+
+--- Sample 4 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (13 sentences):
+    [0] Utility=0.1041 | – Microsoft is buying Nokia, a company it once dominated, in a deal that analysts believe will give the Redmond, Wash., firm a much-needed boost in its struggling smartphone business.
+    [1] Utility=0.0100 | The deal, which values Nokia at $18 billion to $20 billion, is expected to close in the next few weeks, according to the Wall Street Journal, which notes that Nokia's share of the world's smartphone market has dropped to below 40% from more than 60% just a few years ago.
+    [2] Utility=0.2592 | "The story, in hindsight, is simple: Nokia did not have a truly compelling smartphone ready when a large segment of the developed world was first compelled by smartphones," the Journal states.
+    [3] Utility=0.4557 | "We poured gasoline on our
+    [4] Utility=0.1873 | "Our competitors aren't taking
+    [5] Utility=0.1598 | "The story, in hindsight, is simple: Nokia did not have a truly compelling smartphone ready when a large segment of the developed world was first compelled by smartphones," writes Chris Taylor at the Journal.
+    [6] Utility=0.4953 | "Our competitors
+    [7] Utility=0.4949 | "We poured
+    [8] Utility=0.2515 | "Whether this
+    [9] Utility=0.1640 | "The story, in hindsight, is simple: Nokia did not have a truly compelling smartphone ready when a large segment of the developed world was first compelled by smartphones," writes David Pierce at the Journal.
+    [10] Utility=0.2040 | "The story, in hindsight, is simple: Nokia did not have a truly compelling smartphone ready when a large segment of the developed world was first compelled by smartphones," the Journal's Steve Kovach writes.
+    [11] Utility=0.3271 | "Our
+    [12] Utility=0.4204 | "We
+(c) Redundancy matrix shape: (13, 13)
+    Highest redundancy pair: [5] vs [9], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.0100, minicheck=0.4950, redundancy=0.4950
+(d-timing) CO total seconds: 4.073178
+(d) Selected indices: [2, 3, 6, 7, 8, 10, 11, 12], utility sum: 2.9083
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [2, 10, 8, 3, 7, 12, 6, 11]
+    selected=[2] -> source_sent=[47] ROUGE-L=0.9492
+      selected: "The story, in hindsight, is simple: Nokia did not have a truly compelling smartphone ready when a large segment of the developed world was first compelled by smartphones," the Journal states.
+      source:   The story, in hindsight, is simple: Nokia did not have a truly compelling smartphone ready when a large segment of the developed world was first compelled by smartphones.
+    selected=[10] -> source_sent=[47] ROUGE-L=0.9032
+      selected: "The story, in hindsight, is simple: Nokia did not have a truly compelling smartphone ready when a large segment of the developed world was first compelled by smartphones," the Journal's Steve Kovach writes.
+      source:   The story, in hindsight, is simple: Nokia did not have a truly compelling smartphone ready when a large segment of the developed world was first compelled by smartphones.
+    selected=[8] -> source_sent=[134] ROUGE-L=0.2222
+      selected: "Whether this
+      source:   How did we get to this point?
+    selected=[3] -> source_sent=[138] ROUGE-L=0.7692
+      selected: "We poured gasoline on our
+      source:   We poured gasoline on our own burning platform.
+    selected=[7] -> source_sent=[138] ROUGE-L=0.4000
+      selected: "We poured
+      source:   We poured gasoline on our own burning platform.
+    selected=[12] -> source_sent=[142] ROUGE-L=0.3333
+      selected: "We
+      source:   We're not collaborating internally.
+    selected=[6] -> source_sent=[143] ROUGE-L=0.2857
+      selected: "Our competitors
+      source:   Nokia, our platform is burning.
+    selected=[11] -> source_sent=[143] ROUGE-L=0.3333
+      selected: "Our
+      source:   Nokia, our platform is burning.
+(h) Final summary: "The story, in hindsight, is simple: Nokia did not have a truly compelling smartphone ready when a large segment of the developed world was first compelled by smartphones," the Journal states. "The story, in hindsight, is simple: Nokia did not have a truly compelling smartphone ready when a large segment of the developed world was first compelled by smartphones," the Journal's Steve Kovach writes. "Whether this "We poured gasoline on our "We poured "We "Our competitors "Our
+    Reference: – Why did Microsoft buy Nokia's phone business? We now know Microsoft's answer: The computing giant released a 30-slide presentation today arguing that the move will improve Microsoft's margins on Windows phones, which will allow it to invest more in the platform, which will accelerate sales and market share growth, the Washington Post reports. But John Herrman at Buzzfeed has another explanation: "Fear of dying alone." Here's what he and other pundits are saying: The presentation "manages to sound both insane and uninspiring, outlining modest goals that still sound unrealistic," Herman argues—like capturing a whole 15% of the smartphone market. "It's a fitting end for the close of Microsoft's Ballmer era, during which the company … missed out on the most important change in consumer electronics in decades" while remaining profitable in unglamorous ways. Like everyone, Microsoft is trying to ape the Apple model, MobileOpportunity observes. But it's not so sure that's a good idea. "There already is an apple," the blog points out, and other software/hardware hybrid companies, like Palm and BlackBerry, have been crushed under its heel. Maybe Microsoft should have tried to patch up its tried-and-true strategy of licensing its OS. The move risks complicating Microsoft's crucial relationships with other PC and device manufacturers, one analyst tells ZDNet. But he adds that "Microsoft needed to make a bold move" or face "certain terminal decline," and that the price it paid for Nokia "seems extremely reasonable." Meanwhile, Matthew Yglesias at Slate digs up a fairly interesting memo from Nokia CEO (and, perhaps, Microsoft heir apparent) Stephen Elop, in which he uses the story of a Deepwater Horizon worker leaping from the burning oil platform—a seemingly desperate, yet necessary move—to explain the company's shift from its own failed OS to Windows Phone. Of course, Yglesias notes, that move "was basically a total failure." To read the full parable, click here.
+
+--- Sample 5 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (13 sentences):
+    [0] Utility=0.0103 | – The Supreme Court kicks off its new term today, and one of the biggest cases on the docket is one brought by the Little Sisters of the Poor.
+    [1] Utility=0.0048 | The nuns are suing the state of California for forcing them to pay union dues, which they say violates their free-speech rights, Politico reports.
+    [2] Utility=0.0169 | If the court agrees to hear the case, it will be the first time the court has heard an abortion case since 1992, when it reaffirmed the constitutional right to abortion, the New York Times reports.
+    [3] Utility=0.3401 | The case, Whole Woman’s Health Center v. Cole, is a challenge to a 2013 Texas law that could reduce the number of abortion clinics in the state from 40 to 10.
+    [4] Utility=0.3250 | The
+    [5] Utility=0.5025 | The case, Whole Woman’s Health Center v. Cole, is a challenge to a 2013 Texas law that could reduce the number of abortion clinics in the state from more than 40 to 10
+    [6] Utility=0.2711 | The case, Whole Woman’s Health Center v. Cole, is a challenge to a 2013 Texas law that could reduce the number of abortion clinics in the state from 40 to 10, and
+    [7] Utility=0.5009 | The case, Whole Woman’s Health Center v. Cole, revolves around two parts of a 2013 state law: one requiring clinics to meet certain standards for "ambulatory surgical centers," and
+    [8] Utility=0.2767 | If
+    [9] Utility=0.4095 | The case, Whole Woman’s Health Center v. Cole, is a challenge to a 2013 Texas law that could reduce the number of abortion clinics in the state from more than 40 to about
+    [10] Utility=0.3114 | The case, Whole Woman’s Health Center v. Cole, is a challenge to a 2013 Texas law that could reduce the number of abortion clinics in the state from more than 40 to just
+    [11] Utility=0.0150 | If the court agrees to hear the case, it will be the first time it has heard an abortion case since 1992, when it reaffirmed the constitutional right to abortion, the New York Times reports.
+    [12] Utility=0.5029 | The case, Whole Woman’s Health Center v. Cole, revolves around two parts of a 2013 state law: one requiring clinics to meet certain standards for "ambulatory surgical centers," and the
+(c) Redundancy matrix shape: (13, 13)
+    Highest redundancy pair: [3] vs [6], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.0100, minicheck=0.4950, redundancy=0.4950
+(d-timing) CO total seconds: 4.259212
+(d) Selected indices: [3, 4, 5, 7, 8, 9, 10, 12], utility sum: 3.1690
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [8, 3, 5, 9, 10, 7, 12, 4]
+    selected=[8] -> source_sent=[33] ROUGE-L=0.0833
+      selected: If
+      source:   “It’s a reasonable inference if the urban areas are more Democratic leaning that they would lose power to more Republican rural areas.”
+    selected=[3] -> source_sent=[109] ROUGE-L=0.6349
+      selected: The case, Whole Woman’s Health Center v. Cole, is a challenge to a 2013 Texas law that could reduce the number of abortion clinics in the state from 40 to 10.
+      source:   The most likely candidate is a challenge to a Texas law that threatens to reduce the number of abortion clinics in the state to about 10, down from more than 40.
+    selected=[5] -> source_sent=[109] ROUGE-L=0.6769
+      selected: The case, Whole Woman’s Health Center v. Cole, is a challenge to a 2013 Texas law that could reduce the number of abortion clinics in the state from more than 40 to 10
+      source:   The most likely candidate is a challenge to a Texas law that threatens to reduce the number of abortion clinics in the state to about 10, down from more than 40.
+    selected=[9] -> source_sent=[109] ROUGE-L=0.6769
+      selected: The case, Whole Woman’s Health Center v. Cole, is a challenge to a 2013 Texas law that could reduce the number of abortion clinics in the state from more than 40 to about
+      source:   The most likely candidate is a challenge to a Texas law that threatens to reduce the number of abortion clinics in the state to about 10, down from more than 40.
+    selected=[10] -> source_sent=[109] ROUGE-L=0.6769
+      selected: The case, Whole Woman’s Health Center v. Cole, is a challenge to a 2013 Texas law that could reduce the number of abortion clinics in the state from more than 40 to just
+      source:   The most likely candidate is a challenge to a Texas law that threatens to reduce the number of abortion clinics in the state to about 10, down from more than 40.
+    selected=[7] -> source_sent=[113] ROUGE-L=0.4643
+      selected: The case, Whole Woman’s Health Center v. Cole, revolves around two parts of a 2013 state law: one requiring clinics to meet certain standards for "ambulatory surgical centers," and
+      source:   One part of the law requires all clinics in the state to meet the standards for “ambulatory surgical centers,” including regulations concerning buildings, equipment and staffing.
+    selected=[12] -> source_sent=[113] ROUGE-L=0.4561
+      selected: The case, Whole Woman’s Health Center v. Cole, revolves around two parts of a 2013 state law: one requiring clinics to meet certain standards for "ambulatory surgical centers," and the
+      source:   One part of the law requires all clinics in the state to meet the standards for “ambulatory surgical centers,” including regulations concerning buildings, equipment and staffing.
+    selected=[4] -> source_sent=[120] ROUGE-L=0.6667
+      selected: The
+      source:   The split...
+(h) Final summary: If The case, Whole Woman’s Health Center v. Cole, is a challenge to a 2013 Texas law that could reduce the number of abortion clinics in the state from 40 to 10. The case, Whole Woman’s Health Center v. Cole, is a challenge to a 2013 Texas law that could reduce the number of abortion clinics in the state from more than 40 to 10 The case, Whole Woman’s Health Center v. Cole, is a challenge to a 2013 Texas law that could reduce the number of abortion clinics in the state from more than 40 to about The case, Whole Woman’s Health Center v. Cole, is a challenge to a 2013 Texas law that could reduce the number of abortion clinics in the state from more than 40 to just The case, Whole Woman’s Health Center v. Cole, revolves around two parts of a 2013 state law: one requiring clinics to meet certain standards for "ambulatory surgical centers," and The case, Whole Woman’s Health Center v. Cole, revolves around two parts of a 2013 state law: one requiring clinics to meet certain standards for "ambulatory surgical centers," and the The
+    Reference: – The Supreme Court is facing a docket of high-profile political cases that will test whether recent liberal victories were more fluke or firm conviction, the New York Times reports. The court—which is divided 5-4 for conservatives, but saw Justice Roberts vote liberal on Obamacare and same-sex marriage—will look at cases including unions, affirmative action, and possibly abortion. A primer: Unions: Since 1977, unions have been allowed to charge non-union workers for dues that go to collective bargaining efforts, but not political ones. Now California teachers have brought a case saying collective bargaining is itself political. "It could set the stage for a Citizens United-style reconsideration in the area of union dues," a lawyer says. Affirmative Action: Abigail Fisher says that being white played a role in the University of Texas denying her admission back in 2008. The Supreme Court punted on her case in 2013, and now it's back on the docket. Like the unions case, this was brought by a conservative group that recruited the plaintiffs. The death penalty: Justices will decide on capital-punishment cases in Pennsylvania, Kansas, Georgia, and Florida, the Wall Street Journal reports. Justices Ruth Bader Ginsburg and Stephen Breyer have already expressed doubts about whether capital punishment is constitutional. "One person, one vote": Should state legislative districts be drawn based on their number of people or eligible voters? If justices choose the latter—leaving out immigrants and children—Latinos could lose political clout and rural areas will gain, Politico reports. Abortion: Justices may opt to revisit a Texas law that could reduce the state's abortion clinics from more than 40 to roughly 10. At issue is whether new clinic requirements are an "undue burden" on women's right to an abortion. One commentator believes this Supreme Court session will be ugly for liberals.
+
+--- Sample 6 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (11 sentences):
+    [0] Utility=0.4975 | – A preservationist says he has found evidence that a Manhattan building is the former site of an 18th-century tavern where George Washington is believed to have enjoyed a celebratory drink during the American Revolution.
+    [1] Utility=0.5005 | If it is indeed the home of the legendary watering hole, the discovery could mean that the building that is perhaps Manhattan’s oldest is slated to demolished.
+    [2] Utility=0.4886 | The building at 50 Bowery, which has had many faces since, is being prepared for demolition so a hotel can be built at the site.
+    [3] Utility=0.3873 | Legend had it that "the Bull's Head's structure, cellar, bones" were still inside, CBS New York reports.
+    [4] Utility=0.4950 | preservationist Adam Woodward found what he believes are Colonial-era,
+    [5] Utility=0.4481 | Preservationist Adam Woodward discovered a cellar that he believes could be the
+    [6] Utility=0.4516 | preservationist Adam Woodward discovered a cellar that he believes could be the
+    [7] Utility=0.3393 | Legend had it that "the Bull's Head's structure, cellar, bones" were still inside, reports CBS New York.
+    [8] Utility=0.4944 | Preservationist Adam Woodward discovered a cellar that he believes is the foundation
+    [9] Utility=0.0012 | Adam Woodward discovered a cellar that he believes could be the Revolutionary War
+    [10] Utility=0.4925 | preservationist Adam Woodward discovered a cellar that he believes is the foundation
+(c) Redundancy matrix shape: (11, 11)
+    Highest redundancy pair: [5] vs [6], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.0100, minicheck=0.4950, redundancy=0.4950
+(d-timing) CO total seconds: 1.747980
+(d) Selected indices: [0, 1, 2, 3, 4, 6, 8, 10], utility sum: 3.8074
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [6, 8, 10, 0, 1, 2, 3, 4]
+    selected=[6] -> source_sent=[1] ROUGE-L=0.7059
+      selected: preservationist Adam Woodward discovered a cellar that he believes could be the
+      source:   Preservationist Adam Woodward discovered a cellar that he believes could be the foundation of the Revolutionary War-era Bull’s Head Tavern.
+    selected=[8] -> source_sent=[1] ROUGE-L=0.6471
+      selected: Preservationist Adam Woodward discovered a cellar that he believes is the foundation
+      source:   Preservationist Adam Woodward discovered a cellar that he believes could be the foundation of the Revolutionary War-era Bull’s Head Tavern.
+    selected=[10] -> source_sent=[1] ROUGE-L=0.6471
+      selected: preservationist Adam Woodward discovered a cellar that he believes is the foundation
+      source:   Preservationist Adam Woodward discovered a cellar that he believes could be the foundation of the Revolutionary War-era Bull’s Head Tavern.
+    selected=[0] -> source_sent=[3] ROUGE-L=0.9589
+      selected: – A preservationist says he has found evidence that a Manhattan building is the former site of an 18th-century tavern where George Washington is believed to have enjoyed a celebratory drink during the American Revolution.
+      source:   NEW YORK (CBSNewYork) — A preservationist says he has found evidence that a Manhattan building is the former site of an 18th-century tavern where George Washington is believed to have enjoyed a celebratory drink during the American Revolution.
+    selected=[1] -> source_sent=[4] ROUGE-L=1.0000
+      selected: If it is indeed the home of the legendary watering hole, the discovery could mean that the building that is perhaps Manhattan’s oldest is slated to demolished.
+      source:   If it is indeed the home of the legendary watering hole, the discovery could mean that the building that is perhaps Manhattan’s oldest is slated to demolished.
+    selected=[2] -> source_sent=[8] ROUGE-L=1.0000
+      selected: The building at 50 Bowery, which has had many faces since, is being prepared for demolition so a hotel can be built at the site.
+      source:   The building at 50 Bowery, which has had many faces since, is being prepared for demolition so a hotel can be built at the site.
+    selected=[3] -> source_sent=[9] ROUGE-L=0.8333
+      selected: Legend had it that "the Bull's Head's structure, cellar, bones" were still inside, CBS New York reports.
+      source:   Legend had it that “the Bull’s Head’s structure, cellar, bones” were still inside, Woodward said.
+    selected=[4] -> source_sent=[10] ROUGE-L=0.4444
+      selected: preservationist Adam Woodward found what he believes are Colonial-era,
+      source:   He decided to poke around and, in the basement, Woodward found what he believes are Colonial-era, hand-hewn and hand-planed joists and foundation walls.
+(h) Final summary: preservationist Adam Woodward discovered a cellar that he believes could be the Preservationist Adam Woodward discovered a cellar that he believes is the foundation preservationist Adam Woodward discovered a cellar that he believes is the foundation – A preservationist says he has found evidence that a Manhattan building is the former site of an 18th-century tavern where George Washington is believed to have enjoyed a celebratory drink during the American Revolution. If it is indeed the home of the legendary watering hole, the discovery could mean that the building that is perhaps Manhattan’s oldest is slated to demolished. The building at 50 Bowery, which has had many faces since, is being prepared for demolition so a hotel can be built at the site. Legend had it that "the Bull's Head's structure, cellar, bones" were still inside, CBS New York reports. preservationist Adam Woodward found what he believes are Colonial-era,
+    Reference: – In 1783, after the British soldiers left New York City, George Washington is believed to have stopped for a celebratory drink at the Bull's Head tavern. Now a preservationist thinks he's found the historic site—and if he's right, it could be the oldest building in Manhattan. Adam Woodward had heard that the building at 50 Bowery, currently scheduled to be demolished so a hotel can go up, might have "the Bull's Head's structure, cellar, bones," he tells CBS New York. So he searched the basement, and "found myself in what I am pretty certain is the 1750s historic tavern," he says. Specifically, he found what he thinks are hand-hewn and hand-planed joists and foundation walls from the Colonial era. Since that time, the building has housed a drugstore, a Chinese restaurant, and a beer garden, among other things. Now he's hoping city officials will preserve the site, saying, "What an incredible opportunity that the city suddenly has for this thing to re-emerge." A historian is also convinced it is indeed the old tavern, and investigations have been launched by elected officials and the Landmarks Preservation Commission, Eater NY reports. But ultimately, the commission says, it "cannot require the owner to conduct archaeology," so a lot depends on him. He's apparently not talking yet; the New York Times couldn't get hold of him.
+
+--- Sample 7 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (11 sentences):
+    [0] Utility=0.0118 | – Israel says it has shot down a drone believed to have been launched by Iran-backed militants in response to an airstrike on Gaza that killed one Israeli and wounded two others, Reuters reports.
+    [1] Utility=0.0054 | The Israeli military says it shot down the drone with a cruise missile after it entered Israeli airspace, according to the Jerusalem Post.
+    [2] Utility=0.0062 | A spokesman for Iran's Supreme Leader Mahmoud Abbas says he is "shocked and appalled" by the attack, which took place near the border between Israel and the Gaza Strip, the BBC reports.
+    [3] Utility=0.4978 | He says the attack was carried out with the help of a "smaller militant group" from the Islamic Jihad group.
+    [4] Utility=0.3599 | Israel has warned that it will not tolerate any attacks on its people or its
+    [5] Utility=0.0255 | He says the attack was carried out with the help of a "smaller and more organized" group of militants.
+    [6] Utility=0.0238 | Israel has warned that it will not tolerate any attack on Iran, which it accuses
+    [7] Utility=0.4846 | Israel has warned that it will not tolerate any attacks on its people.
+    [8] Utility=0.3684 | Israel has warned that it will not tolerate any attacks on its people or its people
+    [9] Utility=0.2357 | Israel has warned that it will not tolerate any attacks on its people or its borders
+    [10] Utility=0.4873 | He says the attack was carried out with the help of a number of groups, including the Islamic Jihad militant group.
+(c) Redundancy matrix shape: (11, 11)
+    Highest redundancy pair: [4] vs [8], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.0100, minicheck=0.4950, redundancy=0.4950
+(d-timing) CO total seconds: 1.390623
+(d) Selected indices: [3, 4, 5, 6, 7, 8, 9, 10], utility sum: 2.4830
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [3, 5, 10, 4, 6, 7, 8, 9]
+    selected=[3] -> source_sent=[20] ROUGE-L=0.3333
+      selected: He says the attack was carried out with the help of a "smaller militant group" from the Islamic Jihad group.
+      source:   The armed wing of Hamas, the Islamists who control the Gaza Strip, said it had joined in Monday's rocket attack along with the smaller Islamic Jihad group.
+    selected=[5] -> source_sent=[20] ROUGE-L=0.2553
+      selected: He says the attack was carried out with the help of a "smaller and more organized" group of militants.
+      source:   The armed wing of Hamas, the Islamists who control the Gaza Strip, said it had joined in Monday's rocket attack along with the smaller Islamic Jihad group.
+    selected=[10] -> source_sent=[20] ROUGE-L=0.2857
+      selected: He says the attack was carried out with the help of a number of groups, including the Islamic Jihad militant group.
+      source:   The armed wing of Hamas, the Islamists who control the Gaza Strip, said it had joined in Monday's rocket attack along with the smaller Islamic Jihad group.
+    selected=[4] -> source_sent=[27] ROUGE-L=0.2581
+      selected: Israel has warned that it will not tolerate any attacks on its people or its
+      source:   Israeli forces say they will not tolerate such attacks and will hold Hamas responsible for them.
+    selected=[6] -> source_sent=[27] ROUGE-L=0.2581
+      selected: Israel has warned that it will not tolerate any attack on Iran, which it accuses
+      source:   Israeli forces say they will not tolerate such attacks and will hold Hamas responsible for them.
+    selected=[7] -> source_sent=[27] ROUGE-L=0.2759
+      selected: Israel has warned that it will not tolerate any attacks on its people.
+      source:   Israeli forces say they will not tolerate such attacks and will hold Hamas responsible for them.
+    selected=[8] -> source_sent=[27] ROUGE-L=0.2500
+      selected: Israel has warned that it will not tolerate any attacks on its people or its people
+      source:   Israeli forces say they will not tolerate such attacks and will hold Hamas responsible for them.
+    selected=[9] -> source_sent=[27] ROUGE-L=0.2500
+      selected: Israel has warned that it will not tolerate any attacks on its people or its borders
+      source:   Israeli forces say they will not tolerate such attacks and will hold Hamas responsible for them.
+(h) Final summary: He says the attack was carried out with the help of a "smaller militant group" from the Islamic Jihad group. He says the attack was carried out with the help of a "smaller and more organized" group of militants. He says the attack was carried out with the help of a number of groups, including the Islamic Jihad militant group. Israel has warned that it will not tolerate any attacks on its people or its Israel has warned that it will not tolerate any attack on Iran, which it accuses Israel has warned that it will not tolerate any attacks on its people. Israel has warned that it will not tolerate any attacks on its people or its people Israel has warned that it will not tolerate any attacks on its people or its borders
+    Reference: – Israel launched a round of airstrikes on Gaza today, wounding two militants and eight bystanders, including some children. Israel says the attack was retaliation for a round of Palestinian rockets fired yesterday, which Palestinians say were in response to another Israeli airstrike earlier in the day, Reuters reports. More than 470 rockets have been fired from Gaza since June, but this was the first time Hamas acknowledged responsibility. As usual the rockets failed to harm anyone, though one did kill some goats at a petting zoo. The incident comes in the wake of a drone flight into Israeli airspace this weekend, which some have speculated came from Iran. An Iranian military official today boasted that the incident proved that Israel is vulnerable, and that its anti-missile defense system "does not work and lacks the necessary capacity." But he denied that the drone was made by Iran, saying such accusations represented a "psychological operation" on Israel's part. "The Zionist regime has many enemies," he said. Iran, meanwhile, is blaming Israel for a hack attack on its oil rigs.
+
+--- Sample 8 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (15 sentences):
+    [0] Utility=0.4965 | – A Picasso painting that went missing from a museum in Paris for more than a decade has resurfaced in the US.
+    [1] Utility=0.2463 | The 1911 painting, "La Coiffeuse," which translates to "The Hairdresser," was discovered in December in a FedEx shipment from Belgium to Newark, NBC News reports.
+    [2] Utility=0.4989 | The canvas had been smuggled out of a storeroom of the Centre Georges Pompidou, and its whereabouts had not been known.
+    [3] Utility=0.5029 | On Thursday, Loretta E. Lynch, the United States attorney for the Eastern District of New York, filed a civil complaint to forfeit the Picasso and return it to France.
+    [4] Utility=0.4959 | Its shipping papers described it as a $37 "art craft/toy"
+    [5] Utility=0.5027 | On Thursday, Loretta Lynch, the United States attorney for the Eastern District of New York, filed a civil complaint to forfeit the Picasso and return it to France.
+    [6] Utility=0.4797 | Its shipping papers described it as a $37 "art craft/toy" and also
+    [7] Utility=0.0155 | On Thursday, Loretta Lynch, the United States attorney for the Eastern District of New York, filed a civil complaint to forfeit the Picasso and return it to France, the New York Times reports.
+    [8] Utility=0.4954 | Its shipping papers described it as a $37 "art craft
+    [9] Utility=0.0100 | On Thursday, Loretta E. Lynch, the United States attorney for the Eastern District of New York, filed a civil complaint to forfeit the Picasso and return it to France, the New York Times reports.
+    [10] Utility=0.4903 | Its shipping papers described it as a $37 "
+    [11] Utility=0.4960 | The shipping papers described it as a $37 "art craft/toy"
+    [12] Utility=0.4955 | Its shipping papers described it as a $37 "art craft/toy,"
+    [13] Utility=0.4818 | Its shipping papers described it as a $37 "art craft/toy," and also
+    [14] Utility=0.4930 | The painting was shipped to a climate-controlled warehouse in Long Island City, where
+(c) Redundancy matrix shape: (15, 15)
+    Highest redundancy pair: [4] vs [12], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.0100, minicheck=0.4950, redundancy=0.4950
+(d-timing) CO total seconds: 1.450060
+(d) Selected indices: [0, 2, 3, 4, 5, 10, 11, 14], utility sum: 3.9761
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [0, 2, 3, 5, 4, 10, 11, 14]
+    selected=[0] -> source_sent=[22] ROUGE-L=0.5185
+      selected: – A Picasso painting that went missing from a museum in Paris for more than a decade has resurfaced in the US.
+      source:   — Tracy Connor ||||| A Picasso painting missing from Paris for more than a decade resurfaced in the United States, where it had been shipped under false pretenses as a $37 holiday-themed “art craft.”
+    selected=[2] -> source_sent=[24] ROUGE-L=0.8750
+      selected: The canvas had been smuggled out of a storeroom of the Centre Georges Pompidou, and its whereabouts had not been known.
+      source:   The canvas had been smuggled out of a storeroom of the Centre Georges Pompidou, the Paris museum and arts center, and its whereabouts had not been known.
+    selected=[3] -> source_sent=[25] ROUGE-L=1.0000
+      selected: On Thursday, Loretta E. Lynch, the United States attorney for the Eastern District of New York, filed a civil complaint to forfeit the Picasso and return it to France.
+      source:   On Thursday, Loretta E. Lynch, the United States attorney for the Eastern District of New York, filed a civil complaint to forfeit the Picasso and return it to France.
+    selected=[5] -> source_sent=[25] ROUGE-L=0.9825
+      selected: On Thursday, Loretta Lynch, the United States attorney for the Eastern District of New York, filed a civil complaint to forfeit the Picasso and return it to France.
+      source:   On Thursday, Loretta E. Lynch, the United States attorney for the Eastern District of New York, filed a civil complaint to forfeit the Picasso and return it to France.
+    selected=[4] -> source_sent=[26] ROUGE-L=0.7097
+      selected: Its shipping papers described it as a $37 "art craft/toy"
+      source:   Its shipping papers described it as a $37 “art craft/toy” and also read “Joyeux Noel,” French for “Merry Christmas.”
+    selected=[10] -> source_sent=[26] ROUGE-L=0.5714
+      selected: Its shipping papers described it as a $37 "
+      source:   Its shipping papers described it as a $37 “art craft/toy” and also read “Joyeux Noel,” French for “Merry Christmas.”
+    selected=[11] -> source_sent=[26] ROUGE-L=0.6452
+      selected: The shipping papers described it as a $37 "art craft/toy"
+      source:   Its shipping papers described it as a $37 “art craft/toy” and also read “Joyeux Noel,” French for “Merry Christmas.”
+    selected=[14] -> source_sent=[33] ROUGE-L=0.5789
+      selected: The painting was shipped to a climate-controlled warehouse in Long Island City, where
+      source:   On Dec. 17, someone going by “Robert” with an address in Belgium shipped the painting to a climate-controlled warehouse in Long Island City.
+(h) Final summary: – A Picasso painting that went missing from a museum in Paris for more than a decade has resurfaced in the US. The canvas had been smuggled out of a storeroom of the Centre Georges Pompidou, and its whereabouts had not been known. On Thursday, Loretta E. Lynch, the United States attorney for the Eastern District of New York, filed a civil complaint to forfeit the Picasso and return it to France. On Thursday, Loretta Lynch, the United States attorney for the Eastern District of New York, filed a civil complaint to forfeit the Picasso and return it to France. Its shipping papers described it as a $37 "art craft/toy" Its shipping papers described it as a $37 " The shipping papers described it as a $37 "art craft/toy" The painting was shipped to a climate-controlled warehouse in Long Island City, where
+    Reference: – A Picasso painting that was found to have vanished from a Paris museum more than a decade ago has turned up—in the US, in a package shipped from Belgium. Its papers identified it as a $37 "art craft/toy" and also included the line "Joyeux Noel," or Merry Christmas, the New York Times reports. A man named "Robert" attempted to send the package to a climate-controlled warehouse in Queens, New York, in December, but custom officials at the Port of Newark seized what turned out to be Picasso's 1911 La Coiffeuse (The Hairdresser). French museum officials traveled to New York last month and confirmed the find is indeed the missing Picasso work, which the Centre Georges Pompidou realized was missing from its storerooms in 2001 following a loan request; it was then valued at more than $2.5 million. Court documents don't specify whether the sender or would-be recipient have been identified, NBC News reports, but "a lost treasure has been found," US attorney Loretta Lynch said in a statement. She filed a civil complaint yesterday that will have the painting returned to France. The Pompidou's director, who called the painting's rediscovery a "true comfort," hopes the painting can go on display at the museum as early as May, the AP reports. (Another Picasso work was stolen days before this one was found.)
+
+--- Sample 9 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (13 sentences):
+    [0] Utility=0.0826 | – If you're looking for the best burger in St. Paul, you're going to have to try the Sunshine Factory.
+    [1] Utility=0.4976 | It's the "best burger in town," according to WCCO.
+    [2] Utility=0.4987 | "Really, it's that amazing. Not a huge place, so don't bring your whole extended family with you."
+    [3] Utility=0.0027 | The restaurant is located in New Hope, which is about 30 miles from the city.
+    [4] Utility=0.0428 | The rest of the top 10 best burger joints in the city, according to the Star Tribune:
+    [5] Utility=0.0247 | The rest of the top 10 best burgers in the city, according to the Star Tribune:
+    [6] Utility=0.0450 | The rest of the top 10 best burger joints in the city, per the Star Tribune:
+    [7] Utility=0.1718 | The rest of the top 10:
+    [8] Utility=0.0026 | The restaurant is located in New Hope, which is about 30 miles away from the city.
+    [9] Utility=0.0371 | It's also home to the world's best burger.
+    [10] Utility=0.0899 | Click for the rest of the best restaurants in the city.
+    [11] Utility=0.0225 | Click for the rest of the best burgers in the state.
+    [12] Utility=0.2029 | Click for the rest of the top 10.
+(c) Redundancy matrix shape: (13, 13)
+    Highest redundancy pair: [4] vs [5], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.0100, minicheck=0.4950, redundancy=0.4950
+(d-timing) CO total seconds: 0.355892
+(d) Selected indices: [0, 1, 2, 4, 6, 7, 10, 12], utility sum: 1.6312
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [1, 2, 10, 4, 6, 0, 7, 12]
+    selected=[1] -> source_sent=[2] ROUGE-L=0.2500
+      selected: It's the "best burger in town," according to WCCO.
+      source:   ||||| St. Paul's Top 3 Dive Bars"Best burger in town. Really, it's that amazing. Not a huge place, so don't bring your whole extended family with you."
+    selected=[2] -> source_sent=[2] ROUGE-L=0.7755
+      selected: "Really, it's that amazing. Not a huge place, so don't bring your whole extended family with you."
+      source:   ||||| St. Paul's Top 3 Dive Bars"Best burger in town. Really, it's that amazing. Not a huge place, so don't bring your whole extended family with you."
+    selected=[10] -> source_sent=[3] ROUGE-L=0.2273
+      selected: Click for the rest of the best restaurants in the city.
+      source:   WCCO Viewers' Choice For Best Egg Roll In MinnesotaIn this week’s Best of Minnesota, the tastiest egg rolls can be found at a popular neighborhood restaurant in northeast Minneapolis called Que Viet.
+    selected=[4] -> source_sent=[5] ROUGE-L=0.2553
+      selected: The rest of the top 10 best burger joints in the city, according to the Star Tribune:
+      source:   Minneapolis Moonshine: 5 Of The City's Top DistilleriesWe crunched the numbers to find the top distilleries in Minneapolis, to help you find the best spots to meet your needs.
+    selected=[6] -> source_sent=[5] ROUGE-L=0.2174
+      selected: The rest of the top 10 best burger joints in the city, per the Star Tribune:
+      source:   Minneapolis Moonshine: 5 Of The City's Top DistilleriesWe crunched the numbers to find the top distilleries in Minneapolis, to help you find the best spots to meet your needs.
+    selected=[0] -> source_sent=[6] ROUGE-L=0.2632
+      selected: – If you're looking for the best burger in St. Paul, you're going to have to try the Sunshine Factory.
+      source:   Artsy Deals Worth Seeking Out In St. Paul This WeekLooking to up your appreciation of the arts?
+    selected=[7] -> source_sent=[6] ROUGE-L=0.1739
+      selected: The rest of the top 10:
+      source:   Artsy Deals Worth Seeking Out In St. Paul This WeekLooking to up your appreciation of the arts?
+    selected=[12] -> source_sent=[6] ROUGE-L=0.1600
+      selected: Click for the rest of the top 10.
+      source:   Artsy Deals Worth Seeking Out In St. Paul This WeekLooking to up your appreciation of the arts?
+(h) Final summary: It's the "best burger in town," according to WCCO. "Really, it's that amazing. Not a huge place, so don't bring your whole extended family with you." Click for the rest of the best restaurants in the city. The rest of the top 10 best burger joints in the city, according to the Star Tribune: The rest of the top 10 best burger joints in the city, per the Star Tribune: – If you're looking for the best burger in St. Paul, you're going to have to try the Sunshine Factory. The rest of the top 10: Click for the rest of the top 10.
+    Reference: – A dispute over the freshness of Wendy’s fries leaves a 25-year-old Minnesota woman facing criminal charges. According to CBS Minnesota, Wendy's employees claim that Eiram Chanel Amir Dixson became argumentative during a drive-thru transaction just after noon Thursday after the woman asked specifically for fresh French fries. Reports don't specify the condition of the fries, or whether she even received them, but do make clear that an argument followed. Employees allege Dixson reached through the drive-thru window and, after an employee threw a soft drink at her, proceeded to spray them with Mace. The restaurant manager was hit directly in the face while two more employees were also in the line of the spray, per the police report. All three employees provided similar accounts of the incident, according to ABC News 5. Dixson is being charged with felony use of tear gas to immobilize. If found guilty, she’ll face a maximum sentence of up to five years in prison and/or a $3,000 to $10,000 fine. Wendy’s drive-thrus see their share of action: last year, a worker was allegedly bit over a wrong order in Virginia, while a Florida man reportedly threw an alligator through a drive-thru window as a prank.
+
+--- Sample 10 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (14 sentences):
+    [0] Utility=0.5026 | – A Dallas police officer died Wednesday after a shooting that wounded another officer and an employee at a home improvement store, the city's mayor said.
+    [1] Utility=0.1164 | Mayor Mike Rawlings was presiding over a city council meeting when he announced the death of Rogelio Santander, a member of the police force for three years, reports the Dallas Morning News.
+    [2] Utility=0.4963 | The other officer, Crystal Almeida, and a loss-prevention officer for Home Depot were shot Tuesday by a man identified by police as 29-year-old Armando Luis Juarez.
+    [3] Utility=0.3223 | Police later spotted the truck Juarez and a female passenger inside, in Southeast Dallas and gave chase.
+    [4] Utility=0.4212 | Officers were ultimately able to corner Juarez in a residential neighborhood near
+    [5] Utility=0.3784 | Police later spotted the truck Juarez and a female passenger were in in Southeast Dallas and gave chase.
+    [6] Utility=0.2681 | Officers were ultimately able to corner Juarez in a residential neighborhood and
+    [7] Utility=0.4997 | Mayor Mike Rawlings was presiding over a city council meeting when he announced the death of Rogelio Santander, a member of the police force for three years.
+    [8] Utility=0.0062 | Santander was shot in the back of the head Tuesday by a man identified by police as 29-year-old Armando Luis Juarez.
+    [9] Utility=0.5041 | The two officers and the store loss-prevention officer underwent surgery for their injuries after the shooting in the north of the city, Dallas Police Chief U. Renee Hall said late Tuesday.
+    [10] Utility=0.4902 | Juarez has been charged with capital murder in addition to the
+    [11] Utility=0.4750 | Juarez has been charged with capital murder and assault on a
+    [12] Utility=0.4115 | Juarez, who has been charged with capital murder, was
+    [13] Utility=0.4901 | Juarez, who has been charged with capital murder and assault
+(c) Redundancy matrix shape: (14, 14)
+    Highest redundancy pair: [4] vs [6], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.0100, minicheck=0.4950, redundancy=0.4950
+(d-timing) CO total seconds: 2.655757
+(d) Selected indices: [0, 2, 4, 7, 9, 10, 11, 13], utility sum: 3.8790
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [4, 10, 11, 13, 0, 7, 2, 9]
+    selected=[4] -> source_sent=[39] ROUGE-L=0.6486
+      selected: Officers were ultimately able to corner Juarez in a residential neighborhood near
+      source:   Officers were ultimately able to corner Juarez in a residential neighborhood near Dallas Love Field Airport and took the 29-year-old man into custody.
+    selected=[10] -> source_sent=[49] ROUGE-L=0.5116
+      selected: Juarez has been charged with capital murder in addition to the
+      source:   With the death of Officer Santander, Juarez has now been charged with Capital Murder in addition to the charge of Aggravated Assault on a Public Servant for the shooting of Officer Almeida.
+    selected=[11] -> source_sent=[49] ROUGE-L=0.4651
+      selected: Juarez has been charged with capital murder and assault on a
+      source:   With the death of Officer Santander, Juarez has now been charged with Capital Murder in addition to the charge of Aggravated Assault on a Public Servant for the shooting of Officer Almeida.
+    selected=[13] -> source_sent=[49] ROUGE-L=0.3810
+      selected: Juarez, who has been charged with capital murder and assault
+      source:   With the death of Officer Santander, Juarez has now been charged with Capital Murder in addition to the charge of Aggravated Assault on a Public Servant for the shooting of Officer Almeida.
+    selected=[0] -> source_sent=[56] ROUGE-L=0.9630
+      selected: – A Dallas police officer died Wednesday after a shooting that wounded another officer and an employee at a home improvement store, the city's mayor said.
+      source:   DALLAS (AP) — A Dallas police officer died Wednesday after a shooting that wounded another officer and an employee at a home improvement store, the city's mayor said.
+    selected=[7] -> source_sent=[57] ROUGE-L=1.0000
+      selected: Mayor Mike Rawlings was presiding over a city council meeting when he announced the death of Rogelio Santander, a member of the police force for three years.
+      source:   Mayor Mike Rawlings was presiding over a city council meeting when he announced the death of Rogelio Santander, a member of the police force for three years.
+    selected=[2] -> source_sent=[58] ROUGE-L=0.9474
+      selected: The other officer, Crystal Almeida, and a loss-prevention officer for Home Depot were shot Tuesday by a man identified by police as 29-year-old Armando Luis Juarez.
+      source:   Santander, officer Crystal Almeida and a loss-prevention officer for Home Depot were shot Tuesday by a man identified by police as 29-year-old Armando Luis Juarez.
+    selected=[9] -> source_sent=[59] ROUGE-L=1.0000
+      selected: The two officers and the store loss-prevention officer underwent surgery for their injuries after the shooting in the north of the city, Dallas Police Chief U. Renee Hall said late Tuesday.
+      source:   The two officers and the store loss-prevention officer underwent surgery for their injuries after the shooting in the north of the city, Dallas Police Chief U. Renee Hall said late Tuesday.
+(h) Final summary: Officers were ultimately able to corner Juarez in a residential neighborhood near Juarez has been charged with capital murder in addition to the Juarez has been charged with capital murder and assault on a Juarez, who has been charged with capital murder and assault – A Dallas police officer died Wednesday after a shooting that wounded another officer and an employee at a home improvement store, the city's mayor said. Mayor Mike Rawlings was presiding over a city council meeting when he announced the death of Rogelio Santander, a member of the police force for three years. The other officer, Crystal Almeida, and a loss-prevention officer for Home Depot were shot Tuesday by a man identified by police as 29-year-old Armando Luis Juarez. The two officers and the store loss-prevention officer underwent surgery for their injuries after the shooting in the north of the city, Dallas Police Chief U. Renee Hall said late Tuesday.
+    Reference: – A 27-year-old Dallas police officer died Wednesday after being shot the day prior at a Home Depot in Lake Highlands. The Morning News identifies the officer as Rogelio Santander. He'd been called to the store around 4pm by a cop who was working an off-duty job there and noticed Armando Luis Juarez was behaving oddly. The off-duty cop detained Juarez and learned he had an outstanding felony warrant. Santander and Crystal Almeida, 26, responded to the scene; authorities say they and a loss prevention officer employed by Home Depot were shot by Juarez as he was being escorted from the store. A source tells CBS Dallas Santander was shot in the back of the head and Almeida was shot in the face. She remains in critical condition, as does the Home Depot employee. Police say Juarez fled and a high-speed car chase ensued, per the AP. He was apprehended Tuesday night and is being held on charges of aggravated assault on a public servant and felony theft. "We got our man," said Mayor Mike Rawlings.
+

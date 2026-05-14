@@ -1,0 +1,141 @@
+gemma-4-E4B Baseline + BASELINE Summarization Results (Generate-then-Optimize)
+Generator: gemma_4_e4b
+Method: baseline
+Objective variant: Baseline from the generation backend
+Model: google/gemma-4-E4B-it
+Dataset: cnn_dailymail
+Split: test
+Samples: 11490
+Sample mode: shuffle
+Sample seed: 42
+Generation mode: direct baseline
+Budget: direct full output
+Runtime generation batch size: 24
+Runtime utility batch size: 128
+Runtime eval batch size: 64
+Runtime dtype: bf16
+ROUGE sentence split: nltk
+Ordering: none (baseline direct generation)
+Stage output trace: outputs/cnn_dailymail/gemma4_e4b/baseline/full_cnn_hf_fulleval_max32k_20260504_133317/baseline_hfrouge_shuffle_seed42_stage_outputs.jsonl
+Started at: 2026-05-04T18:38:12.209312
+Finished at: 2026-05-05T03:27:53.161475
+Runtime total seconds (this process): 31780.95
+Stage seconds: generation=24136.34 (cumulative across resumes), evaluation=7543.38
+Resume: resumed=False, resumed_from=0, prior_gen_seconds=0.00
+Eval suite: full
+ROUGE implementation: huggingface_evaluate
+MaxInputTokens: 8192
+MaxNewTokens: 32768
+Temperature: 1.0
+TopP: 0.95
+TopK: 64
+MinP: 0.0
+PresencePenalty: 0.0
+RepetitionPenalty: 1.1
+Thinking: False
+DoSample: auto
+PromptVersion: cnn_dailymail_concise_summary_only_v1
+Paper metrics: ['rouge', 'bertscore']
+Extra metrics: ['factcc', 'minicheck', 'alignscore', 'factgraph', 'factkb']
+ROUGE sentence split: nltk
+============================================================
+
+
+Paper Metrics:
+ROUGE Scores (F1 only, impl=huggingface_evaluate):
+  rouge1    F1=30.51%
+  rouge2    F1=6.41%
+  rougeL    F1=18.07%
+  rougeLsum  F1=27.40%
+BERTScore (roberta-large):
+  Precision=85.96%  Recall=86.44%  F1=86.19%
+
+Extra Metrics:
+FactCC (manueldeprada/FactCC):
+  SentenceAvgCorrect: 53.99%
+MiniCheck (EMNLP 2024, MiniCheck-RoBERTa-Large):
+  SummaryAvgConsistent: 69.49%
+AlignScore (ACL 2023, yzha/AlignScore-base, nli_sp):
+  SummaryAvg: 71.32%
+FactGraph: unavailable (FileNotFoundError('FACTGRAPH repo dir not configured. Set $FACTGRAPH_REPO_DIR or pass repo_dir explicitly. Clone https://github.com/amazon-science/fact-graph first.'))
+FactKB (bunsenfeng/FactKB):
+  FactualProb: 89.59%
+
+Runtime:
+  StartedAt: 2026-05-04T18:38:12.209312
+  FinishedAt: 2026-05-05T03:27:53.161475
+  MethodTotalSeconds: 31780.95
+  GenerationSeconds: 24136.34
+  EvaluationSeconds: 7543.38
+  Resume: resumed=False, resumed_from=0, prior_generation_seconds=0.00
+  MetricSeconds: rouge=28.00s, bertscore=206.90s, factcc=563.23s, minicheck=3982.08s, alignscore=2635.39s, factgraph=0.00s, factkb=127.26s
+
+============================================================
+Detailed selection logs (first 10 samples):
+============================================================
+
+--- Sample 1 ---
+(a) Optimization method: Baseline
+(h) Final summary: The Palestinian Authorities officially joined the InternationalCriminal Court (ICC), becoming the 231st member and granting the ICC jurisdiction over potential crimes in the Palestinian territories since mid-2020. This formal accession follows an earlier preliminary examination by the ICC regarding the situation there. Supporters view this as a major step toward achieving greater global justice and ending impunity. Opposing nations like Israel and Japan have strongly criticized this development. The ICC prosecutor has affirmed that any future analysis will be conducted with complete independence and neutrality.
+    Reference: Membership gives the ICC jurisdiction over alleged crimes committed in Palestinian territories since last June .
+Israel and the United States opposed the move, which could open the door to war crimes investigations against Israelis .
+
+--- Sample 2 ---
+(a) Optimization method: Baseline
+(h) Final summary: A stray dog in Washington state, named Thei, miraculously survived severe trauma, including being run over, struck with a weapon, and buried. Despite suffering a dislocates jaw and leg injuries, Theia was found four days later and is currently recovering at a veterinary teaching hospital. Rescuer Sara Melllado has organized a successful fundraiser to cover the significant costs of Theia’s necessary surgeries and ongoing care. This incredible story of resilience follows another near-impossible survival case involving a cat in Florida.uga
+    Reference: Theia, a bully breed mix, was apparently hit by a car, whacked with a hammer and buried in a field .
+"She's a true miracle dog and she deserves a good life," says Sara Mellado, who is looking for a home for Theia .
+
+--- Sample 3 ---
+(a) Optimization method: Baseline
+(h) Final summary: Iranian Foreign Minister Mohammad Javar Zarif has gained recognition for his diplomatic efforts toward potential nuclear agreements with the USL, earning popular support in Iran. While presenting a jovial public image, lesser-known facts reveal a complex history, including engaging in online spats regarding Holocaust denial. Furthermore, discrepancies exist in his official reported birth year across different sources. In the early stages of the revolution, Zarf was involved in protests at Iranian consulates. Despite past scrutiny concerning an Alavi charitable foundation, he remains central to
+    Reference: Mohammad Javad Zarif has spent more time with John Kerry than any other foreign minister .
+He once participated in a takeover of the Iranian Consulate in San Francisco .
+The Iranian foreign minister tweets in English .
+
+--- Sample 4 ---
+(a) Optimization method: Baseline
+(h) Final summary: Five American clinicians who were exposed but did not contract Ebola in a recent outbreak have been discharged from a Nebraska hospital. These individuals work for the aid group Partners in Aid and had contact tracing links to an infected colleague. That coworker remains hospitalized and is in stable condition. Furthermore, CDC officials anticipate releasing the final of seventeen monitored patients by Thursday regarding the ongoing surveillance. The article also notes the severity of the wider West African Ebola epidemic.
+    Reference: 17 Americans were exposed to the Ebola virus while in Sierra Leone in March .
+Another person was diagnosed with the disease and taken to hospital in Maryland .
+National Institutes of Health says the patient is in fair condition after weeks of treatment .
+
+--- Sample 5 ---
+(a) Optimization method: Baseline
+(h) Final summary: A Duke University student confessed to hanging an improvised noose from a nearby tree. The university confirmed the student is off campus and faces disciplinary review while criminal investigations continue. Following the discovery, students and faculty demonstrated against what they deemed an unacceptable action. This incident adds to a pattern of recent racially charged events reported at various colleges. University officials condemned the act as cowardly and stated it would not succeed in creating fear.
+    Reference: Student is no longer on Duke University campus and will face disciplinary review .
+School officials identified student during investigation and the person admitted to hanging the noose, Duke says .
+The noose, made of rope, was discovered on campus about 2 a.m.
+
+--- Sample 6 ---
+(a) Optimization method: Baseline
+(h) Final summary: A star basketball recruit named Trey Moses proposed to Ellie Meredith, a high-school freshman with down syndrome, to be prom dates. The heartwarming prom-proposal went viral after being shared by a teacher. Trey stated that Ellie was wonderful because she was easy to listen to and talk to. This event highlighted the positive impact of a special school program called Best Friends Buddies, which helps foster inclusivity. Trey plans to study special education in college while pursuing basketball.
+    Reference: College-bound basketball star asks girl with Down syndrome to high school prom .
+Pictures of the two during the "prom-posal" have gone viral .
+
+--- Sample 7 ---
+(a) Optimization method: Baseline
+(h) Final summary: Amnesty International's 2usreport indicates that while global executions dropped nearly 27%, governments increasingly used the threat and reality of terrorism to pursue capital punishment as a tactic. Despite falling execution numbers overall, there was a significant 29% rise in people sentenced and death sentences were often imposed without meeting international fair trials standards. The organization noted regional decreases in executions but criticized nations like Pakistan and China for utilizing the death penal in counter-terrorism efforts. Overall, the report shows positive trends toward abolition despite
+    Reference: Amnesty's annual death penalty report catalogs encouraging signs, but setbacks in numbers of those sentenced to death .
+Organization claims that governments around the world are using the threat of terrorism to advance executions .
+The number of executions worldwide has gone down by almost 22% compared with 2013, but death sentences up by 28% .
+
+--- Sample 8 ---
+(a) Optimization method: Baseline
+(h) Final summary: Andrew Getty passed away due to natural causes; police stated there was absolutely no indication of foul play. The 46-year-old heir to the Getty fortune reportedly suffered from several ongoing health issues. His parents issued a statement acknowledging and mourning his passing while requesting privacy. While some medication was found at his residence, an official autopsy is pending.
+    Reference: Andrew Getty's death appears to be from natural causes, police say, citing coroner's early assessment .
+In a petition for a restraining order, Getty had written he had a serious medical condition.
+Police say this is not a criminal matter at this time .
+
+--- Sample 9 ---
+(a) Optimization method: Baseline
+(h) Final summary: Tropical storm Mayssak, known locally as Chedeng, is approaching the Philippines, prompting warnings about potential flash floods. Although it has weakened from a super typhoon, it maintains strong winds and is forecast to make land in Isabela on Sunday morning. Authorities have implemented safety measures, including banning certain outdoor activities and initiating precautionary evacuATIONS. Officials advise residents, particularly those near the coast, to prepare seriously for the storm's arrival. The system is expected to exit the country by Monday, but its impact remains uncertain.
+    Reference: Once a super typhoon, Maysak is now a tropical storm with 70 mph winds .
+It could still cause flooding, landslides and other problems in the Philippines .
+
+--- Sample 10 ---
+(a) Optimization method: Baseline
+(h) Final summary: Bob Barker, the legendary former host of The Price Is Write, made a surprising return after an eight-year absence. He took over the hosting duties for the premiere episode on April 2nd. At age 90, Barker participated in the initial game segment before handing hosting responsibilities back to Drew Carey. His appearance marked a notable event for fans of the long-running television program.
+    Reference: Bob Barker returned to host "The Price Is Right" on Wednesday .
+Barker, 91, had retired as host in 2007 .
+

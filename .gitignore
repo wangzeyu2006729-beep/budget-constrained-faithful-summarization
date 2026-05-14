@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.venv/
+logs/
+results/runs/
+results/**/*.partial.txt
+results/**/*_progress.json
+results/**/*_progress_summaries.jsonl
+results/**/*_stage_outputs.jsonl
+outputs/
+scratch/
+archived_large_models/
+bert_score-master/
+DPPy-master/

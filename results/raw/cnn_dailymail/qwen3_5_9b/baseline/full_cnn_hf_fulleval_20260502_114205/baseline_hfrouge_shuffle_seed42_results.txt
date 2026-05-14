@@ -1,0 +1,131 @@
+Qwen3.5-9B Baseline + BASELINE Summarization Results (Generate-then-Optimize)
+Generator: qwen3.5_9B
+Method: baseline
+Objective variant: Baseline from the generation backend
+Model: Qwen/Qwen3.5-9B
+Dataset: cnn_dailymail
+Split: test
+Samples: 11490
+Sample mode: shuffle
+Sample seed: 42
+Generation mode: direct baseline
+Budget: direct full output
+Runtime generation batch size: 4
+Runtime utility batch size: 128
+Runtime eval batch size: 64
+Runtime dtype: bf16
+ROUGE sentence split: nltk
+Ordering: none (baseline direct generation)
+Stage output trace: <SOURCE_EXPERIMENT_ROOT>/outputs/cnn_dailymail/qwen3_5_9b/baseline/full_cnn_hf_fulleval_20260502_114205/baseline_hfrouge_shuffle_seed42_stage_outputs.jsonl
+Started at: 2026-05-02T16:32:23.277881
+Finished at: 2026-05-03T02:50:22.082813
+Runtime total seconds (this process): 37078.80
+Stage seconds: generation=45109.39 (cumulative across resumes), evaluation=6339.36
+Resume: resumed=True, resumed_from=4540, prior_gen_seconds=14448.58
+Eval suite: full
+ROUGE implementation: huggingface_evaluate
+MaxInputTokens: 8192
+MaxNewTokens: 32768
+Temperature: 0.7
+TopP: 0.8
+TopK: 20
+MinP: 0.0
+PresencePenalty: 1.5
+RepetitionPenalty: 1.0
+Thinking: False
+DoSample: auto
+PromptVersion: cnn_dailymail_concise_summary_only_v1
+Paper metrics: ['rouge', 'bertscore']
+Extra metrics: ['factcc', 'minicheck', 'alignscore', 'factgraph', 'factkb']
+ROUGE sentence split: nltk
+============================================================
+
+
+Paper Metrics:
+ROUGE Scores (F1 only, impl=huggingface_evaluate):
+  rouge1    F1=34.88%
+  rouge2    F1=10.91%
+  rougeL    F1=20.33%
+  rougeLsum  F1=30.77%
+BERTScore (roberta-large):
+  Precision=86.15%  Recall=87.80%  F1=86.96%
+
+Extra Metrics:
+FactCC (manueldeprada/FactCC):
+  SentenceAvgCorrect: 40.16%
+MiniCheck (EMNLP 2024, MiniCheck-RoBERTa-Large):
+  SummaryAvgConsistent: 56.82%
+AlignScore (ACL 2023, yzha/AlignScore-base, nli_sp):
+  SummaryAvg: 65.17%
+FactGraph: unavailable (FileNotFoundError('FACTGRAPH repo dir not configured. Set $FACTGRAPH_REPO_DIR or pass repo_dir explicitly. Clone https://github.com/amazon-science/fact-graph first.'))
+FactKB (bunsenfeng/FactKB):
+  FactualProb: 98.12%
+
+Runtime:
+  StartedAt: 2026-05-02T16:32:23.277881
+  FinishedAt: 2026-05-03T02:50:22.082813
+  MethodTotalSeconds: 37078.80
+  GenerationSeconds: 45109.39
+  EvaluationSeconds: 6339.36
+  Resume: resumed=True, resumed_from=4540, prior_generation_seconds=14448.58
+  MetricSeconds: rouge=32.54s, bertscore=226.24s, factcc=470.59s, minicheck=3326.07s, alignscore=2156.82s, factgraph=0.00s, factkb=126.62s
+
+============================================================
+Detailed selection logs (first 10 samples):
+============================================================
+
+--- Sample 1 ---
+(h) Final summary: The Palestinian Authority officially became the 123rd member of the International Criminal Court on Wednesday, granting the tribunal jurisdiction over alleged crimes in Palestinian territories since June 2014. This move follows a preliminary examination opened earlier this year and marks a significant step toward ending impunity for potential war crimes involving both Israelis and Palestinians. While Palestinian officials welcomed the accession as a pursuit of justice, Israel and the United States strongly opposed it, with the US arguing that Palestine is not a state eligible to join the court. Despite this opposition, the ICC maintains its independence and has stated it will impartially review evidence regarding the conflict in Gaza.
+    Reference: Membership gives the ICC jurisdiction over alleged crimes committed in Palestinian territories since last June .
+Israel and the United States opposed the move, which could open the door to war crimes investigations against Israelis .
+
+--- Sample 2 ---
+(h) Final summary: A one-year-old dog named Theia in Washington State miraculously survived being hit by a car, struck with a hammer in an attempted mercy killing, and buried in a field. After staggering to a nearby farm four days later, she was rescued by Sara Mellado, who is raising funds for her extensive medical treatment including jaw realignment and sinus repair. Despite severe injuries, the gentle animal has already inspired over $10,000 in donations, with any surplus intended to help other animals. This story follows a similar recent incident where a cat in Florida also rose from the grave after being buried following a fatal car accident.
+    Reference: Theia, a bully breed mix, was apparently hit by a car, whacked with a hammer and buried in a field .
+"She's a true miracle dog and she deserves a good life," says Sara Mellado, who is looking for a home for Theia .
+
+--- Sample 3 ---
+(h) Final summary: Mohammad Javad Zarif, Iran's foreign minister and key negotiator in nuclear talks with the U.S., has gained international recognition for his polished demeanor and efforts to reengage Iran with the global community. Despite his diplomatic successes, several lesser-known facts about him include a past dispute over Holocaust denial, ambiguous biographical details regarding his birth year and whereabouts during the 1979 Revolution, and an investigation into his alleged role in money laundering via the Alavi Foundation. His background also features early revolutionary activism in San Francisco that eventually led to his employment by the Iranian government, paving the way for his current high-profile negotiations aimed at ending sanctions by June 30.
+    Reference: Mohammad Javad Zarif has spent more time with John Kerry than any other foreign minister .
+He once participated in a takeover of the Iranian Consulate in San Francisco .
+The Iranian foreign minister tweets in English .
+
+--- Sample 4 ---
+(h) Final summary: Five American clinicians who were monitored for Ebola exposure in Nebraska have been released, with one remaining nearby due to a heart issue while the others returned home. None of the five developed the virus after contact with an infected colleague in Sierra Leone, who is currently recovering at the National Institutes of Health. This development brings the total number of monitored patients expected to be discharged by the CDC to zero, concluding a significant phase of the response to the West African epidemic that has claimed over 10,000 lives since 2013.
+    Reference: 17 Americans were exposed to the Ebola virus while in Sierra Leone in March .
+Another person was diagnosed with the disease and taken to hospital in Maryland .
+National Institutes of Health says the patient is in fair condition after weeks of treatment .
+
+--- Sample 5 ---
+(h) Final summary: A Duke University student admitted to hanging a noose from a tree near the student union and has since left campus pending a conduct review. While criminal investigations are ongoing, university officials condemned the act as cowardly and hateful, noting it was discovered early Wednesday morning. Hundreds of students and faculty gathered to protest the incident, with President Richard Brodhead declaring that such actions do not reflect the values of the university. This event follows a series of recent racist incidents at other colleges, including hate speech at the University of Oklahoma and a similar noose placement at the University of Mississippi.
+    Reference: Student is no longer on Duke University campus and will face disciplinary review .
+School officials identified student during investigation and the person admitted to hanging the noose, Duke says .
+The noose, made of rope, was discovered on campus about 2 a.m.
+
+--- Sample 6 ---
+(h) Final summary: Trey Moses, a star basketball recruit, surprised Ellie Meredith, a high school freshman with Down syndrome, by asking her to be his prom date instead of his girlfriend. The gesture, which included flowers and a Taylor Swift-themed poster, was praised by teachers and parents as an act of genuine kindness that helped combat social isolation for Ellie. Trey's decision to major in special education alongside his athletic career highlights his commitment to supporting others, while both families expressed overwhelming joy at the moment.
+    Reference: College-bound basketball star asks girl with Down syndrome to high school prom .
+Pictures of the two during the "prom-posal" have gone viral .
+
+--- Sample 7 ---
+(h) Final summary: Amnesty International's 2014 report alleges that governments are increasingly using the death penalty as a tool to combat terrorism and quell internal instability, citing examples from Pakistan and China. While the number of confirmed executions worldwide dropped by nearly 22% to 607 cases, there was a concerning 28% rise in death sentences globally due to mass sentencing in countries like Egypt and Nigeria. The organization highlights that many executions occur after trials failing to meet international fair trial standards and notes that China likely executes more people than the rest of the world combined. Despite these negative trends, Amnesty observes a positive long-term shift toward abolition, with most regions seeing fewer executions, though Belarus and the United States remain notable exceptions in Europe and the Americas respectively.
+    Reference: Amnesty's annual death penalty report catalogs encouraging signs, but setbacks in numbers of those sentenced to death .
+Organization claims that governments around the world are using the threat of terrorism to advance executions .
+The number of executions worldwide has gone down by almost 22% compared with 2013, but death sentences up by 28% .
+
+--- Sample 8 ---
+(h) Final summary: Andrew Getty, a 47-year-old heir to the vast oil fortune of J. Paul Getty, appears to have died of natural causes according to preliminary police findings. While an autopsy is scheduled to confirm the cause, investigators currently see no foul play and are not conducting a criminal investigation. The Los Angeles Police Department noted that Getty had several health issues, including high blood pressure, shortly before his body was discovered in his home. His parents have confirmed the death and requested privacy for the family during this difficult time.
+    Reference: Andrew Getty's death appears to be from natural causes, police say, citing coroner's early assessment .
+In a petition for a restraining order, Getty had written he had a serious medical condition.
+Police say this is not a criminal matter at this time .
+
+--- Sample 9 ---
+(h) Final summary: Filipino authorities have issued urgent warnings for flash floods and landslides as Tropical Storm Maysak, formerly a super typhoon, approaches the archipelago. Although its sustained winds have decreased to over 70 mph, officials are enforcing strict safety measures including bans on outdoor water activities and precautionary evacuations. Tourists arriving in coastal areas like Aurora may be denied hotel accommodations and advised to leave immediately. The storm is expected to make landfall on Isabela province's southeastern coast Sunday morning before exiting the country by Monday.
+    Reference: Once a super typhoon, Maysak is now a tropical storm with 70 mph winds .
+It could still cause flooding, landslides and other problems in the Philippines .
+
+--- Sample 10 ---
+(h) Final summary: For the first time in eight years, 91-year-old Bob Barker returned to host "The Price Is Right." He successfully led the opening segment of the April 1 episode before handing over duties to regular host Drew Carey. Despite his long absence since stepping down in 2007, Barker appeared spry and handled the show's proceedings without issue. This special appearance marked a memorable reunion for fans of the television legend after three decades of hosting.
+    Reference: Bob Barker returned to host "The Price Is Right" on Wednesday .
+Barker, 91, had retired as host in 2007 .
+

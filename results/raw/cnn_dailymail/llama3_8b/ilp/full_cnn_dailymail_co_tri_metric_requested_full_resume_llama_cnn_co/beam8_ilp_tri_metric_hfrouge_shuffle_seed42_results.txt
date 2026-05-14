@@ -1,0 +1,146 @@
+Llama-3.1-8B-Instruct Candidates-8 + ILP Summarization Results (Generate-then-Optimize)
+Generator: llama3_8b
+Method: ilp
+Objective variant: Tri-metric unified objective (ROUGE + MiniCheck + Redundancy)
+Model: meta-llama/Llama-3.1-8B-Instruct
+Dataset: cnn_dailymail
+Split: test
+Samples: 11490
+Sample mode: shuffle
+Sample seed: 42
+Candidate count: 8
+Budget: 4 sentences
+Runtime generation batch size: 12
+Runtime utility batch size: 32
+Runtime eval batch size: 64
+Runtime dtype: bf16
+ROUGE sentence split: nltk
+Ordering: source_similarity
+Stage output trace: <SOURCE_EXPERIMENT_ROOT>/outputs/cnn_dailymail/llama3_8b/ilp/full_cnn_dailymail_co_tri_metric_requested_full_resume_llama_cnn_co/beam8_ilp_tri_metric_hfrouge_shuffle_seed42_stage_outputs.jsonl
+Stage1 reuse source: None
+Started at: 2026-05-06T01:21:28.282508
+Finished at: 2026-05-09T00:55:11.562905
+Runtime total seconds (this process): 257623.28
+Stage seconds: generation=252522.23 (cumulative across resumes), evaluation=6348.44
+Resume: resumed=True, resumed_from=60, prior_gen_seconds=1353.47
+Eval suite: full
+ROUGE implementation: huggingface_evaluate
+MaxInputTokens: 8192
+MaxNewTokens: 32768
+Temperature: 0.6
+TopP: 0.9
+TopK: 0
+MinP: 0.0
+PresencePenalty: 0.0
+RepetitionPenalty: 1.0
+Thinking: False
+DoSample: auto
+PromptVersion: llama3_cnn_dailymail_concise_summary_only_v1
+Tri-metric weights: rouge=0.100000, minicheck=0.200000, redundancy=0.700000
+Paper metrics: ['rouge', 'bertscore']
+Extra metrics: ['factcc', 'minicheck', 'alignscore', 'factgraph', 'factkb']
+ROUGE sentence split: nltk
+============================================================
+
+
+Paper Metrics:
+ROUGE Scores (F1 only, impl=huggingface_evaluate):
+  rouge1    F1=33.10%
+  rouge2    F1=7.47%
+  rougeL    F1=18.72%
+  rougeLsum  F1=29.09%
+BERTScore (roberta-large):
+  Precision=86.63%  Recall=86.38%  F1=86.49%
+
+Extra Metrics:
+FactCC (manueldeprada/FactCC):
+  SentenceAvgCorrect: 47.46%
+MiniCheck (EMNLP 2024, MiniCheck-RoBERTa-Large):
+  SummaryAvgConsistent: 76.82%
+AlignScore (ACL 2023, yzha/AlignScore-base, nli_sp):
+  SummaryAvg: 74.68%
+FactGraph: unavailable (FileNotFoundError('FACTGRAPH repo dir not configured. Set $FACTGRAPH_REPO_DIR or pass repo_dir explicitly. Clone https://github.com/amazon-science/fact-graph first.'))
+FactKB (bunsenfeng/FactKB):
+  FactualProb: 96.65%
+
+Runtime:
+  StartedAt: 2026-05-06T01:21:28.282508
+  FinishedAt: 2026-05-09T00:55:11.562905
+  MethodTotalSeconds: 257623.28
+  GenerationSeconds: 252522.23
+  EvaluationSeconds: 6348.44
+  Resume: resumed=True, resumed_from=60, prior_generation_seconds=1353.47
+  MetricSeconds: rouge=40.92s, bertscore=211.96s, factcc=471.88s, minicheck=3324.47s, alignscore=2171.68s, factgraph=0.00s, factkb=127.12s
+  COTimingSeconds:
+    Samples: 11490
+    Total: 10457.56s MeanPerSample: 0.910145s
+
+============================================================
+Detailed selection logs (first 10 samples):
+============================================================
+
+--- Sample 1 ---
+(d-timing) CO total seconds: 0.829772
+(h) Final summary: The Palestine Authority has officially joined the International Court of Justice as its 123nd member, giving it jurisdiction over crimes committed in its territories. This move was marked by a ceremony in The Hague and is seen as a step towards greater justice and an end to impunity in the region. The US and Israel, which are not ICC members, have opposed Palestine's membership, but human rights groups have welcomed the move. The court's prosecutor has vowed to conduct an impartial investigation.
+    Reference: Membership gives the ICC jurisdiction over alleged crimes committed in Palestinian territories since last June .
+Israel and the United States opposed the move, which could open the door to war crimes investigations against Israelis .
+
+--- Sample 2 ---
+(d-timing) CO total seconds: 0.648568
+(h) Final summary: Found four days after being buried, she was rescued and taken to a veterinary hospital where she is receiving treatment for severe injuries. Despite her traumatic past, she is described as "gentle and loving" and a "true miracle dog." Donations have already exceeded the initial target. A fundraising page has been set up to help cover the cost of her extensive medical care, which includes surgery to repair her jaw and nasal damage.
+    Reference: Theia, a bully breed mix, was apparently hit by a car, whacked with a hammer and buried in a field .
+"She's a true miracle dog and she deserves a good life," says Sara Mellado, who is looking for a home for Theia .
+
+--- Sample 3 ---
+(d-timing) CO total seconds: 0.936340
+(h) Final summary: Iranian Foreign Minister Mohammad Javid Zarif has been making headlines for his efforts to secure a nuclear deal with the US, but there are lesser-known facts about him, including that he tweeted a happy new year message to Jews and responded to criticism from US politician Christine Pelosi. His birthdate is disputed, with different sources listing different years, and he was involved in student protests during the early Iranian Revolution. His birthdate is disputed, with different sources listing different years. He was educated in the US and has two children born there, and was investigated by the US Justice Department over allegations of involvement with a charity accused of laundering money.
+    Reference: Mohammad Javad Zarif has spent more time with John Kerry than any other foreign minister .
+He once participated in a takeover of the Iranian Consulate in San Francisco .
+The Iranian foreign minister tweets in English .
+
+--- Sample 4 ---
+(d-timing) CO total seconds: 0.285737
+(h) Final summary: Five Americans monitored for Ebola exposure at a Nebraska hospital were released after three weeks, with one still in the area due to a pre-existing heart issue. The group, clinicians for a Boston aid group, had been exposed to the virus in March while working in Sierra Leon. None of them developed Ebola, and a colleague being treated in Maryland is in stable condition. This comes as the CDC expects to release all 17 monitored patients by Thursday, ending the monitoring period.
+    Reference: 17 Americans were exposed to the Ebola virus while in Sierra Leone in March .
+Another person was diagnosed with the disease and taken to hospital in Maryland .
+National Institutes of Health says the patient is in fair condition after weeks of treatment .
+
+--- Sample 5 ---
+(d-timing) CO total seconds: 0.604439
+(h) Final summary: A Duke University student has been identified and removed from campus after admitting to placing a rope noose near the student union. Hundreds of students and faculty gathered for a forum to condemn the incident, with the university president stating that the act was "not the Duke they want to experience." This is the latest in a series of racist incidents affecting college students, including a fraternity's charter being removed and a statue desecrated at another university. A vice president called the act "hateful and cowardly."
+    Reference: Student is no longer on Duke University campus and will face disciplinary review .
+School officials identified student during investigation and the person admitted to hanging the noose, Duke says .
+The noose, made of rope, was discovered on campus about 2 a.m.
+
+--- Sample 6 ---
+(d-timing) CO total seconds: 0.735568
+(h) Final summary: Ellie's mother was thrilled, crediting a school program that helps students with developmental disabilities make friends and feel included. Trey Moses, a college-bound basketball star, asked his classmate Ellie Meredith, who has Down syndrome, to prom instead of his girlfriend. Trey chose Ellie because of her kind and friendly nature, and she accepted with the help of a special poster and flowers referencing her favorite singer, Taylor Swift. Trey plans to major in special education in college, and Ellie is excited to go to prom.
+    Reference: College-bound basketball star asks girl with Down syndrome to high school prom .
+Pictures of the two during the "prom-posal" have gone viral .
+
+--- Sample 7 ---
+(d-timing) CO total seconds: 1.047510
+(h) Final summary: Governments worldwide are using terrorism as a pretext to carry out executions, according to Amnesty International's annual report. The number of global executions decreased by 22%, from 778 to 607, with China, Belarus, and Vietnam not releasing execution data. Despite this decline, the report highlights an increase in death sentencing by 28%, with many countries imposing mass sentences. The organization notes positive developments, such as decreases in executions in several regions, but expresses concern over flawed judicial processes leading to death sentences.
+    Reference: Amnesty's annual death penalty report catalogs encouraging signs, but setbacks in numbers of those sentenced to death .
+Organization claims that governments around the world are using the threat of terrorism to advance executions .
+The number of executions worldwide has gone down by almost 22% compared with 2013, but death sentences up by 28% .
+
+--- Sample 8 ---
+(d-timing) CO total seconds: 0.649689
+(h) Final summary: The Los Angeles Coroner's Office is conducting an autopsy to determine the cause of death, which is believed to be due to natural causes. Getty had a history of health issues and had recently sought protection from an ex-partner in court. Andy Getty, a 47-year-old heir to the Getty oil fortune, has been found dead at his home with no signs of foul play. His parents, Gordon and Ann Getty, have asked for privacy following his death.
+    Reference: Andrew Getty's death appears to be from natural causes, police say, citing coroner's early assessment .
+In a petition for a restraining order, Getty had written he had a serious medical condition.
+Police say this is not a criminal matter at this time .
+
+--- Sample 9 ---
+(d-timing) CO total seconds: 0.371440
+(h) Final summary: Philippine authorities are warning residents and tourists to be cautious due to the approach of tropical storm "Maysak" or "Chedeng", which has sustained winds of over 70mph. Precautionary measures have been taken, including evacuations and a ban on outdoor activities in some areas. The storm is expected to land in the Philippines on Sunday morning and exit the country by Monday, with residents advised to prepare for a potentially severe impact. The storm is expected to land in the Philippines on Sunday morning and exit the country by Monday, with residents advised to prepare for significant impact.
+    Reference: Once a super typhoon, Maysak is now a tropical storm with 70 mph winds .
+It could still cause flooding, landslides and other problems in the Philippines .
+
+--- Sample 10 ---
+(d-timing) CO total seconds: 0.321567
+(h) Final summary: Bob Barker, a 91-year-old TV legend, made a surprise return to host the "Price is Right" after an eight-year absence, taking over for Drew Carey for the first episode of April. He then passed the hosting duties back to Carey to complete the episode. He then handed over to Drew Carey to finish the show.
+    Reference: Bob Barker returned to host "The Price Is Right" on Wednesday .
+Barker, 91, had retired as host in 2007 .
+

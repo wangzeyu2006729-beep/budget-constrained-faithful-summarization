@@ -1,0 +1,449 @@
+Llama-3.1-8B-Instruct Candidates-8 + DPP Summarization Results (Generate-then-Optimize)
+Generator: llama3_8b
+Method: dpp
+Objective variant: Tri-metric unified objective (ROUGE + MiniCheck + Redundancy)
+Model: meta-llama/Llama-3.1-8B-Instruct
+Dataset: cnn_dailymail
+Split: test
+Samples: 11490
+Sample mode: shuffle
+Sample seed: 42
+Candidate count: 8
+Budget: 4 sentences
+Runtime generation batch size: 12
+Runtime utility batch size: 32
+Runtime eval batch size: 64
+Runtime dtype: bf16
+ROUGE sentence split: nltk
+Ordering: source_similarity
+Stage output trace: <SOURCE_EXPERIMENT_ROOT>/outputs/cnn_dailymail/llama3_8b/dpp/full_cnn_dailymail_co_tri_metric_balanced_wr020_wm060_wd020_reuse_ilp_stage1/beam8_dpp_tri_metric_hfrouge_shuffle_seed42_stage_outputs.jsonl
+Stage1 reuse source: <SOURCE_EXPERIMENT_ROOT>/outputs/cnn_dailymail/llama3_8b/ilp/full_cnn_dailymail_co_tri_metric_requested_full_resume_llama_cnn_co/beam8_ilp_tri_metric_hfrouge_shuffle_seed42_stage_outputs.jsonl
+Started at: 2026-05-09T15:09:23.055448
+Finished at: 2026-05-09T19:50:08.104597
+Runtime total seconds (this process): 16845.05
+Stage seconds: generation=10166.00 (cumulative across resumes), evaluation=6667.41
+Resume: resumed=False, resumed_from=0, prior_gen_seconds=0.00
+Eval suite: full
+ROUGE implementation: huggingface_evaluate
+MaxInputTokens: 8192
+MaxNewTokens: 32768
+Temperature: 0.6
+TopP: 0.9
+TopK: 0
+MinP: 0.0
+PresencePenalty: 0.0
+RepetitionPenalty: 1.0
+Thinking: False
+DoSample: auto
+PromptVersion: llama3_cnn_dailymail_concise_summary_only_v1
+Tri-metric weights: rouge=0.200000, minicheck=0.600000, redundancy=0.200000
+Paper metrics: ['rouge', 'bertscore']
+Extra metrics: ['factcc', 'minicheck', 'alignscore', 'factgraph', 'factkb']
+ROUGE sentence split: nltk
+============================================================
+
+
+Paper Metrics:
+ROUGE Scores (F1 only, impl=huggingface_evaluate):
+  rouge1    F1=26.31%
+  rouge2    F1=5.26%
+  rougeL    F1=16.44%
+  rougeLsum  F1=22.79%
+BERTScore (roberta-large):
+  Precision=85.26%  Recall=84.81%  F1=85.02%
+
+Extra Metrics:
+FactCC (manueldeprada/FactCC):
+  SentenceAvgCorrect: 50.17%
+MiniCheck (EMNLP 2024, MiniCheck-RoBERTa-Large):
+  SummaryAvgConsistent: 85.02%
+AlignScore (ACL 2023, yzha/AlignScore-base, nli_sp):
+  SummaryAvg: 78.17%
+FactGraph: unavailable (FileNotFoundError('FACTGRAPH repo dir not configured. Set $FACTGRAPH_REPO_DIR or pass repo_dir explicitly. Clone https://github.com/amazon-science/fact-graph first.'))
+FactKB (bunsenfeng/FactKB):
+  FactualProb: 98.60%
+
+Runtime:
+  StartedAt: 2026-05-09T15:09:23.055448
+  FinishedAt: 2026-05-09T19:50:08.104597
+  MethodTotalSeconds: 16845.05
+  GenerationSeconds: 10166.00
+  EvaluationSeconds: 6667.41
+  Resume: resumed=False, resumed_from=0, prior_generation_seconds=0.00
+  MetricSeconds: rouge=28.43s, bertscore=211.87s, factcc=491.21s, minicheck=3511.27s, alignscore=2304.73s, factgraph=0.00s, factkb=119.55s
+  COTimingSeconds:
+    Samples: 11490
+    Total: 10126.19s MeanPerSample: 0.881304s
+
+============================================================
+Detailed selection logs (first 10 samples):
+============================================================
+
+--- Sample 1 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (11 sentences):
+    [0] Utility=0.7328 | The Palestine Authority has officially joined the International Court of Justice as its 123nd member, giving it jurisdiction over crimes committed in its territories.
+    [1] Utility=0.7199 | This move was marked by a ceremony in The Hague and is seen as a step towards greater justice and an end to impunity in the region.
+    [2] Utility=0.1272 | The ICC will now have the power to investigate war crimes, including those committed during the 2021 Gaza war, and Palestinians may also face counter charges.
+    [3] Utility=0.7735 | The US and Israel, which are not ICC members, have opposed Palestine's membership, but rights groups have welcomed the move as a positive step towards international justice.
+    [4] Utility=0.7134 | The US and Israel, which are not ICC members, have opposed Palestine's membership, but rights groups have welcomed the move.
+    [5] Utility=0.6000 | The court's prosecutor has vowed to conduct an impartial investigation.
+    [6] Utility=0.6995 | The US and Israel, which are not ICC members, have opposed Palestine's membership, but rights groups have welcomed the move, saying it upholds international justice.
+    [7] Utility=0.7317 | The US and Israel, which are not ICC members, have opposed Palestine's membership, but human rights groups have welcomed the move.
+    [8] Utility=0.7518 | The US and Israel, which are not ICC members, have opposed Palestine's membership, but rights groups have welcomed the move as a positive step towards international accountability.
+    [9] Utility=0.6163 | The US and Israel, which are not ICC members, have opposed Palestine's membership, but rights groups have welcomed the move, saying it upholds international justice and accountability.
+    [10] Utility=0.6419 | The US and Israel, which are not ICC members, have opposed Palestine's membership.
+(c) Redundancy matrix shape: (11, 11)
+    Highest redundancy pair: [4] vs [7], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.2000, minicheck=0.6000, redundancy=0.2000
+(d-timing) CO total seconds: 1.025383
+(d) Selected indices: [0, 1, 3, 8], utility sum: 2.9780
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [0, 1, 3, 8]
+    selected=[0] -> source_sent=[0] ROUGE-L=0.4528
+      selected: The Palestine Authority has officially joined the International Court of Justice as its 123nd member, giving it jurisdiction over crimes committed in its territories.
+      source:   (CNN)The Palestinian Authority officially became the 123rd member of the International Criminal Court on Wednesday, a step that gives the court jurisdiction over alleged crimes in Palestinian territories.
+    selected=[1] -> source_sent=[1] ROUGE-L=0.3478
+      selected: This move was marked by a ceremony in The Hague and is seen as a step towards greater justice and an end to impunity in the region.
+      source:   The formal accession was marked with a ceremony at The Hague, in the Netherlands, where the court is based.
+    selected=[3] -> source_sent=[5] ROUGE-L=0.2500
+      selected: The US and Israel, which are not ICC members, have opposed Palestine's membership, but rights groups have welcomed the move as a positive step towards international justice.
+      source:   Israel and the United States, neither of which is an ICC member, opposed the Palestinians' efforts to join the body.
+    selected=[8] -> source_sent=[5] ROUGE-L=0.2500
+      selected: The US and Israel, which are not ICC members, have opposed Palestine's membership, but rights groups have welcomed the move as a positive step towards international accountability.
+      source:   Israel and the United States, neither of which is an ICC member, opposed the Palestinians' efforts to join the body.
+(h) Final summary: The Palestine Authority has officially joined the International Court of Justice as its 123nd member, giving it jurisdiction over crimes committed in its territories. This move was marked by a ceremony in The Hague and is seen as a step towards greater justice and an end to impunity in the region. The US and Israel, which are not ICC members, have opposed Palestine's membership, but rights groups have welcomed the move as a positive step towards international justice. The US and Israel, which are not ICC members, have opposed Palestine's membership, but rights groups have welcomed the move as a positive step towards international accountability.
+    Reference: Membership gives the ICC jurisdiction over alleged crimes committed in Palestinian territories since last June .
+Israel and the United States opposed the move, which could open the door to war crimes investigations against Israelis .
+
+--- Sample 2 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (10 sentences):
+    [0] Utility=0.2000 | A one-year-old stray dog in Washington state has survived a series of near-fatal incidents, including a car accident, a hammer blow to the head, and attempted mercy killing by being buried alive.
+    [1] Utility=0.7126 | Found four days after being buried, she was rescued and taken to a veterinary hospital where she is receiving treatment for severe injuries.
+    [2] Utility=0.6817 | Despite her traumatic past, she is described as "gentle and loving" and a "true miracle dog."
+    [3] Utility=0.7702 | A fundraising campaign has been set up to help cover the cost of her extensive medical care, which includes surgery to repair her jaw and nasal damage.
+    [4] Utility=0.5989 | Donations have already exceeded the initial target.
+    [5] Utility=0.7521 | A fundraising campaign has been set up to help cover the cost of her medical care, which includes surgery to repair her jaw and nasal damage.
+    [6] Utility=0.7812 | A fundraising page has been set up to help cover the cost of her extensive medical care, which includes surgery to repair her jaw and nasal damage.
+    [7] Utility=0.7631 | A fundraising page has been set up to help cover the cost of her medical care, which includes surgery to repair her jaw and nasal damage.
+    [8] Utility=0.7434 | A fundraising campaign has been set up to help cover the cost of her medical care, which includes surgery to repair her jaw and sinus cavity.
+    [9] Utility=0.7161 | A fundraising campaign has been set up to help cover the cost of her extensive medical care.
+(c) Redundancy matrix shape: (10, 10)
+    Highest redundancy pair: [3] vs [5], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.2000, minicheck=0.6000, redundancy=0.2000
+(d-timing) CO total seconds: 0.632347
+(d) Selected indices: [3, 5, 6, 7], utility sum: 3.0666
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [5, 3, 6, 7]
+    selected=[5] -> source_sent=[9] ROUGE-L=0.2812
+      selected: A fundraising campaign has been set up to help cover the cost of her medical care, which includes surgery to repair her jaw and nasal damage.
+      source:   The veterinary hospital's Good Samaritan Fund committee awarded some money to help pay for the dog's treatment, but Mellado has set up a fundraising page to help meet the remaining cost of the dog's care.
+    selected=[3] -> source_sent=[12] ROUGE-L=0.3137
+      selected: A fundraising campaign has been set up to help cover the cost of her extensive medical care, which includes surgery to repair her jaw and nasal damage.
+      source:   On the fundraising page, Mellado writes, "She is in desperate need of extensive medical procedures to fix her nasal damage and reset her jaw.
+    selected=[6] -> source_sent=[12] ROUGE-L=0.3529
+      selected: A fundraising page has been set up to help cover the cost of her extensive medical care, which includes surgery to repair her jaw and nasal damage.
+      source:   On the fundraising page, Mellado writes, "She is in desperate need of extensive medical procedures to fix her nasal damage and reset her jaw.
+    selected=[7] -> source_sent=[12] ROUGE-L=0.3200
+      selected: A fundraising page has been set up to help cover the cost of her medical care, which includes surgery to repair her jaw and nasal damage.
+      source:   On the fundraising page, Mellado writes, "She is in desperate need of extensive medical procedures to fix her nasal damage and reset her jaw.
+(h) Final summary: A fundraising campaign has been set up to help cover the cost of her medical care, which includes surgery to repair her jaw and nasal damage. A fundraising campaign has been set up to help cover the cost of her extensive medical care, which includes surgery to repair her jaw and nasal damage. A fundraising page has been set up to help cover the cost of her extensive medical care, which includes surgery to repair her jaw and nasal damage. A fundraising page has been set up to help cover the cost of her medical care, which includes surgery to repair her jaw and nasal damage.
+    Reference: Theia, a bully breed mix, was apparently hit by a car, whacked with a hammer and buried in a field .
+"She's a true miracle dog and she deserves a good life," says Sara Mellado, who is looking for a home for Theia .
+
+--- Sample 3 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (9 sentences):
+    [0] Utility=0.2000 | Iranian Foreign Minister Mohammad Javid Zarif has been making headlines for his efforts to secure a nuclear deal with the US, but there are lesser-known facts about him, including that he tweeted a happy new year message to Jews and responded to criticism from US politician Christine Pelosi.
+    [1] Utility=0.6798 | He was educated in the US and has two children born there, and was investigated by the US Justice Department over allegations of involvement with a charity accused of money laundering.
+    [2] Utility=0.6047 | His birthdate is disputed, with different sources listing different years, and he was involved in student protests during the early Iranian Revolution.
+    [3] Utility=0.6000 | His birthdate is disputed, with different sources listing different years.
+    [4] Utility=0.6834 | He was educated in the US and has two children born there, and has been investigated by the US Justice Department for his alleged involvement with a charity accused of money laundering.
+    [5] Utility=0.5878 | His birthdate is disputed, with different sources listing different years, and he was involved in student protests during Iran's revolution.
+    [6] Utility=0.6893 | He was educated in the US and has two children born there, and was investigated by the US Justice Department over allegations of involvement with a charity accused of laundering money.
+    [7] Utility=0.6835 | He was educated in the US and has two children born there, and was investigated by the US Justice Department over allegations of involvement with a charity suspected of money laundering.
+    [8] Utility=0.6942 | He was educated in the US and has two children born there, and has been investigated by the US Justice Department for his alleged involvement with a charity accused of laundering money.
+(c) Redundancy matrix shape: (9, 9)
+    Highest redundancy pair: [4] vs [8], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.2000, minicheck=0.6000, redundancy=0.2000
+(d-timing) CO total seconds: 0.886818
+(d) Selected indices: [4, 6, 7, 8], utility sum: 2.7504
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [4, 6, 7, 8]
+    selected=[4] -> source_sent=[29] ROUGE-L=0.2083
+      selected: He was educated in the US and has two children born there, and has been investigated by the US Justice Department for his alleged involvement with a charity accused of money laundering.
+      source:   The feds investigated him over his alleged role in controlling the Alavi Foundation, a charitable organization.
+    selected=[6] -> source_sent=[29] ROUGE-L=0.2128
+      selected: He was educated in the US and has two children born there, and was investigated by the US Justice Department over allegations of involvement with a charity accused of laundering money.
+      source:   The feds investigated him over his alleged role in controlling the Alavi Foundation, a charitable organization.
+    selected=[7] -> source_sent=[29] ROUGE-L=0.2128
+      selected: He was educated in the US and has two children born there, and was investigated by the US Justice Department over allegations of involvement with a charity suspected of money laundering.
+      source:   The feds investigated him over his alleged role in controlling the Alavi Foundation, a charitable organization.
+    selected=[8] -> source_sent=[29] ROUGE-L=0.2083
+      selected: He was educated in the US and has two children born there, and has been investigated by the US Justice Department for his alleged involvement with a charity accused of laundering money.
+      source:   The feds investigated him over his alleged role in controlling the Alavi Foundation, a charitable organization.
+(h) Final summary: He was educated in the US and has two children born there, and has been investigated by the US Justice Department for his alleged involvement with a charity accused of money laundering. He was educated in the US and has two children born there, and was investigated by the US Justice Department over allegations of involvement with a charity accused of laundering money. He was educated in the US and has two children born there, and was investigated by the US Justice Department over allegations of involvement with a charity suspected of money laundering. He was educated in the US and has two children born there, and has been investigated by the US Justice Department for his alleged involvement with a charity accused of laundering money.
+    Reference: Mohammad Javad Zarif has spent more time with John Kerry than any other foreign minister .
+He once participated in a takeover of the Iranian Consulate in San Francisco .
+The Iranian foreign minister tweets in English .
+
+--- Sample 4 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (10 sentences):
+    [0] Utility=0.7486 | Five Americans monitored for Ebola exposure at a Nebraska hospital were released after three weeks, with one still in the area due to a pre-existing heart issue.
+    [1] Utility=0.7470 | The group, clinicians for a Boston aid group, had been exposed to the virus in March while working in Sierra Leon.
+    [2] Utility=0.5934 | None of them developed Ebola, and a colleague being treated for the disease in Maryland is in stable condition.
+    [3] Utility=0.3425 | This comes as the CDC expects to release all 17 monitored patients by Thursday, marking a significant milestone in the West African Ebola epidemic.
+    [4] Utility=0.0857 | This comes as the CDC expects to release all 17 monitored patients by Thursday, marking a milestone in the West African Ebola epidemic.
+    [5] Utility=0.3665 | This comes as the CDC expects to release all 17 monitored patients by Thursday, marking a significant milestone in the West African Ebola outbreak.
+    [6] Utility=0.3308 | This comes as the CDC expects to release all 17 monitored patients by Thursday, marking a significant milestone in the West African outbreak.
+    [7] Utility=0.6000 | This comes as the CDC expects to release all 17 monitored patients by Thursday, ending the monitoring period.
+    [8] Utility=0.7099 | Five Americans monitored for Ebola exposure at a Nebraska hospital were released after three weeks, with one individual remaining in the area due to a pre-existing heart issue.
+    [9] Utility=0.5628 | None of them developed Ebola, and a colleague being treated in Maryland is in stable condition.
+(c) Redundancy matrix shape: (10, 10)
+    Highest redundancy pair: [3] vs [4], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.2000, minicheck=0.6000, redundancy=0.2000
+(d-timing) CO total seconds: 0.269219
+(d) Selected indices: [0, 1, 7, 8], utility sum: 2.8055
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [0, 8, 1, 7]
+    selected=[0] -> source_sent=[0] ROUGE-L=0.3226
+      selected: Five Americans monitored for Ebola exposure at a Nebraska hospital were released after three weeks, with one still in the area due to a pre-existing heart issue.
+      source:   (CNN)Five Americans who were monitored for three weeks at an Omaha, Nebraska, hospital after being exposed to Ebola in West Africa have been released, a Nebraska Medicine spokesman said in an email Wednesday.
+    selected=[8] -> source_sent=[0] ROUGE-L=0.3175
+      selected: Five Americans monitored for Ebola exposure at a Nebraska hospital were released after three weeks, with one individual remaining in the area due to a pre-existing heart issue.
+      source:   (CNN)Five Americans who were monitored for three weeks at an Omaha, Nebraska, hospital after being exposed to Ebola in West Africa have been released, a Nebraska Medicine spokesman said in an email Wednesday.
+    selected=[1] -> source_sent=[4] ROUGE-L=0.3636
+      selected: The group, clinicians for a Boston aid group, had been exposed to the virus in March while working in Sierra Leon.
+      source:   They are clinicians for Partners in Health, a Boston-based aid group.
+    selected=[7] -> source_sent=[7] ROUGE-L=0.2667
+      selected: This comes as the CDC expects to release all 17 monitored patients by Thursday, ending the monitoring period.
+      source:   The Centers for Disease Control and Prevention in Atlanta has said the last of 17 patients who were being monitored are expected to be released by Thursday.
+(h) Final summary: Five Americans monitored for Ebola exposure at a Nebraska hospital were released after three weeks, with one still in the area due to a pre-existing heart issue. Five Americans monitored for Ebola exposure at a Nebraska hospital were released after three weeks, with one individual remaining in the area due to a pre-existing heart issue. The group, clinicians for a Boston aid group, had been exposed to the virus in March while working in Sierra Leon. This comes as the CDC expects to release all 17 monitored patients by Thursday, ending the monitoring period.
+    Reference: 17 Americans were exposed to the Ebola virus while in Sierra Leone in March .
+Another person was diagnosed with the disease and taken to hospital in Maryland .
+National Institutes of Health says the patient is in fair condition after weeks of treatment .
+
+--- Sample 5 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (11 sentences):
+    [0] Utility=0.7232 | A Duke University student has been identified and removed from campus after admitting to placing a rope noose near the student union.
+    [1] Utility=0.6720 | The university is conducting a review of the student's conduct and a criminal investigation is ongoing.
+    [2] Utility=0.7936 | Hundreds of students and faculty gathered for a forum to condemn the incident, with the university president stating that the act was "not the Duke they want to experience."
+    [3] Utility=0.6494 | This is the latest in a series of racist incidents affecting college students, including a fraternity's charter being removed and a statue desecrated at another university.
+    [4] Utility=0.1040 | This is the latest in a series of racist incidents affecting college students, including a fraternity's charter being removed and a statue being vandalized.
+    [5] Utility=0.2017 | This is the latest in a series of racist incidents affecting college students, including a fraternity's charter being removed and a statue vandalized.
+    [6] Utility=0.5917 | A university official called the act "hateful and cowardly."
+    [7] Utility=0.2328 | A vice president called the act "hateful and stupid."
+    [8] Utility=0.6063 | A university official called the act "hateful and stupid."
+    [9] Utility=0.5665 | A vice president called the act "hateful and cowardly."
+    [10] Utility=0.3681 | A university vice president called the act "hateful and stupid."
+(c) Redundancy matrix shape: (11, 11)
+    Highest redundancy pair: [4] vs [5], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.2000, minicheck=0.6000, redundancy=0.2000
+(d-timing) CO total seconds: 0.622852
+(d) Selected indices: [0, 1, 2, 3], utility sum: 2.8382
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [0, 2, 1, 3]
+    selected=[0] -> source_sent=[0] ROUGE-L=0.4783
+      selected: A Duke University student has been identified and removed from campus after admitting to placing a rope noose near the student union.
+      source:   (CNN)A Duke student has admitted to hanging a noose made of rope from a tree near a student union, university officials said Thursday.
+    selected=[2] -> source_sent=[11] ROUGE-L=0.2564
+      selected: Hundreds of students and faculty gathered for a forum to condemn the incident, with the university president stating that the act was "not the Duke they want to experience."
+      source:   This is not the Duke we're here to experience.
+    selected=[1] -> source_sent=[13] ROUGE-L=0.2667
+      selected: The university is conducting a review of the student's conduct and a criminal investigation is ongoing.
+      source:   The incident is one of several recent racist events to affect college students.
+    selected=[3] -> source_sent=[13] ROUGE-L=0.3000
+      selected: This is the latest in a series of racist incidents affecting college students, including a fraternity's charter being removed and a statue desecrated at another university.
+      source:   The incident is one of several recent racist events to affect college students.
+(h) Final summary: A Duke University student has been identified and removed from campus after admitting to placing a rope noose near the student union. Hundreds of students and faculty gathered for a forum to condemn the incident, with the university president stating that the act was "not the Duke they want to experience." The university is conducting a review of the student's conduct and a criminal investigation is ongoing. This is the latest in a series of racist incidents affecting college students, including a fraternity's charter being removed and a statue desecrated at another university.
+    Reference: Student is no longer on Duke University campus and will face disciplinary review .
+School officials identified student during investigation and the person admitted to hanging the noose, Duke says .
+The noose, made of rope, was discovered on campus about 2 a.m.
+
+--- Sample 6 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (11 sentences):
+    [0] Utility=0.6945 | Trey Moses, a college-bound basketball star, asked his classmate Ellie Meredith, who has Down syndrome, to prom instead of his girlfriend.
+    [1] Utility=0.4963 | Trey chose Ellie because of her kind and friendly nature, and she accepted with the help of a special poster and flowers referencing her favorite singer, Taylor Swift.
+    [2] Utility=0.5682 | Ellie's mother was thrilled, crediting a school program that helps students with developmental disabilities form friendships with their peers.
+    [3] Utility=0.1600 | Trey plans to major in special education in college, and Ellie is excited to go to prom with her new date.
+    [4] Utility=0.6200 | Ellie's mother was thrilled, crediting a school program that helps students with developmental disabilities make friends and feel included.
+    [5] Utility=0.5125 | Trey plans to major in special education in college, and Ellie is excited for prom and dress shopping.
+    [6] Utility=0.5478 | Trey plans to major in special education in college, and Ellie is excited to go to prom and start dress shopping.
+    [7] Utility=0.6862 | Trey plans to major in special education in college, and Ellie is excited to go to prom.
+    [8] Utility=0.5702 | Trey plans to major in special education in college, and Ellie is excited to go to prom and start planning her outfit.
+    [9] Utility=0.5492 | Trey plans to major in special education in college, and Ellie is excited to go to prom and start planning her dress.
+    [10] Utility=0.2882 | Trey plans to major in special education in college, and Ellie is excited to go to prom with her date.
+(c) Redundancy matrix shape: (11, 11)
+    Highest redundancy pair: [3] vs [10], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.2000, minicheck=0.6000, redundancy=0.2000
+(d-timing) CO total seconds: 0.685249
+(d) Selected indices: [0, 2, 4, 7], utility sum: 2.5689
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [2, 4, 0, 7]
+    selected=[2] -> source_sent=[1] ROUGE-L=0.2759
+      selected: Ellie's mother was thrilled, crediting a school program that helps students with developmental disabilities form friendships with their peers.
+      source:   She's a high school freshman with Down syndrome.
+    selected=[4] -> source_sent=[1] ROUGE-L=0.2759
+      selected: Ellie's mother was thrilled, crediting a school program that helps students with developmental disabilities make friends and feel included.
+      source:   She's a high school freshman with Down syndrome.
+    selected=[0] -> source_sent=[3] ROUGE-L=0.2778
+      selected: Trey Moses, a college-bound basketball star, asked his classmate Ellie Meredith, who has Down syndrome, to prom instead of his girlfriend.
+      source:   But all that changed Thursday when Trey asked Ellie to be his prom date.
+    selected=[7] -> source_sent=[25] ROUGE-L=0.3243
+      selected: Trey plans to major in special education in college, and Ellie is excited to go to prom.
+      source:   Trey is looking to take up special education as a college major, in addition to playing basketball in the fall.
+(h) Final summary: Ellie's mother was thrilled, crediting a school program that helps students with developmental disabilities form friendships with their peers. Ellie's mother was thrilled, crediting a school program that helps students with developmental disabilities make friends and feel included. Trey Moses, a college-bound basketball star, asked his classmate Ellie Meredith, who has Down syndrome, to prom instead of his girlfriend. Trey plans to major in special education in college, and Ellie is excited to go to prom.
+    Reference: College-bound basketball star asks girl with Down syndrome to high school prom .
+Pictures of the two during the "prom-posal" have gone viral .
+
+--- Sample 7 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (11 sentences):
+    [0] Utility=0.6000 | Governments worldwide are using terrorism as a pretext to carry out executions, according to Amnesty International's annual report.
+    [1] Utility=0.1929 | The number of global executions decreased by 22%, from 778 to 607, with China, Belarus, and Vietnam not releasing execution data.
+    [2] Utility=0.6245 | Despite this decline, the report highlights an increase in death sentencing by 28%, with many countries imposing mass sentences.
+    [3] Utility=0.3171 | The organization notes positive developments, such as decreases in executions in several regions, but also raises concerns about flawed judicial processes leading to unfair death sentences.
+    [4] Utility=0.2283 | The organization notes positive developments, such as decreases in executions in several regions, but expresses concern over flawed judicial processes leading to unfair death sentences.
+    [5] Utility=0.3904 | The organization notes positive developments, such as decreases in executions in several regions, but also raises concerns about flawed judiciary processes leading to unfair death sentences.
+    [6] Utility=0.3016 | The organization notes positive developments, such as decreases in executions in several regions, but expresses concern over flawed judiciary processes leading to unfair death sentences.
+    [7] Utility=0.5009 | The organization notes positive developments, such as decreases in executions in several regions, but expresses concern over flawed judicial processes leading to death sentences.
+    [8] Utility=0.1492 | The organization notes positive developments, such as decreases in executions in several regions, but also raises concerns about flawed judiciary processes leading to unfair trials.
+    [9] Utility=0.0782 | The organization notes positive developments, such as decreases in executions in several regions, but expresses concern over flawed judiciary processes leading to unfair trials.
+    [10] Utility=0.0666 | The organization notes positive developments, such as decreases in executions in several regions, but also raises concerns about flawed judicial processes leading to unfair trials.
+(c) Redundancy matrix shape: (11, 11)
+    Highest redundancy pair: [4] vs [7], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.2000, minicheck=0.6000, redundancy=0.2000
+(d-timing) CO total seconds: 1.053893
+(d) Selected indices: [0, 2, 5, 7], utility sum: 2.1159
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [0, 2, 5, 7]
+    selected=[0] -> source_sent=[0] ROUGE-L=0.4255
+      selected: Governments worldwide are using terrorism as a pretext to carry out executions, according to Amnesty International's annual report.
+      source:   (CNN)Governments around the world are using the threat of terrorism -- real or perceived -- to advance executions, Amnesty International alleges in its annual report on the death penalty.
+    selected=[2] -> source_sent=[27] ROUGE-L=0.3333
+      selected: Despite this decline, the report highlights an increase in death sentencing by 28%, with many countries imposing mass sentences.
+      source:   The report also highlights the imperfections in the judiciary processes that lead to many sentenced to death.
+    selected=[5] -> source_sent=[27] ROUGE-L=0.3256
+      selected: The organization notes positive developments, such as decreases in executions in several regions, but also raises concerns about flawed judiciary processes leading to unfair death sentences.
+      source:   The report also highlights the imperfections in the judiciary processes that lead to many sentenced to death.
+    selected=[7] -> source_sent=[27] ROUGE-L=0.2927
+      selected: The organization notes positive developments, such as decreases in executions in several regions, but expresses concern over flawed judicial processes leading to death sentences.
+      source:   The report also highlights the imperfections in the judiciary processes that lead to many sentenced to death.
+(h) Final summary: Governments worldwide are using terrorism as a pretext to carry out executions, according to Amnesty International's annual report. Despite this decline, the report highlights an increase in death sentencing by 28%, with many countries imposing mass sentences. The organization notes positive developments, such as decreases in executions in several regions, but also raises concerns about flawed judiciary processes leading to unfair death sentences. The organization notes positive developments, such as decreases in executions in several regions, but expresses concern over flawed judicial processes leading to death sentences.
+    Reference: Amnesty's annual death penalty report catalogs encouraging signs, but setbacks in numbers of those sentenced to death .
+Organization claims that governments around the world are using the threat of terrorism to advance executions .
+The number of executions worldwide has gone down by almost 22% compared with 2013, but death sentences up by 28% .
+
+--- Sample 8 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (10 sentences):
+    [0] Utility=0.6736 | Andy Getty, a 47-year-old heir to the Getty oil fortune, has been found dead at his home with no signs of foul play.
+    [1] Utility=0.7548 | The Los Angeles Coroner's Office is conducting an autopsy to determine the cause of death, which is believed to be due to natural causes.
+    [2] Utility=0.6526 | Getty had a history of health issues and had recently sought protection from an ex-partner.
+    [3] Utility=0.6541 | His parents, Gordon and Ann Getty, have asked for privacy as they mourn the loss of their son.
+    [4] Utility=0.6375 | His parents, Gordon and Ann Getty, have asked for privacy following his death.
+    [5] Utility=0.7540 | The Los Angeles Coroner's office is conducting an autopsy to determine the cause of death, which is believed to be due to natural causes.
+    [6] Utility=0.6793 | Getty had a history of health issues and had recently sought protection from an ex-partner in court.
+    [7] Utility=0.6499 | His parents, Gordon and Ann Getty, have asked for privacy following the news of his passing.
+    [8] Utility=0.6058 | His parents, Gordon and Ann Getty, have asked for privacy as they mourn the loss.
+    [9] Utility=0.0000 | The family's net worth is estimated to be around $5 million.
+(c) Redundancy matrix shape: (10, 10)
+    Highest redundancy pair: [1] vs [5], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.2000, minicheck=0.6000, redundancy=0.2000
+(d-timing) CO total seconds: 0.615557
+(d) Selected indices: [0, 1, 5, 6], utility sum: 2.8617
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [1, 5, 6, 0]
+    selected=[1] -> source_sent=[0] ROUGE-L=0.2353
+      selected: The Los Angeles Coroner's Office is conducting an autopsy to determine the cause of death, which is believed to be due to natural causes.
+      source:   (CNN)Andrew Getty, one of the heirs to billions of oil money, appears to have died of natural causes, a Los Angeles Police Department spokesman said.
+    selected=[5] -> source_sent=[0] ROUGE-L=0.2353
+      selected: The Los Angeles Coroner's office is conducting an autopsy to determine the cause of death, which is believed to be due to natural causes.
+      source:   (CNN)Andrew Getty, one of the heirs to billions of oil money, appears to have died of natural causes, a Los Angeles Police Department spokesman said.
+    selected=[6] -> source_sent=[2] ROUGE-L=0.2941
+      selected: Getty had a history of health issues and had recently sought protection from an ex-partner in court.
+      source:   Andrew Getty, 47, had "several health issues," Aguilar said, adding that an autopsy will be conducted.
+    selected=[0] -> source_sent=[5] ROUGE-L=0.2000
+      selected: Andy Getty, a 47-year-old heir to the Getty oil fortune, has been found dead at his home with no signs of foul play.
+      source:   KTLA reported that Getty was found on his side near a bathroom in his home.
+(h) Final summary: The Los Angeles Coroner's Office is conducting an autopsy to determine the cause of death, which is believed to be due to natural causes. The Los Angeles Coroner's office is conducting an autopsy to determine the cause of death, which is believed to be due to natural causes. Getty had a history of health issues and had recently sought protection from an ex-partner in court. Andy Getty, a 47-year-old heir to the Getty oil fortune, has been found dead at his home with no signs of foul play.
+    Reference: Andrew Getty's death appears to be from natural causes, police say, citing coroner's early assessment .
+In a petition for a restraining order, Getty had written he had a serious medical condition.
+Police say this is not a criminal matter at this time .
+
+--- Sample 9 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (10 sentences):
+    [0] Utility=0.7769 | Philippine authorities are warning residents and tourists to be cautious due to the approach of tropical storm "Maysak" or "Chedeng", which has sustained winds of over 70mph.
+    [1] Utility=0.6000 | Precautionary measures have been taken, including evacuations and a ban on outdoor activities in some areas.
+    [2] Utility=0.3072 | The storm is expected to hit the eastern coast of the country on Sunday morning and exit by Monday, with residents advised to prepare for a potentially severe impact.
+    [3] Utility=0.7533 | The storm is expected to land in the Philippines on Sunday morning and exit the country by Monday, with residents advised to prepare for a potentially severe impact.
+    [4] Utility=0.4118 | The storm is expected to hit the eastern coast of the country on Sunday morning and exit by Monday, with officials advising residents to prepare for a potentially severe impact.
+    [5] Utility=0.7604 | The storm is expected to land in the Philippines on Sunday morning and exit the country by Monday, with residents advised to prepare for a potentially significant impact.
+    [6] Utility=0.7365 | The storm is expected to land in the Philippines on Sunday morning and exit the country by Monday, with residents advised to prepare for a significant impact.
+    [7] Utility=0.7196 | The storm is expected to land in the Philippines on Sunday morning and exit the country by Monday, with residents advised to prepare for significant impact.
+    [8] Utility=0.2302 | The storm is expected to hit the eastern coast of the country on Sunday morning and exit by Monday, with residents advised to prepare for a significant impact.
+    [9] Utility=0.1882 | The storm is expected to hit the eastern coast of the country on Sunday morning and exit by Monday, with residents advised to prepare for significant impact.
+(c) Redundancy matrix shape: (10, 10)
+    Highest redundancy pair: [5] vs [6], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.2000, minicheck=0.6000, redundancy=0.2000
+(d-timing) CO total seconds: 0.358273
+(d) Selected indices: [0, 3, 5, 6], utility sum: 3.0272
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [0, 3, 5, 6]
+    selected=[0] -> source_sent=[0] ROUGE-L=0.2745
+      selected: Philippine authorities are warning residents and tourists to be cautious due to the approach of tropical storm "Maysak" or "Chedeng", which has sustained winds of over 70mph.
+      source:   (CNN)Filipinos are being warned to be on guard for flash floods and landslides as tropical storm Maysak approached the Asian island nation Saturday.
+    selected=[3] -> source_sent=[11] ROUGE-L=0.3137
+      selected: The storm is expected to land in the Philippines on Sunday morning and exit the country by Monday, with residents advised to prepare for a potentially severe impact.
+      source:   It's expected to make landfall Sunday morning on the southeastern coast of Isabela province and be out of the Philippines by Monday.
+    selected=[5] -> source_sent=[11] ROUGE-L=0.3137
+      selected: The storm is expected to land in the Philippines on Sunday morning and exit the country by Monday, with residents advised to prepare for a potentially significant impact.
+      source:   It's expected to make landfall Sunday morning on the southeastern coast of Isabela province and be out of the Philippines by Monday.
+    selected=[6] -> source_sent=[11] ROUGE-L=0.3200
+      selected: The storm is expected to land in the Philippines on Sunday morning and exit the country by Monday, with residents advised to prepare for a significant impact.
+      source:   It's expected to make landfall Sunday morning on the southeastern coast of Isabela province and be out of the Philippines by Monday.
+(h) Final summary: Philippine authorities are warning residents and tourists to be cautious due to the approach of tropical storm "Maysak" or "Chedeng", which has sustained winds of over 70mph. The storm is expected to land in the Philippines on Sunday morning and exit the country by Monday, with residents advised to prepare for a potentially severe impact. The storm is expected to land in the Philippines on Sunday morning and exit the country by Monday, with residents advised to prepare for a potentially significant impact. The storm is expected to land in the Philippines on Sunday morning and exit the country by Monday, with residents advised to prepare for a significant impact.
+    Reference: Once a super typhoon, Maysak is now a tropical storm with 70 mph winds .
+It could still cause flooding, landslides and other problems in the Philippines .
+
+--- Sample 10 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (10 sentences):
+    [0] Utility=0.3803 | Bob Barker, a 91-year-old TV legend, made a surprise return to host the "Price is Right" after an eight-year absence, taking over for Drew Carey for the first episode of April.
+    [1] Utility=0.0839 | Barker hosted the show from 1972-2007 and seemed to be back in his element, effortlessly handling the classic game.
+    [2] Utility=0.6018 | He then handed over to Drew Carey to finish the episode.
+    [3] Utility=0.0088 | Barker's return was a welcome surprise for contestants and fans alike.
+    [4] Utility=0.6319 | He then passed the hosting duties back to Carey to finish the episode.
+    [5] Utility=0.6452 | He then passed the hosting duties back to Carey to finish the show.
+    [6] Utility=0.6236 | He then passed the hosting duties back to Carey to complete the episode.
+    [7] Utility=0.6176 | He then handed over hosting duties to Drew Carey to finish the episode.
+    [8] Utility=0.6195 | He then handed over to Drew Carey to finish the show.
+    [9] Utility=0.6355 | He then handed over hosting duties to Drew Carey to finish the show.
+(c) Redundancy matrix shape: (10, 10)
+    Highest redundancy pair: [4] vs [5], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.2000, minicheck=0.6000, redundancy=0.2000
+(d-timing) CO total seconds: 0.238028
+(d) Selected indices: [4, 5, 6, 9], utility sum: 2.5362
+(d-order) Ordering method: source_similarity
+    Ordered selected indices: [4, 5, 6, 9]
+    selected=[4] -> source_sent=[4] ROUGE-L=0.2927
+      selected: He then passed the hosting duties back to Carey to finish the episode.
+      source:   Looking spry at 91, Barker handled the first price-guessing game of the show, the classic "Lucky Seven," before turning hosting duties over to Carey, who finished up.
+    selected=[5] -> source_sent=[4] ROUGE-L=0.2927
+      selected: He then passed the hosting duties back to Carey to finish the show.
+      source:   Looking spry at 91, Barker handled the first price-guessing game of the show, the classic "Lucky Seven," before turning hosting duties over to Carey, who finished up.
+    selected=[6] -> source_sent=[4] ROUGE-L=0.2439
+      selected: He then passed the hosting duties back to Carey to complete the episode.
+      source:   Looking spry at 91, Barker handled the first price-guessing game of the show, the classic "Lucky Seven," before turning hosting duties over to Carey, who finished up.
+    selected=[9] -> source_sent=[4] ROUGE-L=0.2439
+      selected: He then handed over hosting duties to Drew Carey to finish the show.
+      source:   Looking spry at 91, Barker handled the first price-guessing game of the show, the classic "Lucky Seven," before turning hosting duties over to Carey, who finished up.
+(h) Final summary: He then passed the hosting duties back to Carey to finish the episode. He then passed the hosting duties back to Carey to finish the show. He then passed the hosting duties back to Carey to complete the episode. He then handed over hosting duties to Drew Carey to finish the show.
+    Reference: Bob Barker returned to host "The Price Is Right" on Wednesday .
+Barker, 91, had retired as host in 2007 .
+
