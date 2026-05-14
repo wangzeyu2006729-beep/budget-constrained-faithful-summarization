@@ -101,15 +101,21 @@ see `docs/acl_code_paper_audit.md` and `paper/AUDIT_NOTES.md` before submission.
 
 ## Publish To GitHub
 
-The repository name derived from `Budget-constrained and faithful.tex` is:
+The publication-style repository name derived from the paper topic is:
 
 ```text
-budget-constrained-and-faithful
+budget-constrained-faithful-summarization
 ```
 
-This server currently has no `gh` CLI and no `GH_TOKEN`/`GITHUB_TOKEN`, so remote
-creation requires a token. The release directory is already initialized as a
-local git repository on branch `main`.
+The GitHub repository is:
+
+```text
+https://github.com/wangzeyu2006729-beep/budget-constrained-faithful-summarization
+```
+
+This server currently has no `gh` CLI, so creating or renaming repositories
+requires a token. The release directory is already initialized as a local git
+repository on branch `main`.
 
 ```bash
 cd /home/zeyu/projects/NLP_acl_repro_release

@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-REPO_NAME="${REPO_NAME:-budget-constrained-and-faithful}"
+REPO_NAME="${REPO_NAME:-budget-constrained-faithful-summarization}"
 VISIBILITY="${VISIBILITY:-private}"
 REMOTE_NAME="${REMOTE_NAME:-origin}"
 BRANCH="${BRANCH:-main}"
@@ -18,7 +18,7 @@ Usage:
 
 Environment:
   GH_TOKEN or GITHUB_TOKEN  GitHub token with repo creation permission.
-  REPO_NAME                Default: budget-constrained-and-faithful.
+  REPO_NAME                Default: budget-constrained-faithful-summarization.
   VISIBILITY               private or public. Default: private.
   REMOTE_NAME              Default: origin.
   BRANCH                   Default: main.
