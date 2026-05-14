@@ -1,0 +1,487 @@
+\documentclass[11pt]{article}
+
+% Change "review" to "final" to generate the final (sometimes called camera-ready) version.
+% Change to "preprint" to generate a non-anonymous version with page numbers.
+\usepackage[review]{acl}
+
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
+
+% For proper rendering and hyphenation of words containing Latin characters (including in bib files)
+\usepackage[T1]{fontenc}
+% For Vietnamese characters
+% \usepackage[T5]{fontenc}
+% See https://www.latex-project.org/help/documentation/encguide.pdf for other character sets
+
+% This assumes your files are encoded as UTF8
+\usepackage[utf8]{inputenc}
+
+% This is not strictly necessary, and may be commented out,
+% but it will improve the layout of the manuscript,
+% and will typically save some space.
+\usepackage{microtype}
+
+% This is also not strictly necessary, and may be commented out.
+% However, it will improve the aesthetics of text in
+% the typewriter font.
+\usepackage{inconsolata}
+
+%Including images in your LaTeX document requires adding
+%additional package(s)
+\usepackage{graphicx}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{multirow}
+
+% If the title and author information does not fit in the area allocated, uncomment the following
+%
+%\setlength\titlebox{<dim>}
+%
+% and set <dim> to something 5cm or larger.
+
+\title{Decoupling Generation and Selection for Budget-Constrained and Faithful Summarization}
+
+\author{
+\textbf{Zeyu Wang} and
+\textbf{Guanghua Wang}\thanks{Corresponding author.}
+\\
+\ Kean University, USA
+\\
+\small{
+\texttt{\{wangzeyu, guanghua.wang\}@kean.edu}
+}
+}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+This document is a supplement to the general instructions for *ACL authors. It contains instructions for using the \LaTeX{} style files for ACL conferences.
+The document itself conforms to its own specifications, and is therefore an example of what your manuscript should look like.
+These instructions should be used both for papers submitted for review and for final versions of accepted papers.
+\end{abstract}
+\section{Introduction}
+\section{Related Work}
+\subsection{Abstractive Summarization with Language Models}
+\subsection{Faithfulness and Hallucination Reduction}
+\subsection{Combinatorial Optimization for Summarization}
+\section{Method}
+
+\subsection{Problem Definition and Framework Overview}
+
+Given an input document or document set $\mathcal{D}$, abstractive summarization aims to produce a concise and faithful textual summary that captures the salient information of $\mathcal{D}$. Most existing approaches formulate this task as conditional sequence generation, which achieves strong fluency but provides limited control over output length and factual consistency.
+
+We instead cast abstractive summarization as a \emph{budget-constrained combinatorial selection problem} over a discrete candidate space. Specifically, we construct a candidate pool of sentences 
+$\mathcal{C} = \{c_1, \dots, c_n\}$ 
+using a pretrained language model. The objective is to select a subset $S \subseteq \mathcal{C}$ that maximizes summary quality under an explicit budget constraint:
+\begin{equation}
+\max_{S \subseteq \mathcal{C}} f(S)
+\quad \text{s.t.} \quad
+\sum_{c_i \in S} l_i \le B,
+\end{equation}
+where $l_i$ denotes the cost (e.g., length) of candidate $c_i$, and $B$ is the budget.
+
+We design $f(S)$ to capture three key properties of high-quality summaries:
+\begin{itemize}
+    \item \textbf{Utility (U):} promotes relevance and semantic coverage of the source document;
+    \item \textbf{Factuality (F):} encourages consistency between candidate sentences and $\mathcal{D}$;
+    \item \textbf{Redundancy (R):} penalizes semantic overlap among selected candidates to encourage diversity.
+\end{itemize}
+These components are integrated within a unified combinatorial objective to guide subset selection under the budget constraint.
+
+Crucially, we design $f(S)$ as a monotone submodular function, which naturally captures diminishing returns and provides a principled foundation for modeling coverage and diversity. In particular, we combine (i) a coverage-based component defined over semantic units or document representations, (ii) a modular factuality score, and (iii) a diversity-promoting term such as a facility-location or similarity-based objective. This formulation enables the use of combinatorial optimization methods, including exact optimization via integer linear programming and diversity-aware selection mechanisms such as determinantal point processes, while retaining the theoretical properties of submodular objectives.
+
+Figure~\ref{fig:pipeline} illustrates the overall framework, which consists of three stages:
+(1) \emph{candidate generation}, where a language model produces a diverse set of candidate sentences;
+(2) \emph{combinatorial content planning}, where an optimizer selects a subset of candidates by jointly considering utility, factuality, and redundancy under a budget constraint; and
+(3) \emph{constrained summary realization}, where the selected candidates are ordered to produce the final summary.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{latex/Pipeline.png}
+\caption{Overview of the proposed framework. A language model first generates a pool of candidate sentences. A combinatorial optimizer then selects a subset under a budget constraint by jointly considering utility, factuality, and redundancy. Finally, the selected content is ordered to produce the final summary.}
+\label{fig:pipeline}
+\end{figure*}
+
+This formulation offers three key advantages. First, it provides \emph{explicit and guaranteed control over summary length} through the budget constraint, independent of the generation model. Second, it improves \emph{faithfulness} by restricting the final output to content that is explicitly evaluated against the source document. Third, it enables a \emph{modular integration} of neural generation and combinatorial optimization, allowing pretrained language models to be used without retraining while enforcing global constraints explicitly at the selection stage.
+
+
+
+
+\subsection{Candidate Generation}
+\subsection{Scoring Functions}
+\paragraph{Utility}
+\paragraph{Factuality}
+\paragraph{Redundancy}
+\subsection{Budget-Constrained Optimization}
+\subsection{Summary Realization}
+
+\section{Experimental Setup}
+\subsection{Datasets}
+CNN/Daily Mail\cite{nallapati-etal-2016-abstractive}
+Multi-News\cite{fabbri-etal-2019-multi}
+\subsection{Baselines}
+BART\cite{lewis-etal-2020-bart}
+PRIMERA\cite{xiao-etal-2022-primera}
+Qwen3.5-9B\cite{qwenteam2026qwen35omnitechnicalreport}
+FactEdit\cite{balachandran-etal-2022-correcting}
+SimCLS\cite{liu-liu-2021-simcls}
+BRIO-Mul\cite{liu-etal-2022-brio}
+BRIO-Ctr\cite{liu-etal-2022-brio}
+EFactSum\cite{dixit-etal-2023-improving}
+SummaReranker\cite{ravaut-etal-2022-summareranker}
+Llama-3-8B\cite{llama3modelcard}
+Gemma-4-E4B-it\cite{gemma2024, gemma4_e4b_it}
+
+\subsection{Implementation Details}
+
+\subsection{Evaluation Metrics}
+Rouge
+BertScore
+FactCC
+MiniCheck
+AlignScore
+FactKB
+\section{Results}
+\subsection{Main Results}
+\begin{table*}[htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{4.5pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{} l l cccc c cccc @{}}
+\toprule
+\textbf{Dataset} & \textbf{Method}
+ & \multicolumn{4}{c}{\textbf{ROUGE} ($\uparrow$)}
+ & \textbf{BERTScore} ($\uparrow$)
+ & \multicolumn{4}{c}{\textbf{Faithfulness} ($\uparrow$)} \\
+\cmidrule(lr){3-6} \cmidrule(lr){7-7} \cmidrule(l){8-11}
+ & 
+ & R-1 & R-2 & R-L & R-Lsum
+ & F1
+ & FactCC & MiniCheck & AlignScore & FactKB \\
+\midrule
+
+\multirow{16}{*}{CNN/DM}
+ & BART        & 44.05 & 21.07 & 30.62 & 40.99 & 88.21 & 75.83 & 94.90 & 91.56 & 98.49 \\
+ & Qwen3.5-9B        & 34.88 & 10.91 & 20.33 & 30.77 & 86.96 & 40.16 & 56.82 & 65.17 & 98.12 \\
+ & FactEdit        & 42.53 & 20.48 & 39.74 & 40.76 & 88.17 & 76.03 & 94.82 & 91.46 & 98.68 \\
+ & SimCLS          & 46.67 & 22.15 & 43.54 & 43.09 & 66.14 & 59.49 & 83.34 & 82.37 & 80.75 \\
+ & BRIO-Mul        & 47.78 & 23.55 & 44.57 & 44.12 & 87.84 & 54.06 & 84.67 & 74.48 & 85.20 \\
+ & BRIO-Ctr        & 47.28 & 22.93 & 44.15 & 44.10 & 89.11 & 62.62 & 88.42 & 84.98 & 78.89 \\
+ & EFactSum        & 44.37 & 21.28 & 40.92 & 41.07 & 88.36 & 60.74 & 88.33 & 82.02 & 91.38 \\
+ & SummaReranker   & 46.62 & 22.39 & 43.59 & 43.80 & 88.47 & 68.17 & 93.81 & 88.27 & 98.10 \\
+ & Llama-3-8B      & 38.98 & 14.82 & 24.20 & 35.28 & 87.72 & 46.78 & 76.00 & 75.08 & 98.51 \\
+ & Gemma-4-E4B-it   & 30.51 & 6.41 & 18.07 & 27.40 & 86.19 & 53.99 & 69.49 & 71.32 & 89.59 \\
+ \cmidrule(l){2-11}
+ & BART+MMR            & 41.85 & 19.44 & 28.03 & 38.99 & 87.75 & 76.55 & 96.22 & 92.42 & 98.67 \\
+ & BART+ILP             & 42.84 & 19.91 & 28.46 & 39.87 & 87.91 & 76.71 & 96.76 & 92.56 & 98.65 \\
+ & BART+DPP             & 41.67 & 19.36 & 27.96 & 38.85 & 87.72 & 76.92 & 96.93 & 93.14 & 98.83 \\
+ & Llama-3-8B+MMR (new w.)   & 29.18 & 6.14 & 17.33 & 25.53 & 85.68 & 49.94 & 83.69 & 77.52 & 97.98 \\
+ & Llama-3-8B+ILP (new w.)   & 27.96 & 5.75 & 16.95 & 24.35 & 85.39 & 50.06 & 84.61 & 77.98 & 98.30 \\
+ & Llama-3-8B+DPP (old w.)   & 26.89 & 5.27 & 16.54 & 23.48 & 85.21 & 52.27 & 85.78 & 78.61 & 98.20 \\
+
+\midrule
+
+\multirow{16}{*}{Multi-News}
+ & PRIMERA            & 41.10 & 15.88 & 22.17 & 37.30 & 86.89 & 37.40 & 63.06 & 53.30 & 94.36 \\
+ & Qwen3.5-9B        &  &  &  &  &  &  &  &  &  \\
+ & FactEdit        &  &  &  &  &  &  &  &  &  \\
+ & SimCLS          &  &  &  &  &  &  &  &  &  \\
+ & BRIO-Mul        &  &  &  &  &  &  &  &  &  \\
+ & BRIO-Ctr        &  &  &  &  &  &  &  &  &  \\
+ & EFactSum        &  &  &  &  &  &  &  &  &  \\
+ & SummaReranker   &  &  &  &  &  &  &  &  &  \\
+ & Llama-3-8B      &  &  &  &  &  &  &  &  &  \\
+ & Gemma-4-E4B-it   &  &  &  &  &  &  &  &  &  \\
+ \cmidrule(l){2-11}
+ & PRIMERA+MMR        & 41.18 & 14.86 & 20.98 & 37.28 & 85.61 & 33.82 & 62.74 & 54.12 & 87.72 \\
+ & PRIMERA+ILP        & 39.58 & 14.04 & 20.55 & 35.63 & 85.39 & 36.77 & 70.95 & 59.45 & 88.94 \\
+ & PRIMERA+DPP        & 34.31 & 10.99 & 18.90 & 31.05 & 84.02 & 40.10 & 77.88 & 65.98 & 89.20 \\
+ &Llama-3-8B+MMR          &  &  &  &  &  &  &  &  &  \\
+ & Llama-3-8B+ILP          &  &  &  &  &  &  &  &  &  \\
+ & Llama-3-8B+DPP          &  &  &  &  &  &  &  &  &  \\
+
+\bottomrule
+\end{tabular}%
+}
+\caption{Performance comparison on CNN/DailyMail and Multi-News datasets.}
+\label{tab:main_results}
+\end{table*}
+\subsection{Ablation Study}
+
+\section{Analysis}
+\subsection{Trade-offs between Coverage, Redundancy, and Faithfulness}
+\subsection{Effect of Candidate Pool Size}
+\subsection{Case Studies}
+
+\section{Limitations}
+\section{Conclusion}
+
+
+
+
+\section{Introduction}
+
+These instructions are for authors submitting papers to *ACL conferences using \LaTeX. They are not self-contained. All authors must follow the general instructions for *ACL proceedings,\footnote{\url{http://acl-org.github.io/ACLPUB/formatting.html}} and this document contains additional instructions for the \LaTeX{} style files.
+
+The templates include the \LaTeX{} source of this document (\texttt{acl\_latex.tex}),
+the \LaTeX{} style file used to format it (\texttt{acl.sty}),
+an ACL bibliography style (\texttt{acl\_natbib.bst}),
+an example bibliography (\texttt{custom.bib}),
+and the bibliography for the ACL Anthology (\texttt{anthology.bib}).
+
+\section{Engines}
+
+To produce a PDF file, pdf\LaTeX{} is strongly recommended (over original \LaTeX{} plus dvips+ps2pdf or dvipdf).
+The style file \texttt{acl.sty} can also be used with
+lua\LaTeX{} and
+Xe\LaTeX{}, which are especially suitable for text in non-Latin scripts.
+The file \texttt{acl\_lualatex.tex} in this repository provides
+an example of how to use \texttt{acl.sty} with either
+lua\LaTeX{} or
+Xe\LaTeX{}.
+
+\section{Preamble}
+
+The first line of the file must be
+\begin{quote}
+\begin{verbatim}
+\documentclass[11pt]{article}
+\end{verbatim}
+\end{quote}
+
+To load the style file in the review version:
+\begin{quote}
+\begin{verbatim}
+\usepackage[review]{acl}
+\end{verbatim}
+\end{quote}
+For the final version, omit the \verb|review| option:
+\begin{quote}
+\begin{verbatim}
+\usepackage{acl}
+\end{verbatim}
+\end{quote}
+
+To use Times Roman, put the following in the preamble:
+\begin{quote}
+\begin{verbatim}
+\usepackage{times}
+\end{verbatim}
+\end{quote}
+(Alternatives like txfonts or newtx are also acceptable.)
+
+Please see the \LaTeX{} source of this document for comments on other packages that may be useful.
+
+Set the title and author using \verb|\title| and \verb|\author|. Within the author list, format multiple authors using \verb|\and| and \verb|\And| and \verb|\AND|; please see the \LaTeX{} source for examples.
+
+By default, the box containing the title and author names is set to the minimum of 5 cm. If you need more space, include the following in the preamble:
+\begin{quote}
+\begin{verbatim}
+\setlength\titlebox{<dim>}
+\end{verbatim}
+\end{quote}
+where \verb|<dim>| is replaced with a length. Do not set this length smaller than 5 cm.
+
+\section{Document Body}
+
+\subsection{Footnotes}
+
+Footnotes are inserted with the \verb|\footnote| command.\footnote{This is a footnote.}
+
+\subsection{Tables and figures}
+
+See Table~\ref{tab:accents} for an example of a table and its caption.
+\textbf{Do not override the default caption sizes.}
+
+\begin{table}
+  \centering
+  \begin{tabular}{lc}
+    \hline
+    \textbf{Command} & \textbf{Output} \\
+    \hline
+    \verb|{\"a}|     & {\"a}           \\
+    \verb|{\^e}|     & {\^e}           \\
+    \verb|{\`i}|     & {\`i}           \\
+    \verb|{\.I}|     & {\.I}           \\
+    \verb|{\o}|      & {\o}            \\
+    \verb|{\'u}|     & {\'u}           \\
+    \verb|{\aa}|     & {\aa}           \\\hline
+  \end{tabular}
+  \begin{tabular}{lc}
+    \hline
+    \textbf{Command} & \textbf{Output} \\
+    \hline
+    \verb|{\c c}|    & {\c c}          \\
+    \verb|{\u g}|    & {\u g}          \\
+    \verb|{\l}|      & {\l}            \\
+    \verb|{\~n}|     & {\~n}           \\
+    \verb|{\H o}|    & {\H o}          \\
+    \verb|{\v r}|    & {\v r}          \\
+    \verb|{\ss}|     & {\ss}           \\
+    \hline
+  \end{tabular}
+  \caption{Example commands for accented characters, to be used in, \emph{e.g.}, Bib\TeX{} entries.}
+  \label{tab:accents}
+\end{table}
+
+As much as possible, fonts in figures should conform
+to the document fonts. See Figure~\ref{fig:experiments} for an example of a figure and its caption.
+
+Using the \verb|graphicx| package graphics files can be included within figure
+environment at an appropriate point within the text.
+The \verb|graphicx| package supports various optional arguments to control the
+appearance of the figure.
+You must include it explicitly in the \LaTeX{} preamble (after the
+\verb|\documentclass| declaration and before \verb|\begin{document}|) using
+\verb|\usepackage{graphicx}|.
+
+\begin{figure}[t]
+  \includegraphics[width=\columnwidth]{example-image-golden}
+  \caption{A figure with a caption that runs for more than one line.
+    Example image is usually available through the \texttt{mwe} package
+    without even mentioning it in the preamble.}
+  \label{fig:experiments}
+\end{figure}
+
+\begin{figure*}[t]
+  \includegraphics[width=0.48\linewidth]{example-image-a} \hfill
+  \includegraphics[width=0.48\linewidth]{example-image-b}
+  \caption {A minimal working example to demonstrate how to place
+    two images side-by-side.}
+\end{figure*}
+
+\subsection{Hyperlinks}
+
+Users of older versions of \LaTeX{} may encounter the following error during compilation:
+\begin{quote}
+\verb|\pdfendlink| ended up in different nesting level than \verb|\pdfstartlink|.
+\end{quote}
+This happens when pdf\LaTeX{} is used and a citation splits across a page boundary. The best way to fix this is to upgrade \LaTeX{} to 2018-12-01 or later.
+
+\subsection{Citations}
+
+\begin{table*}
+  \centering
+  \begin{tabular}{lll}
+    \hline
+    \textbf{Output}           & \textbf{natbib command} & \textbf{ACL only command} \\
+    \hline
+    \citep{Gusfield:97}       & \verb|\citep|           &                           \\
+    \citealp{Gusfield:97}     & \verb|\citealp|         &                           \\
+    \citet{Gusfield:97}       & \verb|\citet|           &                           \\
+    \citeyearpar{Gusfield:97} & \verb|\citeyearpar|     &                           \\
+    \citeposs{Gusfield:97}    &                         & \verb|\citeposs|          \\
+    \hline
+  \end{tabular}
+  \caption{\label{citation-guide}
+    Citation commands supported by the style file.
+    The style is based on the natbib package and supports all natbib citation commands.
+    It also supports commands defined in previous ACL style files for compatibility.
+  }
+\end{table*}
+
+Table~\ref{citation-guide} shows the syntax supported by the style files.
+We encourage you to use the natbib styles.
+You can use the command \verb|\citet| (cite in text) to get ``author (year)'' citations, like this citation to a paper by \citet{Gusfield:97}.
+You can use the command \verb|\citep| (cite in parentheses) to get ``(author, year)'' citations \citep{Gusfield:97}.
+You can use the command \verb|\citealp| (alternative cite without parentheses) to get ``author, year'' citations, which is useful for using citations within parentheses (e.g. \citealp{Gusfield:97}).
+
+A possessive citation can be made with the command \verb|\citeposs|.
+This is not a standard natbib command, so it is generally not compatible
+with other style files.
+
+\subsection{References}
+
+\nocite{Ando2005,andrew2007scalable,rasooli-tetrault-2015}
+
+The \LaTeX{} and Bib\TeX{} style files provided roughly follow the American Psychological Association format.
+If your own bib file is named \texttt{custom.bib}, then placing the following before any appendices in your \LaTeX{} file will generate the references section for you:
+\begin{quote}
+\begin{verbatim}
+\bibliography{custom}
+\end{verbatim}
+\end{quote}
+
+You can obtain the complete ACL Anthology as a Bib\TeX{} file from \url{https://aclweb.org/anthology/anthology.bib.gz}.
+To include both the Anthology and your own .bib file, use the following instead of the above.
+\begin{quote}
+\begin{verbatim}
+\bibliography{anthology,custom}
+\end{verbatim}
+\end{quote}
+
+Please see Section~\ref{sec:bibtex} for information on preparing Bib\TeX{} files.
+
+\subsection{Equations}
+
+An example equation is shown below:
+\begin{equation}
+  \label{eq:example}
+  A = \pi r^2
+\end{equation}
+
+Labels for equation numbers, sections, subsections, figures and tables
+are all defined with the \verb|\label{label}| command and cross references
+to them are made with the \verb|\ref{label}| command.
+
+This an example cross-reference to Equation~\ref{eq:example}.
+
+\subsection{Appendices}
+
+Use \verb|\appendix| before any appendix section to switch the section numbering over to letters. See Appendix~\ref{sec:appendix} for an example.
+
+\section{Bib\TeX{} Files}
+\label{sec:bibtex}
+
+Unicode cannot be used in Bib\TeX{} entries, and some ways of typing special characters can disrupt Bib\TeX's alphabetization. The recommended way of typing special characters is shown in Table~\ref{tab:accents}.
+
+Please ensure that Bib\TeX{} records contain DOIs or URLs when possible, and for all the ACL materials that you reference.
+Use the \verb|doi| field for DOIs and the \verb|url| field for URLs.
+If a Bib\TeX{} entry has a URL or DOI field, the paper title in the references section will appear as a hyperlink to the paper, using the hyperref \LaTeX{} package.
+
+\section*{Limitations}
+
+This document does not cover the content requirements for ACL or any
+other specific venue.  Check the author instructions for
+information on
+maximum page lengths, the required ``Limitations'' section,
+and so on.
+
+\section*{Acknowledgments}
+
+This document has been adapted
+by Steven Bethard, Ryan Cotterell and Rui Yan
+from the instructions for earlier ACL and NAACL proceedings, including those for
+ACL 2019 by Douwe Kiela and Ivan Vuli\'{c},
+NAACL 2019 by Stephanie Lukin and Alla Roskovskaya,
+ACL 2018 by Shay Cohen, Kevin Gimpel, and Wei Lu,
+NAACL 2018 by Margaret Mitchell and Stephanie Lukin,
+Bib\TeX{} suggestions for (NA)ACL 2017/2018 from Jason Eisner,
+ACL 2017 by Dan Gildea and Min-Yen Kan,
+NAACL 2017 by Margaret Mitchell,
+ACL 2012 by Maggie Li and Michael White,
+ACL 2010 by Jing-Shin Chang and Philipp Koehn,
+ACL 2008 by Johanna D. Moore, Simone Teufel, James Allan, and Sadaoki Furui,
+ACL 2005 by Hwee Tou Ng and Kemal Oflazer,
+ACL 2002 by Eugene Charniak and Dekang Lin,
+and earlier ACL and EACL formats written by several people, including
+John Chen, Henry S. Thompson and Donald Walker.
+Additional elements were taken from the formatting instructions of the \emph{International Joint Conference on Artificial Intelligence} and the \emph{Conference on Computer Vision and Pattern Recognition}.
+
+% Bibliography entries for the entire Anthology, followed by custom entries
+%\bibliography{anthology,custom}
+% Custom bibliography entries only
+\bibliography{custom}
+
+\appendix
+
+\section{Example Appendix}
+\label{sec:appendix}
+
+This is an appendix.
+
+\end{document}

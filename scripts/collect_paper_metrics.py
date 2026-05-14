@@ -46,6 +46,15 @@ METRIC_PATTERNS = {
     "factkb": re.compile(r"^\s*FactualProb:\s*([-\d.]+)%"),
 }
 
+UNAVAILABLE_PATTERNS = {
+    "bertscore_status": re.compile(r"^BERTScore:\s*unavailable\s*(.*)$"),
+    "factcc_status": re.compile(r"^FactCC:\s*unavailable\s*(.*)$"),
+    "minicheck_status": re.compile(r"^MiniCheck:\s*unavailable\s*(.*)$"),
+    "alignscore_status": re.compile(r"^AlignScore:\s*unavailable\s*(.*)$"),
+    "factkb_status": re.compile(r"^FactKB:\s*unavailable\s*(.*)$"),
+    "factgraph_status": re.compile(r"^FactGraph:\s*unavailable\s*(.*)$"),
+}
+
 FIELDNAMES = [
     "dataset",
     "generator",
@@ -63,10 +72,15 @@ FIELDNAMES = [
     "rougeL",
     "rougeLsum",
     "bertscore_f1",
+    "bertscore_status",
     "factcc",
+    "factcc_status",
     "minicheck",
+    "minicheck_status",
     "alignscore",
+    "alignscore_status",
     "factkb",
+    "factkb_status",
     "factgraph_status",
     "ordering",
     "stage1_reuse_source",
@@ -93,8 +107,11 @@ def parse_result(path: Path, root: Path) -> dict[str, str]:
             if match and not row[metric_name]:
                 row[metric_name] = match.group(1)
 
-        if line.startswith("FactGraph:"):
-            row["factgraph_status"] = line.split(":", 1)[1].strip()
+        for status_name, pattern in UNAVAILABLE_PATTERNS.items():
+            match = pattern.search(line)
+            if match and not row[status_name]:
+                detail = match.group(1).strip()
+                row[status_name] = f"unavailable {detail}".strip()
 
     return row
 

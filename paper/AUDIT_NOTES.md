@@ -1,7 +1,7 @@
 # Paper Audit Notes
 
-`zeyu.tex` is copied as the authoritative paper snapshot, but it is not
-submission-ready.
+`Budget-constrained and faithful.tex` is the authoritative paper snapshot, but
+it is not submission-ready. `zeyu.tex` is kept only as an older/reference draft.
 
 Required fixes before ACL/ARR submission:
 

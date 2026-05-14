@@ -5,7 +5,7 @@ summarization experiments. It was built from
 `/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment` without moving or modifying the
 original experiment directory.
 
-Authoritative paper source: `paper/zeyu.tex`.
+Authoritative paper source: `paper/Budget-constrained and faithful.tex`.
 
 ## Layout
 
@@ -14,11 +14,12 @@ Authoritative paper source: `paper/zeyu.tex`.
 - `results/raw/`: copied compact `*_results.txt` files only.
 - `results/paper_metrics.csv`: compact metrics regenerated from `results/raw/`.
 - `docs/`: ACL/code-paper audit, dependency notes, and reproduction runbook.
-- `paper/`: raw authoritative paper snapshot and paper-side audit notes.
+- `paper/`: raw authoritative paper snapshot, older draft snapshot, and paper-side audit notes.
 
 Heavy artifacts are intentionally excluded: full `outputs/`, stage traces,
-progress checkpoints, logs, caches, vendored third-party repositories, and
-archived large-model folders.
+progress checkpoints, training/evaluation run logs, caches, vendored
+third-party repositories, and archived large-model folders. The small `logs/`
+directory in this release only records release validation and dry-run commands.
 
 ## Quick Checks
 
