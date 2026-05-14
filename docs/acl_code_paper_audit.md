@@ -25,7 +25,7 @@ ACL/ARR references used for this release:
 | CNN/DailyMail and Multi-News test splits are used. | `src/bart/core/data.py`, `src/primera_multinews/core/data.py`, and LLM data loaders use Hugging Face datasets. Copied result files use `Split: test`. | Matches. |
 | Budgets are dataset-specific sentence budgets. | BART and LLM CNN/DM use 4 sentences; PRIMERA Multi-News CO uses 8 sentences in copied result headers. | Matches. |
 | Candidate count is larger for CO than direct baselines. | CO result headers show `Candidate count: 8` or `Beam size: 8`; PRIMERA baseline uses beam 5; BART baseline uses beam 4. | Matches. |
-| Evaluation reports ROUGE, BERTScore, FactCC, MiniCheck, AlignScore, FactKB. | `src/*/metrics/evaluation.py`, copied `results/raw/**/*_results.txt`, and one archived BART selector summary CSV. | Mostly matches. Multi-News BART baseline now uses the v2 re-evaluation file with MiniCheck restored; several LLM Multi-News baseline result files still lack MiniCheck; FactGraph is unavailable. |
+| Evaluation reports ROUGE, BERTScore, FactCC, MiniCheck, AlignScore, FactKB. | `src/*/metrics/evaluation.py`, copied `results/raw/**/*_results.txt`, and one archived BART selector summary CSV. | Mostly matches. Several LLM Multi-News baseline result files still lack MiniCheck; FactGraph is unavailable. The corrected Multi-News BART v2 result is kept only as non-paper auxiliary evidence. |
 | Objective is a monotone submodular function with facility-location-style diversity. | Budget draft line 93 claims this, but release code implements weighted modular utility plus selector-specific pairwise redundancy/DPP-inspired log-det behavior. | Does not match; revise paper wording before submission. |
 | Commands produce real-time logs. | `scripts/run_live.sh` wraps commands with `stdbuf` and `tee`. README and runbook use it for documented commands. | Matches project instruction. |
 
@@ -37,10 +37,11 @@ ACL/ARR references used for this release:
 - `paper/Budget-constrained and faithful.tex` references `latex/Pipeline.png`, but that asset is not present in the release.
 - `paper/Budget-constrained and faithful.tex` references `custom.bib`, but no bibliography file is present in the source experiment directory or release.
 - `paper/Budget-constrained and faithful.tex` contains author names and affiliations in the source. If this package is submitted for anonymous review, the paper source and supplementary files must be anonymized.
-- Several result table cells in `paper/Budget-constrained and faithful.tex` are blank even though matching result files exist in `results/raw/`.
+- The release paper snapshot now fills locally available Multi-News Qwen3.5-9B and Gemma-4-E4B-it baseline rows and uses `--` for unavailable or unreproduced cells instead of silent blanks.
 - The CNN/DM BART baseline row in the Budget paper has no completed full-test `*_results.txt` evidence found in the source tree.
 - CNN/DM BART selector rows are supported only by an archived summary CSV in this release; full selector `*_results.txt` evidence was not found in the source tree.
 - The Multi-News BART baseline is a real Multi-News result and must not be used to fill the CNN/DM BART baseline row.
+- Remaining missing or limited result evidence is tracked in `results/missing_results.csv`.
 - Original README/code comments sometimes say LLM CO uses "sampled candidates"; in the current LLM implementation, `GENERATION_DO_SAMPLE=auto` means baselines sample while CO candidate generation uses beam-style generation unless `--do-sample true` is explicitly passed. Paper wording should say "candidate count" or "beam candidates" for the copied CO runs.
 - The paper should not claim FactGraph as a completed reported metric unless a final FactGraph evaluation is added.
 - The active Llama Multi-News baseline was not copied because, on May 14, 2026, it still had only progress files and no final result file.

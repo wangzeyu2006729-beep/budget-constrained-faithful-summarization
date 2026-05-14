@@ -13,7 +13,11 @@ Authoritative paper source: `paper/Budget-constrained and faithful.tex`.
 - `scripts/`: release wrappers, live logging, validation, and metric extraction.
 - `results/raw/`: copied compact `*_results.txt` files and one archived BART
   selector summary CSV used only where full result text files were missing.
+- `results/auxiliary/`: non-paper result artifacts kept only to document earlier
+  debugging or re-evaluation runs.
 - `results/paper_metrics.csv`: compact metrics regenerated from `results/raw/`.
+- `results/missing_results.csv`: rows or metrics that are still missing,
+  pending, or only partially supported by release evidence.
 - `docs/`: ACL/code-paper audit, dependency notes, and reproduction runbook.
 - `paper/`: raw authoritative paper snapshot, older draft snapshot, and paper-side audit notes.
 

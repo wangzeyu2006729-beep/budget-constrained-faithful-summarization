@@ -246,6 +246,11 @@ def main() -> None:
         rows.extend(parse_bart_archive_csv(path, results_root))
     for row in rows:
         annotate_budget_table_status(row)
+    rows = [
+        row
+        for row in rows
+        if row.get("budget_table_status") != "extra result; not a Budget paper table row"
+    ]
     rows.sort(key=sort_key)
 
     args.output_csv.parent.mkdir(parents=True, exist_ok=True)

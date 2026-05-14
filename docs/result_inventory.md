@@ -10,9 +10,10 @@ Multi-News full test has 5,622 examples.
 
 | Item | Correction |
 | --- | --- |
-| Multi-News BART baseline | The release now uses `beam4_baseline_hfrouge_shuffle_seed42_results_v2.txt` content as the canonical copied result. This restores MiniCheck = 94.41 instead of the earlier unavailable value. |
+| Multi-News BART baseline | The release keeps the corrected `beam4_baseline_hfrouge_shuffle_seed42_results_v2.txt` content only under `results/auxiliary/non_paper/`. This restores MiniCheck = 94.41 for audit traceability, but it is not parsed into paper metrics. |
 | CNN/DM BART selector rows | The only full-test local evidence found for BART+MMR/ILP/DPP is `scripts/_archive_bart_no_score_normalization_20260501/beam5_8_10_weights_annotated.csv`. It is copied under `results/raw/cnn_dailymail/bart/archive_bart_no_score_normalization_20260501/`; only its beam-5 rows are parsed into `paper_metrics.csv` because those are the Budget paper table values. |
-| CNN/DM vs Multi-News BART | The Multi-News BART baseline is kept as a Multi-News result. It must not be used to fill the CNN/DM BART baseline row in the paper. |
+| CNN/DM vs Multi-News BART | The Multi-News BART baseline is outside `results/raw/` and excluded from `paper_metrics.csv`. It must not be used to fill the CNN/DM BART baseline row in the paper. |
+| Budget paper table | The release paper snapshot now fills Multi-News Qwen3.5-9B and Gemma-4-E4B-it from completed full-test results, marks unavailable MiniCheck cells with `--`, and replaces unsupported blank cells with `--`. |
 
 ## Still Missing Or Limited
 
@@ -26,10 +27,14 @@ Multi-News full test has 5,622 examples.
 
 ## Release Metrics Policy
 
-`results/paper_metrics.csv` is regenerated from copied compact artifacts only.
+`results/paper_metrics.csv` is regenerated from paper-aligned copied compact
+artifacts only. Auxiliary rows such as Multi-News BART are not included there.
 Rows with `source_type=result_txt` come from completed result text files. Rows
 with `source_type=archived_summary_csv` are included only to preserve the
 available CNN/DM BART selector evidence and should be treated as lower-quality
 evidence than full result text files. The `budget_table_status` column states
-whether a row matches the Budget paper table, is an extra result, fills a blank
-paper-table cell, or is only partial archive evidence.
+whether a row matches the Budget paper table, fills a previously blank
+paper-table cell, or is only partial archive evidence. Extra non-paper rows are
+excluded from `paper_metrics.csv`.
+
+Outstanding gaps are listed in `results/missing_results.csv`.

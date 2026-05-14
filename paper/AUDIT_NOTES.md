@@ -19,5 +19,7 @@ Required fixes before ACL/ARR submission:
   result file exists.
 - Do not use the Multi-News BART baseline result to fill the CNN/DM BART row;
   the dataset header and sample count identify it as Multi-News.
+- Check `results/missing_results.csv` before presenting any row as fully
+  supported by release artifacts.
 - Do not report FactGraph as completed unless a final FactGraph run is present.
 - Keep Llama Multi-News baseline marked pending until a final result file exists.

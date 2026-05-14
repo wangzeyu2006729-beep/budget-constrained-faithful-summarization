@@ -28,6 +28,10 @@ Relevant logs:
 - `logs/dryrun_primera_mmr_20260514_111720.log`
 - `logs/collect_paper_metrics_result_inventory_20260514_*.log`
 - `logs/validate_release_result_inventory_20260514_*.log`
+- `logs/collect_paper_metrics_paper_table_fix_20260514_*.log`
+- `logs/validate_release_paper_table_fix_20260514_*.log`
+- `logs/collect_paper_metrics_aux_move_20260514_*.log`
+- `logs/validate_release_aux_move_20260514_*.log`
 
 ## Deferred
 

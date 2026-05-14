@@ -1,0 +1,15 @@
+dataset,generator,method,missing_or_limited_item,status,next_action
+cnn_dailymail,bart,baseline,completed full-test result txt,not found in source tree,locate original full result file or rerun src/bart baseline on cnn_dailymail
+cnn_dailymail,bart,mmr,completed full-test result txt,not found; archived summary CSV only,locate full selector result file or rerun src/bart mmr on cnn_dailymail
+cnn_dailymail,bart,ilp,completed full-test result txt,not found; archived summary CSV only,locate full selector result file or rerun src/bart ilp on cnn_dailymail
+cnn_dailymail,bart,dpp,completed full-test result txt,not found; archived summary CSV only,locate full selector result file or rerun src/bart dpp on cnn_dailymail
+cnn_dailymail,bart,mmr,BERTScore and FactKB,missing from archived summary CSV,rerun evaluation from full result/stage outputs if available
+cnn_dailymail,bart,ilp,BERTScore and FactKB,missing from archived summary CSV,rerun evaluation from full result/stage outputs if available
+cnn_dailymail,bart,dpp,BERTScore and FactKB,missing from archived summary CSV,rerun evaluation from full result/stage outputs if available
+multi_news,llama3_8b,baseline,completed full-test result txt,pending active run,wait for final *_results.txt then copy into results/raw and regenerate paper_metrics.csv
+multi_news,llama3_8b,mmr,completed full-test result txt,not found in source tree,run or locate Multi-News Llama CO selector result
+multi_news,llama3_8b,ilp,completed full-test result txt,not found in source tree,run or locate Multi-News Llama CO selector result
+multi_news,llama3_8b,dpp,completed full-test result txt,not found in source tree,run or locate Multi-News Llama CO selector result
+multi_news,qwen3.5_9B,baseline,MiniCheck,unavailable in copied full result due torch.cat empty tensor error,rerun MiniCheck with fallback as done for BART Multi-News
+multi_news,gemma_4_e4b,baseline,MiniCheck,unavailable in copied full result due torch.cat empty tensor error,rerun MiniCheck with fallback as done for BART Multi-News
+all,all,all,FactGraph,unavailable because FACTGRAPH_REPO_DIR is not configured,configure FactGraph repo and rerun evaluation if paper reports FactGraph
