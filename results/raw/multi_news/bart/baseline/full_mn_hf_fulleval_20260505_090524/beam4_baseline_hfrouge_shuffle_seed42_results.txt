@@ -44,7 +44,8 @@ BERTScore (roberta-large):
 Extra Metrics:
 FactCC (manueldeprada/FactCC):
   SentenceAvgCorrect: 73.95%
-MiniCheck: unavailable (ValueError('torch.cat(): expected a non-empty list of Tensors'))
+MiniCheck (roberta-large):
+  SummaryAvgConsistent: 94.41%
 AlignScore (ACL 2023, yzha/AlignScore-base, nli_sp):
   SummaryAvg: 87.84%
 FactGraph: unavailable (FileNotFoundError('FACTGRAPH repo dir not configured. Set $FACTGRAPH_REPO_DIR or pass repo_dir explicitly. Clone https://github.com/amazon-science/fact-graph first.'))

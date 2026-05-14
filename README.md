@@ -11,7 +11,8 @@ Authoritative paper source: `paper/Budget-constrained and faithful.tex`.
 
 - `src/`: runnable model-specific experiment code.
 - `scripts/`: release wrappers, live logging, validation, and metric extraction.
-- `results/raw/`: copied compact `*_results.txt` files only.
+- `results/raw/`: copied compact `*_results.txt` files and one archived BART
+  selector summary CSV used only where full result text files were missing.
 - `results/paper_metrics.csv`: compact metrics regenerated from `results/raw/`.
 - `docs/`: ACL/code-paper audit, dependency notes, and reproduction runbook.
 - `paper/`: raw authoritative paper snapshot, older draft snapshot, and paper-side audit notes.
@@ -92,6 +93,8 @@ PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
 Full commands and caveats are in `docs/repro_runbook.md`.
 Validation performed during release creation is recorded in
 `docs/validation_log.md`.
+Result-source caveats, including the CNN/DM versus Multi-News BART issue, are
+recorded in `docs/result_inventory.md`.
 
 ## ACL Notes
 

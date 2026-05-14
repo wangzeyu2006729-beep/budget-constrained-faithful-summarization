@@ -4,7 +4,8 @@ Date: May 14, 2026
 
 ## Completed
 
-- Generated `results/paper_metrics.csv` from 16 copied result files.
+- Generated `results/paper_metrics.csv` from 16 copied result text files and
+  one archived BART selector summary CSV.
 - Ran shell syntax checks on release shell scripts.
 - Ran Python AST parsing on release Python files without bytecode writes.
 - Ran `--help` import checks for:
@@ -25,6 +26,8 @@ Relevant logs:
 - `logs/validate_release_retry_20260514_111634.log` records the passing validation after the release code was updated to prefer the installed `bert_score` package.
 - `logs/dryrun_bart_baseline_20260514_111720.log`
 - `logs/dryrun_primera_mmr_20260514_111720.log`
+- `logs/collect_paper_metrics_result_inventory_20260514_*.log`
+- `logs/validate_release_result_inventory_20260514_*.log`
 
 ## Deferred
 
