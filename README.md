@@ -32,11 +32,12 @@ DPP sampling or as a proved submodular optimizer.
 
 - `src/`: runnable model-specific code for BART, PRIMERA, Llama, Qwen, and Gemma.
 - `scripts/`: release wrappers, live logging, validation, and metric extraction.
-- `results/raw/`: compact result evidence for the local rows filled in
-  `paper/zeyu.tex`.
+- `scripts/paper_runs/`: sanitized wrappers for the current paper table rows.
+- `results/raw/`: compact result evidence for the local rows filled in the
+  current paper table.
 - `results/auxiliary/`: completed or partial artifacts that are useful for audit
   but not reported in the current `zeyu.tex` main table.
-- `results/paper_metrics.csv`: regenerated metrics for the seven local
+- `results/paper_metrics.csv`: regenerated metrics for the 14 local
   paper-reported rows.
 - `results/external_reference_metrics.csv`: external comparison rows copied from
   `zeyu.tex`; these are not locally reproduced in this release.
@@ -81,7 +82,14 @@ scripts/run_live.sh --name collect_paper_metrics -- \
 ## Paper-Reported Local Reproduction Commands
 
 Use `--num-samples 0` for the full test split. These commands match the local
-result rows that are filled in `paper/zeyu.tex`.
+result rows that are filled in the current paper table.
+
+To launch the whole current-paper local run list through real-time logs:
+
+```bash
+PYTHON=python3 \
+  bash scripts/paper_runs/run_current_paper_rows.sh
+```
 
 BART CNN/DailyMail direct baseline:
 
@@ -128,6 +136,69 @@ for model in qwen3_5_9b llama3_8b gemma4_e4b; do
 done
 ```
 
+Llama CNN/DailyMail CO rows reported as `new w.` and `old w.`:
+
+```bash
+# MMR/ILP new weights: rouge=0.20, minicheck=0.60, redundancy=0.20
+for method in mmr ilp; do
+  PYTHON=python3 \
+    scripts/run_live.sh --name "full_llama_cnn_${method}_new_w" -- \
+    bash scripts/run_release_experiment.sh \
+      --model llama3_8b \
+      --method "$method" \
+      --dataset cnn_dailymail \
+      --num-samples 0 \
+      --beam-size 8 \
+      --budget-sentences 4 \
+      --output-tag "full_llama_cnn_${method}_new_w" -- \
+      --w-rouge 0.20 \
+      --w-minicheck 0.60 \
+      --w-redundancy 0.20
+done
+
+# DPP old weights: rouge=0.01, minicheck=0.495, redundancy=0.495
+PYTHON=python3 \
+  scripts/run_live.sh --name full_llama_cnn_dpp_old_w -- \
+  bash scripts/run_release_experiment.sh \
+    --model llama3_8b \
+    --method dpp \
+    --dataset cnn_dailymail \
+    --num-samples 0 \
+    --beam-size 8 \
+    --budget-sentences 4 \
+    --output-tag full_llama_cnn_dpp_old_w -- \
+    --w-rouge 0.01 \
+    --w-minicheck 0.495 \
+    --w-redundancy 0.495
+```
+
+PRIMERA Multi-News rows:
+
+```bash
+PYTHON=python3 \
+  scripts/run_live.sh --name full_primera_multinews_baseline -- \
+  bash scripts/run_release_experiment.sh \
+    --model primera_multinews \
+    --method baseline \
+    --dataset multi_news \
+    --num-samples 0 \
+    --beam-size 5 \
+    --output-tag full_primera_multinews_baseline
+
+for method in mmr ilp dpp; do
+  PYTHON=python3 \
+    scripts/run_live.sh --name "full_primera_multinews_${method}" -- \
+    bash scripts/run_release_experiment.sh \
+      --model primera_multinews \
+      --method "$method" \
+      --dataset multi_news \
+      --num-samples 0 \
+      --beam-size 8 \
+      --budget-sentences 8 \
+      --output-tag "full_primera_multinews_${method}"
+done
+```
+
 ## Output Files
 
 Each run writes under `results/runs/<dataset>/<model>/<method>/<output-tag>/`.
@@ -137,12 +208,14 @@ parsed into `results/paper_metrics.csv`.
 
 ## Paper-Code Consistency Notes
 
-- `paper/zeyu.tex` is authoritative for this release.
-- `results/paper_metrics.csv` contains only local rows with filled values in
-  `zeyu.tex`: CNN/DM BART, Qwen, Llama, Gemma baselines and CNN/DM BART+MMR,
-  BART+ILP, BART+DPP.
-- Multi-News rows and CNN/DM Llama CO rows are blank in `zeyu.tex`; matching or
-  related artifacts are kept as auxiliary evidence only.
+- `paper/zeyu.tex` is the release paper source and its table has been updated to
+  include the local rows present in the current paper text.
+- `results/paper_metrics.csv` contains the 14 local rows with filled values:
+  CNN/DM BART, Qwen, Llama, Gemma baselines; CNN/DM BART+MMR/ILP/DPP; CNN/DM
+  Llama+MMR/ILP/DPP; and Multi-News PRIMERA baseline/MMR/ILP/DPP.
+- Multi-News Qwen/Llama/Gemma rows and Multi-News Llama CO rows remain blank or
+  pending in the current paper and are kept as auxiliary evidence only when
+  local artifacts exist.
 - FactGraph appears as unavailable in result files and should not be claimed as
   reported.
 - The current paper source still contains placeholder ACL template material and

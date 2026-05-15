@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Collect compact metrics for the locally reported rows in zeyu.tex."""
+"""Collect compact metrics for rows reported in the current paper table."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RESULTS_ROOT = ROOT / "results" / "raw"
 DEFAULT_OUTPUT_CSV = ROOT / "results" / "paper_metrics.csv"
 
-REPORTED_ZEYU_ROWS = {
+REPORTED_CURRENT_PAPER_ROWS = {
     ("cnn_dailymail", "bart", "baseline"),
     ("cnn_dailymail", "qwen3.5_9B", "baseline"),
     ("cnn_dailymail", "llama3_8b", "baseline"),
@@ -21,6 +21,13 @@ REPORTED_ZEYU_ROWS = {
     ("cnn_dailymail", "bart", "mmr"),
     ("cnn_dailymail", "bart", "ilp"),
     ("cnn_dailymail", "bart", "dpp"),
+    ("cnn_dailymail", "llama3_8b", "mmr"),
+    ("cnn_dailymail", "llama3_8b", "ilp"),
+    ("cnn_dailymail", "llama3_8b", "dpp"),
+    ("multi_news", "primera_multinews", "baseline"),
+    ("multi_news", "primera_multinews", "mmr"),
+    ("multi_news", "primera_multinews", "ilp"),
+    ("multi_news", "primera_multinews", "dpp"),
 }
 
 HEADER_KEYS = [
@@ -165,12 +172,12 @@ def normalize_row(row: dict[str, str]) -> None:
         row["candidate_count"] = row["beam_size"]
 
 
-def annotate_zeyu_table_status(row: dict[str, str]) -> None:
+def annotate_current_paper_table_status(row: dict[str, str]) -> None:
     key = (row.get("dataset", ""), row.get("generator", ""), row.get("method", ""))
-    if key in REPORTED_ZEYU_ROWS:
-        row["budget_table_status"] = "reported local row in zeyu.tex main table"
+    if key in REPORTED_CURRENT_PAPER_ROWS:
+        row["budget_table_status"] = "reported local row in current paper table"
     else:
-        row["budget_table_status"] = "not reported in zeyu.tex main table"
+        row["budget_table_status"] = "not reported in current paper table"
 
 
 def sort_key(row: dict[str, str]) -> tuple[str, str, str, str]:
@@ -195,11 +202,11 @@ def main() -> None:
     ]
     for row in rows:
         normalize_row(row)
-        annotate_zeyu_table_status(row)
+        annotate_current_paper_table_status(row)
     rows = [
         row
         for row in rows
-        if row.get("budget_table_status") == "reported local row in zeyu.tex main table"
+        if row.get("budget_table_status") == "reported local row in current paper table"
     ]
     rows.sort(key=sort_key)
 

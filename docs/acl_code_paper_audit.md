@@ -19,8 +19,8 @@ ACL/ARR references used for this release:
   `scripts/run_release_experiment.sh` resolves model/method/default paths, then
   `src/<model>/run.py` calls the model-specific orchestration, data loading,
   generation, selection, evaluation, and result saving modules.
-- Results: local rows reported in `zeyu.tex` are in `results/raw/`; non-reported
-  evidence is in `results/auxiliary/`.
+- Results: local rows reported in the current paper table are in
+  `results/raw/`; non-reported evidence is in `results/auxiliary/`.
 
 ## Claim-To-Code Map
 
@@ -37,11 +37,11 @@ ACL/ARR references used for this release:
 | MMR greedily balances utility and maximum redundancy. | `mmr_select` in `src/*/opt_selectors/sentence_level/mmr.py`. | Matches. |
 | DPP is DPP-inspired, not exact DPP sampling. | `dpp_select` in `src/*/opt_selectors/sentence_level/dpp.py` uses a quality-weighted similarity kernel with deterministic greedy log-det selection. | Matches the cautious wording in `zeyu.tex`. |
 | Selected sentences are ordered by source similarity. | `order_selected_sentences` in `src/*/core/orchestration.py`. | Matches. |
-| CNN/DailyMail and Multi-News are target datasets. | Data loaders support both where applicable. | Code supports them, but `zeyu.tex` currently reports filled local numbers only for CNN/DM rows. |
-| Budgets are sentence-count budgets in current experiments. | Result headers show direct full output for baselines and 4-sentence budgets for CNN/DM BART CO rows. | Matches. Token/word budgets are not implemented in reported runs. |
-| Evaluation reports ROUGE, BERTScore, FactCC, MiniCheck, AlignScore, FactKB. | `src/*/metrics/evaluation.py` and copied `results/raw/**/*_results.txt`. | Matches for the seven local reported rows. FactGraph is unavailable and is not a reported table metric. |
-| Prior systems are external reference baselines when not re-evaluated locally. | `results/external_reference_metrics.csv` stores the `zeyu.tex` external rows separately. | Matches. They are not in `paper_metrics.csv`. |
-| Llama CO and Multi-News rows are blank in `zeyu.tex`. | Related artifacts are kept under `results/auxiliary/not_reported_in_zeyu/`. | Matches release policy; do not merge these into paper metrics unless the paper is updated. |
+| CNN/DailyMail and Multi-News are target datasets. | Data loaders support both where applicable; `results/raw/` now includes CNN/DM and PRIMERA Multi-News evidence. | Matches the current reported local rows. |
+| Budgets are sentence-count budgets in current experiments. | Result headers show direct full output for baselines, 4-sentence budgets for CNN/DM CO rows, and 8-sentence budgets for Multi-News PRIMERA CO rows. | Matches. Token/word budgets are not implemented in reported runs. |
+| Evaluation reports ROUGE, BERTScore, FactCC, MiniCheck, AlignScore, FactKB. | `src/*/metrics/evaluation.py` and copied `results/raw/**/*_results.txt`. | Matches for the 14 local reported rows. FactGraph is unavailable and is not a reported table metric. |
+| Prior systems are external reference baselines when not re-evaluated locally. | `results/external_reference_metrics.csv` stores the external rows separately. | Matches. They are not in `paper_metrics.csv`. |
+| Multi-News Qwen/Llama/Gemma and Multi-News Llama CO rows are not reported in the pasted table. | Related local artifacts remain in `results/auxiliary/` when present. | Matches release policy; do not merge these into paper metrics unless the paper is updated. |
 
 ## Inconsistency And Risk Notes
 
@@ -50,19 +50,21 @@ ACL/ARR references used for this release:
 | Placeholder abstract | `zeyu.tex` abstract is ACL template text. | `paper/zeyu.tex` copied verbatim. | High paper-quality risk. | Fix paper text before submission; release keeps the source visible. |
 | Template tail | `zeyu.tex` contains ACL template instructions after the first Conclusion. | Present in `paper/zeyu.tex`. | High paper-quality risk. | Remove from the paper before submission. |
 | Missing assets | `latex/Pipeline.png` and `custom.bib` are referenced. | Those files are not included in the release. | High compile/submission risk. | Add assets or revise paper source. |
-| Multi-News values | Table cells are blank. | Completed auxiliary results exist for several rows. | Medium reporting risk. | Keep blank unless the paper is intentionally updated and audited. |
-| CNN/DM Llama CO values | Table cells are blank. | Related result files exist but are auxiliary. | Medium reporting risk. | Do not report from auxiliary without updating paper and selecting the intended weight/run. |
+| Multi-News non-PRIMERA values | Qwen/Llama/Gemma and external rows are blank or unavailable in the pasted table. | Some completed auxiliary result files exist. | Medium reporting risk. | Keep them auxiliary unless the paper is updated. |
+| CNN/DM Llama CO variants | The paper specifies MMR/ILP as `new w.` and DPP as `old w.`. | Matching files are now in `results/raw/`; other Llama CO variants remain auxiliary. | Low after cleanup. | Do not mix old/new weight variants in the same reported row. |
 | FactGraph | Code can request it, but result files mark it unavailable. | No completed FactGraph metric evidence. | Medium metric risk. | Do not claim FactGraph in paper results. |
 | Theoretical guarantees | Method uses heuristics and pairwise penalties. | Code uses ILP/MMR/DPP-inspired selectors. | Medium wording risk. | Avoid strict submodularity/DPP sampling claims. |
+| Pasted PDF text versus release source | The pasted PDF text still contains strong "monotone submodular" and "guaranteed control" wording. | `paper/zeyu.tex` uses safer implementation-aligned wording. | High if the PDF is submitted as-is. | Regenerate the paper from the safer source or revise the PDF/source before submission. |
 
 ## Release Adjustments
 
 - `paper/zeyu.tex` replaces the earlier Budget draft as the authoritative paper
   file.
-- `results/paper_metrics.csv` is regenerated from only seven locally reported
-  rows in `zeyu.tex`.
+- `results/paper_metrics.csv` is regenerated from 14 locally reported rows in
+  the current paper table.
 - External reference baselines are split into
   `results/external_reference_metrics.csv`.
-- Multi-News rows, CNN/DM Llama CO rows, and older BART archive CSV evidence
-  remain in `results/auxiliary/not_reported_in_zeyu/`.
-- No core experiment logic was changed for this zeyu alignment pass.
+- Multi-News Qwen/Gemma/Llama rows, Multi-News Llama CO rows, non-selected
+  CNN/DM Llama CO variants, and older BART archive CSV evidence remain in
+  `results/auxiliary/`.
+- No core experiment logic was changed for this paper-table alignment pass.

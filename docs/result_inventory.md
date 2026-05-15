@@ -2,13 +2,11 @@
 
 Date: May 15, 2026
 
-This release follows the result table as currently written in `paper/zeyu.tex`.
-The table has filled local CNN/DailyMail rows and blank Multi-News rows.
+This release follows the local result rows in the current paper table pasted by
+the author. `results/paper_metrics.csv` is regenerated only from
+`results/raw/`.
 
 ## Main Paper Evidence
-
-`results/paper_metrics.csv` is regenerated only from `results/raw/`. It contains
-these local rows:
 
 | Dataset | Method family | Evidence |
 | --- | --- | --- |
@@ -16,11 +14,13 @@ these local rows:
 | CNN/DM | Qwen3.5-9B baseline | `results/raw/cnn_dailymail/qwen3_5_9b/baseline/.../baseline_hfrouge_shuffle_seed42_results.txt` |
 | CNN/DM | Llama-3-8B baseline | `results/raw/cnn_dailymail/llama3_8b/baseline/.../baseline_hfrouge_shuffle_seed42_results.txt` |
 | CNN/DM | Gemma-4-E4B-it baseline | `results/raw/cnn_dailymail/gemma4_e4b/baseline/.../baseline_hfrouge_shuffle_seed42_results.txt` |
-| CNN/DM | BART+MMR | `results/raw/cnn_dailymail/bart/mmr/.../beam5_mmr_tri_metric_hfrouge_shuffle_seed42_results.txt` |
-| CNN/DM | BART+ILP | `results/raw/cnn_dailymail/bart/ilp/.../beam5_ilp_tri_metric_hfrouge_shuffle_seed42_results.txt` |
-| CNN/DM | BART+DPP | `results/raw/cnn_dailymail/bart/dpp/.../beam5_dpp_minicheck_redundancy_hfrouge_shuffle_seed42_results.txt` |
+| CNN/DM | BART+MMR/ILP/DPP | `results/raw/cnn_dailymail/bart/{mmr,ilp,dpp}/.../*_results.txt` |
+| CNN/DM | Llama+MMR/ILP new weights | `results/raw/cnn_dailymail/llama3_8b/{mmr,ilp}/full_cnn_dailymail_co_tri_metric_balanced_wr020_wm060_wd020_reuse_ilp_stage1/*_results.txt` |
+| CNN/DM | Llama+DPP old weights | `results/raw/cnn_dailymail/llama3_8b/dpp/full_cnn_dailymail_co_tri_metric_requested_full_resume_llama_cnn_co/*_results.txt` |
+| Multi-News | PRIMERA baseline | `results/raw/multi_news/primera_multinews/baseline/.../beam5_baseline_hfrouge_shuffle_seed42_results.txt` |
+| Multi-News | PRIMERA+MMR/ILP/DPP | `results/raw/multi_news/primera_multinews/{mmr,ilp,dpp}/.../*_results.txt` |
 
-The metric values in those files match the filled local rows in `zeyu.tex`.
+These 14 rows are parsed into `results/paper_metrics.csv`.
 
 ## External Reference Rows
 
@@ -32,13 +32,12 @@ paper table, not locally reproduced rows in this release.
 
 The following artifacts are retained but excluded from `paper_metrics.csv`:
 
-- Multi-News baseline and PRIMERA CO results.
-- CNN/DM Llama CO result variants.
+- Multi-News Qwen/Gemma/Llama baseline artifacts whose cells are blank or
+  unavailable in the current pasted table.
+- CNN/DM Llama CO variants that do not correspond to the paper labels
+  `(new w.)` or `(old w.)`.
 - The older BART selector archive CSV.
 - The corrected Multi-News BART baseline kept under `results/auxiliary/non_paper/`.
-
-These files are useful for audit history but must not be treated as paper table
-values until `zeyu.tex` is updated and the intended run is selected.
 
 ## Missing Or Pending
 

@@ -2,20 +2,22 @@
 
 Latest validation date: May 15, 2026
 
-## Completed In Current Zeyu Alignment Pass
+## Completed In Current Paper-Table Alignment Pass
 
 - Copied `<SOURCE_EXPERIMENT_ROOT>/zeyu.tex` to `paper/zeyu.tex`.
-- Regenerated `results/paper_metrics.csv` from seven local result text files
-  that match filled rows in `zeyu.tex`.
-- Moved Multi-News and CNN/DM Llama CO artifacts out of `results/raw/` and into
-  `results/auxiliary/not_reported_in_zeyu/`.
+- Regenerated `results/paper_metrics.csv` from 14 local result text files that
+  match filled rows in the current paper table.
+- Moved reported CNN/DM Llama CO and PRIMERA Multi-News artifacts into
+  `results/raw/`.
 - Split external comparison rows into `results/external_reference_metrics.csv`.
 
 Relevant current log:
 
 - `logs/collect_paper_metrics_zeyu_20260515_103015.log`
 - `logs/collect_paper_metrics_zeyu_final_20260515_103503.log`
+- `logs/collect_paper_metrics_current_paper_20260515_105801.log`
 - `logs/validate_release_static_zeyu_20260515_103329.log`
+- `logs/validate_release_static_current_paper_20260515_110119.log`
 
 ## Static Checks
 
@@ -38,5 +40,6 @@ history.
 
 ## Deferred
 
-No smoke experiment or full experiment was started for this zeyu alignment pass.
+No smoke experiment or full experiment was started for this paper-table
+alignment pass.
 The current server already has a full Llama Multi-News ILP CO job running.
