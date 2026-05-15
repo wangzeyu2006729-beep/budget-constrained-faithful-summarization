@@ -1,0 +1,9 @@
+method_group,methods,setting_type,w_rouge,w_minicheck,w_redundancy,objective,pool_size,note
+baseline,baseline_raw,none,,,,,,HF-aligned baseline; keep existing beam4 result
+explicit_shared,mmr,tri_metric_fixed,0.0,0.3,0.7,,,"shared explicit-weight setting"
+explicit_shared,ilp,tri_metric_fixed,0.0,0.3,0.7,,,"shared explicit-weight setting; threshold is implied from w_redundancy in tri-metric mode"
+explicit_shared,lns,tri_metric_fixed,0.0,0.3,0.7,,,"shared explicit-weight setting"
+mbr,mbr,tri_metric_fixed,0.4,0.6,0.0,,16,"rouge slot acts as consensus weight in MBR; adopted manually after 3-point search"
+nonweight,dpp,legacy_objective,,,,minicheck_redundancy,,"kept as original non-shared-weight method"
+nonweight,submodular,legacy_objective,,,,minicheck_redundancy,,"kept as original non-shared-weight method"
+nonweight,pareto,original_method,,,,,16,"original summary-level Pareto; no shared tri-metric weight"

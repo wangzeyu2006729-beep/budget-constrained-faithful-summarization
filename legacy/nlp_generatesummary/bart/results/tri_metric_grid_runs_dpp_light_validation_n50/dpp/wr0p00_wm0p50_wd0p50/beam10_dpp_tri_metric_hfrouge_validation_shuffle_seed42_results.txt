@@ -1,0 +1,292 @@
+BART Beam-10 + DPP Summarization Results (Generate-then-Optimize)
+Method: dpp
+Objective variant: Tri-metric unified objective (ROUGE + MiniCheck + Redundancy)
+Model: facebook/bart-large-cnn
+Dataset: cnn_dailymail (3.0.0)
+Split: validation
+Samples: 50
+Sample mode: shuffle
+Sample seed: 42
+Beam size: 10
+Budget: 4 sentences
+Runtime generation batch size: 12
+Runtime utility batch size: 128
+Runtime eval batch size: 64
+Runtime dtype: bf16
+Runtime total seconds: 141.81
+Stage seconds: generation=102.94, evaluation=29.17
+Eval suite: full
+ROUGE implementation: huggingface_evaluate
+LenPenalty: 2.0, NoRepeatNgram: 3, EarlyStopping: True
+MaxDecode: 142, MinDecode: 56
+Tri-metric weights: rouge=0.000000, minicheck=0.500000, redundancy=0.500000
+Paper metrics: ['rouge']
+Extra metrics: ['minicheck', 'factcc']
+ROUGE sentence split: pysbd
+============================================================
+
+
+Paper Metrics:
+ROUGE Scores (F1 only, impl=huggingface_evaluate):
+  rouge1    F1=35.80%
+  rouge2    F1=15.89%
+  rougeL    F1=25.59%
+  rougeLsum  F1=32.70%
+
+Extra Metrics:
+MiniCheck (EMNLP 2024, MiniCheck-RoBERTa-Large):
+  SummaryAvgConsistent: 94.17%
+FactCC (manueldeprada/FactCC):
+  SentenceAvgCorrect: 74.47%
+
+============================================================
+Detailed selection logs (first 10 samples):
+============================================================
+
+--- Sample 1 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (13 sentences):
+    [0] Utility=0.4925 | Jarryd Hayne quit the NRL in October to try his luck in American football.
+    [1] Utility=0.4943 | The 27-year-old has signed a three-year contract with the San Francisco 49ers.
+    [2] Utility=0.4914 | Peter Illfield, chairman of US Association of Rugby League, said Hayne's move to the NFL is a boost for rugby league in the United States.
+    [3] Utility=0.4919 | Peter Illfield, chairman of US Association of Rugby League, says Hayne's move to the NFL is a boost for rugby league in the United States.
+    [4] Utility=0.4914 | Peter Illfield, chairman of US Association of Rugby League, said Hayne's move is a boost for rugby league in the United States.
+    [5] Utility=0.4916 | Peter Illfield, chairman of US Association of Rugby League, says Hayne's move is a boost for rugby league in the United States.
+    [6] Utility=0.4911 | Hayne could play at full back or centre in rugby league and is expected to be a running back for the 49ers .
+    [7] Utility=0.4918 | Peter Illfield, chairman of US Association of Rugby League, said Hayne's move to the NFL is a boost for rugby league in the US.
+    [8] Utility=0.4926 | Peter Illfield, chairman of US Association of Rugby League, said the move is a boost for rugby league in the United States.
+    [9] Utility=0.4917 | Peter Illfield, chairman of US Association of Rugby League, said Hayne's move is a boost for rugby league in the US.
+    [10] Utility=0.4918 | Hayne could play at full back or centre in rugby league.
+    [11] Utility=0.4947 | He is expected to be a running back for the 49ers .
+    [12] Utility=0.4918 | Peter Illfield, chairman of US Association of Rugby League, says Hayne's move is a boost for rugby league in the US.
+(c) Redundancy matrix shape: (13, 13)
+    Highest redundancy pair: [2] vs [3], ROUGE-L F1=0.9615
+(d0) Effective weights: rouge=0.0000, minicheck=0.5000, redundancy=0.5000
+(d) Selected indices: [1, 4, 6, 10], utility sum: 1.9686
+(h) Final summary: The 27-year-old has signed a three-year contract with the San Francisco 49ers. Peter Illfield, chairman of US Association of Rugby League, said Hayne's move is a boost for rugby league in the United States. Hayne could play at full back or centre in rugby league and is expected to be a running back for the 49ers . Hayne could play at full back or centre in rugby league.
+    Reference: Jarryd Hayne quit the NRL in October to try and get into American Football .
+This week, he signed a three-year contract with the San Francisco 49ers .
+The chairman of the US Association of Rugby League welcomed his arrival .
+
+--- Sample 2 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (13 sentences):
+    [0] Utility=0.4898 | Faith March's weight dropped to just five stone when she was suffering from anorexia.
+    [1] Utility=0.4941 | After several ill-fated attempts to fight the illness, Faith collapsed in her bathroom.
+    [2] Utility=0.4932 | Her family told her they feared for her life if she didn't get help.
+    [3] Utility=0.4924 | After treatment at the Priory Hospital in Chelmsford, Faith is now at a healthier weight.
+    [4] Utility=0.4925 | She credits the starting of her patisserie business, Whisk of Faith, as kick-starting her recovery.
+    [5] Utility=0.4932 | After several ill-fated attempts to fight the illness, Faith collapsed in her bathroom where she was found by her boyfriend.
+    [6] Utility=0.4887 | After treatment at the Priory Hospital in Chelmsford, Faith is now at a healthier weight and credits the starting of her patisserie business, Whisk of Faith.
+    [7] Utility=0.4926 | She credits the starting of her patisserie business, Whisk of Faith, with kick-starting her recovery.
+    [8] Utility=0.4877 | After several ill-fated attempts to fight the illness, Faith collapsed in her bathroom where she was found by her boyfriend - and her family told her they feared for her life if she didn't get help.
+    [9] Utility=0.4911 | After treatment at the Priory Hospital in Chelmsford, Faith is now at a healthier weight and has set up her own patisserie business.
+    [10] Utility=0.4931 | She credits the starting of her patisserie business as kick-starting her recovery.
+    [11] Utility=0.4927 | She is now in recovery and has set up her own patisserie business, Whisk of Faith.
+    [12] Utility=0.4933 | She is now in recovery and has set up her own patisserie business.
+(c) Redundancy matrix shape: (13, 13)
+    Highest redundancy pair: [4] vs [7], ROUGE-L F1=0.9375
+(d0) Effective weights: rouge=0.0000, minicheck=0.5000, redundancy=0.5000
+(d) Selected indices: [0, 5, 9, 10], utility sum: 1.9673
+(h) Final summary: Faith March's weight dropped to just five stone when she was suffering from anorexia. After several ill-fated attempts to fight the illness, Faith collapsed in her bathroom where she was found by her boyfriend. After treatment at the Priory Hospital in Chelmsford, Faith is now at a healthier weight and has set up her own patisserie business. She credits the starting of her patisserie business as kick-starting her recovery.
+    Reference: Faith March's dropped to just five stone as she suffered from anorexia .
+The 18-year-old from Essex was living on just coffee and no food .
+After she collapsed in the bathroom, she had hospital treatment .
+Has now launched a patisserie business to help her recover .
+
+--- Sample 3 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (10 sentences):
+    [0] Utility=0.4954 | Yahoo streamed the first two episodes of the new season early Tuesday.
+    [1] Utility=0.4946 | The show appears to have suffered no decline in quality in the move to Yahoo.
+    [2] Utility=0.4943 | Critics praised the show, with The Hollywood Reporter's Amy Amatangelo saying, "Everything fans loved about Community remains"
+    [3] Utility=0.4948 | "Community's" much-awaited sixth season made its debut Tuesday.
+    [4] Utility=0.4932 | The show appears to have suffered no decline in quality in the move to Yahoo, though cast member Yvette Nicole Brown had to leave the show.
+    [5] Utility=0.4936 | The show appears to have suffered no decline in quality in the move to Yahoo, though cast member Yvette Nicole Brown had to leave.
+    [6] Utility=0.4943 | Critics praised the show, with The Hollywood Reporter's Amy Amatangelo saying, "Everything fans loved about Community remains."
+    [7] Utility=0.4943 | Critics praised the show, with The Hollywood Reporter's Amy Amatangelo saying, "everything fans loved about Community remains"
+    [8] Utility=0.4937 | The show appears to have suffered no decline in quality in the move to Yahoo, though cast member Yvette Nicole Brown left the show.
+    [9] Utility=0.4932 | The show appears to have suffered no decline in quality in the move to Yahoo, though cast member Yvette Nicole Brown had to leave the series.
+(c) Redundancy matrix shape: (10, 10)
+    Highest redundancy pair: [2] vs [6], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.0000, minicheck=0.5000, redundancy=0.5000
+(d) Selected indices: [1, 5, 7, 8], utility sum: 1.9763
+(h) Final summary: The show appears to have suffered no decline in quality in the move to Yahoo. The show appears to have suffered no decline in quality in the move to Yahoo, though cast member Yvette Nicole Brown had to leave. Critics praised the show, with The Hollywood Reporter's Amy Amatangelo saying, "everything fans loved about Community remains" The show appears to have suffered no decline in quality in the move to Yahoo, though cast member Yvette Nicole Brown left the show.
+    Reference: The fan favorite comedy "Community" returns for a sixth season on Yahoo .
+The series is just as weirdly hilarious as ever, with surprises in store .
+Critics and fans loved the premiere .
+
+--- Sample 4 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (12 sentences):
+    [0] Utility=0.4851 | Sean, of London, became known as the Dancing Man after two photos of him were posted online with the caption: 'Spotted this specimen trying to dance the other week. He stopped when he saw us laughing' But now, the man - who was pictured happily dancing in one shot, and bowing his head in apparent humiliation and dejection in the other - has been tracked down, thanks to a social media campaign.
+    [1] Utility=0.4941 | He was identified after upset Twitter user, Cassandra Fairbanks, from California, spotted the photos and asked other users to help find him.
+    [2] Utility=0.4897 | She and nearly 2,000 other women have now invited him to a huge VIP dance party in Los Angeles.
+    [3] Utility=0.4830 | Sean, of London, became known as the Dancing Man after two photos of him were posted online with the caption: 'Spotted this specimen trying to dance the other week. He stopped when he saw us laughing' But now, the man - who was pictured happily dancing in one shot, and bowing his head in apparent humiliation and dejection in the other - has been tracked down.
+    [4] Utility=0.4936 | Now, Ms Fairbanks and nearly 2,000 other women have invited him to a huge VIP dance party in Los Angeles.
+    [5] Utility=0.4918 | Now, Ms Fairbanks and nearly 2,000 other women have invited him to a huge VIP dance party in Los Angeles, California.
+    [6] Utility=0.4930 | Now, Ms Fairbanks and nearly 2,000 other women have invited Sean to a huge VIP dance party in Los Angeles, California.
+    [7] Utility=0.4933 | Now, Ms Fairbanks and nearly 2,000 other women have invited Sean to a huge VIP dance party in Los Angeles.
+    [8] Utility=0.4883 | Now, she and nearly 2,000 other women have invited him to a huge VIP dance party in Los Angeles, California.
+    [9] Utility=0.4902 | Now, she and nearly 2,000 other women have invited him to a huge VIP dance party in Los Angeles.
+    [10] Utility=0.4905 | Now, she and nearly 2,000 other women have invited Sean to a huge VIP dance party in Los Angeles.
+    [11] Utility=0.4908 | She and nearly 2,000 other women have now invited him to a huge VIP dance party in LA.
+(c) Redundancy matrix shape: (12, 12)
+    Highest redundancy pair: [4] vs [5], ROUGE-L F1=0.9767
+(d0) Effective weights: rouge=0.0000, minicheck=0.5000, redundancy=0.5000
+(d) Selected indices: [1, 2, 5, 11], utility sum: 1.9664
+(h) Final summary: He was identified after upset Twitter user, Cassandra Fairbanks, from California, spotted the photos and asked other users to help find him. She and nearly 2,000 other women have now invited him to a huge VIP dance party in Los Angeles. Now, Ms Fairbanks and nearly 2,000 other women have invited him to a huge VIP dance party in Los Angeles, California. She and nearly 2,000 other women have now invited him to a huge VIP dance party in LA.
+    Reference: Dancing Man humiliated by bullies who posted two photos of him online .
+In one image, he was seen dancing enthusiastically to music at concert .
+In other, he was bowing head, ashamed, after the bullies laughed at him .
+'Spotted this specimen trying to dance the other week,' cameraman said .
+Images, initially posted to 4chan, were spotted by Cassandra Fairbanks .
+She tweeted them on Thursday, asking users to help her to identify man .
+On Friday morning, he was successfully identified as Sean from London .
+Now, he has been sent VIP invite to dance party in LA with 1,727 women .
+
+--- Sample 5 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (13 sentences):
+    [0] Utility=0.4892 | Parker Rice is a former high school cornerback who also loves baseball.
+    [1] Utility=0.4919 | Levi Pettit is a football fan who also played competitive golf.
+    [2] Utility=0.4943 | They're both under fire since the nine-second clip showed them making racial slurs against blacks.
+    [3] Utility=0.4944 | Rice has apologized for the video, calling his actions wrong and reckless.
+    [4] Utility=0.4945 | They're both under fire since the nine-second clip showed them making racial slurs.
+    [5] Utility=0.4952 | Levi Pettit played golf at his alma mater, Highland Park High School.
+    [6] Utility=0.4938 | His family has fled their home, where protesters gathered Wednesday.
+    [7] Utility=0.4948 | Rice has apologized, calling his actions wrong and reckless.
+    [8] Utility=0.4944 | Rice has apologized for the video, calling his actionswrong and reckless.
+    [9] Utility=0.0364 | Rice has apologized for the video, calling his actions right and reckless.
+    [10] Utility=0.4952 | Rice has apologized for the video, calling his actions wrong.
+    [11] Utility=0.4927 | His parents have fled their home, where protesters gathered Wednesday.
+    [12] Utility=0.2775 | The two students have wiped out their social media accounts.
+(c) Redundancy matrix shape: (13, 13)
+    Highest redundancy pair: [2] vs [4], ROUGE-L F1=0.9375
+(d0) Effective weights: rouge=0.0000, minicheck=0.5000, redundancy=0.5000
+(d) Selected indices: [4, 6, 8, 10], utility sum: 1.9779
+(h) Final summary: They're both under fire since the nine-second clip showed them making racial slurs. His family has fled their home, where protesters gathered Wednesday. Rice has apologized for the video, calling his actionswrong and reckless. Rice has apologized for the video, calling his actions wrong.
+    Reference: "That video does not represent his core personality,"  a friend of Parker Rice says .
+Levi Pettit, the second student expelled,  mainly focused on college football on social media .
+
+--- Sample 6 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (14 sentences):
+    [0] Utility=0.4917 | Lammily was created as an antidote to Barbie's super-slim frame.
+    [1] Utility=0.4938 | The brown-haired figure confronts her fears on a trip to the beach.
+    [2] Utility=0.4928 | She sees other women there with flaws and scars, making her realise that no one's perfect.
+    [3] Utility=0.4831 | In the advert Lammily is constantly faced with adverts which tell her she can lose weight quickly - the same images women see in real life.
+    [4] Utility=0.4898 | In the advert Lammily is constantly faced with adverts which tell her she can lose weight quickly.
+    [5] Utility=0.4919 | Lammily doll was created as an antidote to Barbie's super-slim frame.
+    [6] Utility=0.4933 | Lammily was first created in 2014 as the result of a crowd-funding project.
+    [7] Utility=0.4926 | In the new ad the 'average barbie' is shown with stretch marks.
+    [8] Utility=0.4919 | The ad is meant to highlight the pressures women are under to be bikini ready.
+    [9] Utility=0.4875 | If you buy a Lammily doll then you can buy stickers to go on her - for example these stretch mark stickers.
+    [10] Utility=0.4903 | If you buy a Lammily doll then you can buy stickers to go on her.
+    [11] Utility=0.4897 | In the advert Lammily is constantly faced with adverts for a 'dolly tuck'
+    [12] Utility=0.4920 | The ad is meant to highlight the pressures women are under to look 'swimwear ready'
+    [13] Utility=0.4913 | In the advert Lammily is constantly faced with adverts which tell her she can lose weight.
+(c) Redundancy matrix shape: (14, 14)
+    Highest redundancy pair: [4] vs [13], ROUGE-L F1=0.9697
+(d0) Effective weights: rouge=0.0000, minicheck=0.5000, redundancy=0.5000
+(d) Selected indices: [2, 3, 7, 13], utility sum: 1.9598
+(h) Final summary: She sees other women there with flaws and scars, making her realise that no one's perfect. In the advert Lammily is constantly faced with adverts which tell her she can lose weight quickly - the same images women see in real life. In the new ad the 'average barbie' is shown with stretch marks. In the advert Lammily is constantly faced with adverts which tell her she can lose weight.
+    Reference: Lammily takes a trip to the beach in the new advert .
+It is designed to highlight the pressures on women to look good .
+In the advert Lammily realises everyone has their flaws .
+The doll was designed last year as antidote to super skinny Barbie .
+It was created by digital artist Nickolay Lamm, from Pittsburgh .
+
+--- Sample 7 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (11 sentences):
+    [0] Utility=0.4945 | Grant Shapps used online leaflets to boast of his wealth and status.
+    [1] Utility=0.4910 | Used pictures of himself in his private plane and six-bedroom mansion.
+    [2] Utility=0.4919 | Offered his 'friends' the chance to learn how to make their fortune.
+    [3] Utility=0.4749 | As long as they handed him $197, worth £130, he said he could help them get rich.
+    [4] Utility=0.4935 | Revelations come just days after Mr Shapps faced calls to quit.
+    [5] Utility=0.4940 | Tory chairman used online leaflets to boast of his wealth and status.
+    [6] Utility=0.4905 | Offered his 'friends' chance to learn how to make their fortune for £130.
+    [7] Utility=0.4905 | Mr Shapps said his wealth was 'hard-core' evidence he could help people get rich.
+    [8] Utility=0.4793 | As long as they handed him $197, worth £130, Mr Shapps said he could help them.
+    [9] Utility=0.4514 | As long as they handed him $197, worth £130, he claimed he could help them.
+    [10] Utility=0.4905 | Mr Shapps said his wealth was 'hard-core' evidence he could help people.
+(c) Redundancy matrix shape: (11, 11)
+    Highest redundancy pair: [7] vs [10], ROUGE-L F1=0.9286
+(d0) Effective weights: rouge=0.0000, minicheck=0.5000, redundancy=0.5000
+(d) Selected indices: [0, 3, 5, 8], utility sum: 1.9427
+(h) Final summary: Grant Shapps used online leaflets to boast of his wealth and status. As long as they handed him $197, worth £130, he said he could help them get rich. Tory chairman used online leaflets to boast of his wealth and status. As long as they handed him $197, worth £130, Mr Shapps said he could help them.
+    Reference: MP posed as business guru Michael Green to offer keys to making cash .
+Posed for pictures with private plane, luxury cars and six-bed mansion .
+Offered his 'friends' a tool kit on how to make a fortune – for $197 a pop .
+
+--- Sample 8 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (12 sentences):
+    [0] Utility=0.4407 | David, 39, was joined by parents-in-laws Anthony and Jacqueline Adams, mother Sandra and sister Joanne.
+    [1] Utility=0.4359 | The family was without David's wife Victoria, who was hard at work promoting her new sunglasses range on a promotional tour of the Far East.
+    [2] Utility=0.4944 | After the performance David got a chance to meet star of the show Michael Flatley.
+    [3] Utility=0.4457 | David, 39, joined by parents-in-laws Anthony and Jacqueline Adams, mother Sandra and sister Joanne.
+    [4] Utility=0.4947 | After the performance, David got a chance to meet star of the show Michael Flatley.
+    [5] Utility=0.4586 | The family was without David's wife Victoria, who was hard at work promoting her new sunglasses range in the Far East.
+    [6] Utility=0.0322 | The family was without David's wife Victoria, who was hard at work promoting her new sunglasses range in Hong Kong.
+    [7] Utility=0.4724 | The retired football player cut a suave figure in a jumper, tailored trousers and leather boots.
+    [8] Utility=0.4704 | The retired football player cut a suave figure in an all black ensemble.
+    [9] Utility=0.4943 | After the performance, David met star of the show Michael Flatley.
+    [10] Utility=0.4950 | After the performance, David got a chance to meet star Michael Flatley.
+    [11] Utility=0.4941 | David met star of the show Michael Flatley after the performance.
+(c) Redundancy matrix shape: (12, 12)
+    Highest redundancy pair: [2] vs [4], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.0000, minicheck=0.5000, redundancy=0.5000
+(d) Selected indices: [3, 5, 7, 8], utility sum: 1.8472
+(h) Final summary: David, 39, joined by parents-in-laws Anthony and Jacqueline Adams, mother Sandra and sister Joanne. The family was without David's wife Victoria, who was hard at work promoting her new sunglasses range in the Far East. The retired football player cut a suave figure in a jumper, tailored trousers and leather boots. The retired football player cut a suave figure in an all black ensemble.
+    Reference: Whole family checked out Michael Flatley's farewell Lord Of The Dance show on Saturday .
+Flatley's beloved father died just one day before and David praised the dancer for going ahead with Saturday's performance .
+Michael shared a picture of himself and David and thanked the footballer for his support .
+He has vowed to continue the farewell tour but will take time out to attend his father's wake in Chicago this week .
+
+--- Sample 9 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (10 sentences):
+    [0] Utility=0.4879 | Derrell Alexander made his first car sale 66 years ago at White's Mountain Motors in Casper, Wyoming.
+    [1] Utility=0.4910 | He still works six days a week and hasn't taken a vacation since his children were young.
+    [2] Utility=0.4897 | Once a top salesman, Alexander now sells to the children and grandchildren of his old regular customers.
+    [3] Utility=0.4922 | His daughter Sheri Rupe said she believes work has 'kept him going'
+    [4] Utility=0.4908 | Derrell Alexander rang in his 100th birthday at White's Mountain Motors, the car dealership where he still works today in Casper, Wyoming.
+    [5] Utility=0.4916 | Alexander made his first car sale 66 years ago.
+    [6] Utility=0.4900 | He still works six days a week and hasn't taken a vacation since his two children were young.
+    [7] Utility=0.4880 | Alexander worked on ranches, a pipeline and as a mechanic before finding his dream job in car sales in 1949.
+    [8] Utility=0.4929 | The father-of-two hasn't even taken a vacation since his children were young.
+    [9] Utility=0.4914 | Derrell Alexander rang in his 100th birthday at White's Mountain Motors in Casper, Wyoming.
+(c) Redundancy matrix shape: (10, 10)
+    Highest redundancy pair: [1] vs [6], ROUGE-L F1=0.9730
+(d0) Effective weights: rouge=0.0000, minicheck=0.5000, redundancy=0.5000
+(d) Selected indices: [0, 2, 3, 5], utility sum: 1.9615
+(h) Final summary: Derrell Alexander made his first car sale 66 years ago at White's Mountain Motors in Casper, Wyoming. Once a top salesman, Alexander now sells to the children and grandchildren of his old regular customers. His daughter Sheri Rupe said she believes work has 'kept him going' Alexander made his first car sale 66 years ago.
+    Reference: Derrell Alexander still works six days a week at White's Mountain Motors in Casper, Wyoming .
+The father-of-two hasn't taken a vacation since his children were young .
+Alexander hopes he never has to retire and believes you don't last long if you just 'sit around the house and watch TV'
+Retired daughter Sheri Rupe believes job her dad loves has 'kept him going'
+
+--- Sample 10 ---
+(a) Optimization method: DPP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (11 sentences):
+    [0] Utility=0.4939 | Video captures the moment bomb technicians from Midland Police Department in Texas detonated ten tons of illegal fireworks on Monday afternoon.
+    [1] Utility=0.4950 | Most of the explosives were reportedly confiscated during last year's Fourth of July festivities.
+    [2] Utility=0.4943 | Consumer fireworks must be stored by a licensed pyrotechnician and labeled properly otherwise they are subject to confiscation.
+    [3] Utility=0.4946 | Bomb technicians from Midland Police Department in Texas detonated ten tons of illegal fireworks on Monday afternoon.
+    [4] Utility=0.4892 | The deafening footage shows a giant plume of smoke sailing into the sky interspersed with flashes of brilliant white and red.
+    [5] Utility=0.4946 | The explosive materials are usually stored for months in off-site bunkers before being collectively destroyed.
+    [6] Utility=0.4950 | Consumer fireworks must be stored by a licensed pyrotechnician and labeled properly.
+    [7] Utility=0.4944 | Consumer fireworks must be stored by a licensed pyrotechnician and labeled properly otherwise they are subject to confiscated.
+    [8] Utility=0.4942 | The deafening footage shows a giant plume of smoke sailing into the sky.
+    [9] Utility=0.4949 | Consumer fireworks must be stored by a licensed pyrotechnician and labeled properly otherwise they can be confiscated.
+    [10] Utility=0.4955 | Consumer fireworks must be stored by a licensed pyrotechnician.
+(c) Redundancy matrix shape: (11, 11)
+    Highest redundancy pair: [2] vs [7], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.0000, minicheck=0.5000, redundancy=0.5000
+(d) Selected indices: [2, 4, 8, 10], utility sum: 1.9732
+(h) Final summary: Consumer fireworks must be stored by a licensed pyrotechnician and labeled properly otherwise they are subject to confiscation. The deafening footage shows a giant plume of smoke sailing into the sky interspersed with flashes of brilliant white and red. The deafening footage shows a giant plume of smoke sailing into the sky. Consumer fireworks must be stored by a licensed pyrotechnician.
+    Reference: Video captures the moment bomb technicians from Midland Police Department in Texas detonated seized explosive on Monday .
+They were disposed of in a controlled destruction during the day because authorities did not want it to be confused for a public fireworks show .
+

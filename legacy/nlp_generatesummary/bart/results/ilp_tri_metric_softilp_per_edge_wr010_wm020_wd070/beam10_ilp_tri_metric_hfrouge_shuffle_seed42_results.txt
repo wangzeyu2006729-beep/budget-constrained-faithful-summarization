@@ -1,0 +1,308 @@
+BART Beam-10 + ILP Summarization Results (Generate-then-Optimize)
+Method: ilp
+Objective variant: Tri-metric unified objective (ROUGE + MiniCheck + Redundancy)
+Model: facebook/bart-large-cnn
+Dataset: cnn_dailymail (3.0.0)
+Split: test
+Samples: 11490
+Sample mode: shuffle
+Sample seed: 42
+Beam size: 10
+Budget: 4 sentences
+Runtime generation batch size: 12
+Runtime utility batch size: 128
+Runtime eval batch size: 64
+Runtime dtype: bf16
+Started at: 2026-04-26T12:14:00.936875
+Finished at: 2026-04-26T20:29:46.003338
+Runtime total seconds (this process): 29745.07
+Stage seconds: generation=23438.11 (cumulative across resumes), evaluation=6299.93
+Resume: resumed=False, resumed_from=0, prior_gen_seconds=0.00
+Eval suite: full
+ROUGE implementation: huggingface_evaluate
+LenPenalty: 2.0, NoRepeatNgram: 3, EarlyStopping: True
+MaxDecode: 142, MinDecode: 56
+Tri-metric weights: rouge=0.100000, minicheck=0.200000, redundancy=0.700000
+ROUGE sentence split: pysbd
+============================================================
+
+
+Paper Metrics:
+ROUGE Scores (F1 only, impl=huggingface_evaluate):
+  rouge1    F1=42.02%
+  rouge2    F1=19.03%
+  rougeL    F1=26.73%
+  rougeLsum  F1=39.02%
+BERTScore (roberta-large):
+  Precision=87.61%  Recall=87.75%  F1=87.67%
+
+Extra Metrics:
+FactCC (manueldeprada/FactCC):
+  SentenceAvgCorrect: 78.68%
+MiniCheck (EMNLP 2024, MiniCheck-RoBERTa-Large):
+  SummaryAvgConsistent: 96.85%
+AlignScore (ACL 2023, yzha/AlignScore-base, nli_sp):
+  SummaryAvg: 93.11%
+FactGraph: unavailable (FileNotFoundError('FACTGRAPH repo dir not configured. Set $FACTGRAPH_REPO_DIR or pass repo_dir explicitly. Clone https://github.com/amazon-science/fact-graph first.'))
+FactKB (bunsenfeng/FactKB):
+  FactualProb: 98.68%
+
+Runtime:
+  StartedAt: 2026-04-26T12:14:00.936875
+  FinishedAt: 2026-04-26T20:29:46.003338
+  MethodTotalSeconds: 29745.07
+  GenerationSeconds: 23438.11
+  EvaluationSeconds: 6299.93
+  Resume: resumed=False, resumed_from=0, prior_generation_seconds=0.00
+  MetricSeconds: rouge=40.46s, bertscore=161.85s, factcc=477.03s, minicheck=3299.84s, alignscore=2199.00s, factgraph=0.00s, factkb=121.26s
+  COTimingSeconds:
+    Samples: 11490
+    Total: 11745.68s MeanPerSample: 1.022253s
+
+============================================================
+Detailed selection logs (first 10 samples):
+============================================================
+
+--- Sample 1 ---
+(a) Optimization method: ILP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (12 sentences):
+    [0] Utility=0.2019 | The Palestinian Authority officially becomes the 123rd member of the International Criminal Court.
+    [1] Utility=0.2044 | The formal accession was marked with a ceremony at The Hague, in the Netherlands, where the court is based.
+    [2] Utility=0.2032 | Israel and the United States, neither of which is an ICC member, opposed the Palestinians' efforts to join.
+    [3] Utility=0.2050 | The Palestinians signed the ICC's founding Rome Statute in January, when they also accepted its jurisdiction over alleged crimes.
+    [4] Utility=0.2032 | Israel and the United States, neither of which is an ICC member, had opposed the Palestinians' efforts to join.
+    [5] Utility=0.2033 | Israel and the United States, neither of which is an ICC member, have opposed the Palestinians' efforts to join.
+    [6] Utility=0.2025 | Israel and the United States, neither of which is an ICC member, opposed the Palestinians' efforts.
+    [7] Utility=0.2044 | The Palestinians signed the ICC's founding Rome Statute in January, when they accepted its jurisdiction over alleged crimes.
+    [8] Utility=0.2039 | The Palestinians signed the ICC's founding Rome Statute in January, when they also accepted its jurisdiction.
+    [9] Utility=0.2034 | The Palestinians signed the ICC's founding Rome Statute in January, when they accepted its jurisdiction.
+    [10] Utility=0.2026 | Israel and the United States, neither of which is an ICC member, have opposed the Palestinians' efforts.
+    [11] Utility=0.2025 | Israel and the United States, neither of which is an ICC member, had opposed the Palestinians' efforts.
+(c) Redundancy matrix shape: (12, 12)
+    Highest redundancy pair: [3] vs [7], ROUGE-L F1=0.9744
+(d0) Effective weights: rouge=0.1000, minicheck=0.2000, redundancy=0.7000
+(d-timing) CO total seconds: 1.041823
+(d) Selected indices: [0, 1, 3, 5], utility sum: 0.8147
+(h) Final summary: The Palestinian Authority officially becomes the 123rd member of the International Criminal Court. The formal accession was marked with a ceremony at The Hague, in the Netherlands, where the court is based. The Palestinians signed the ICC's founding Rome Statute in January, when they also accepted its jurisdiction over alleged crimes. Israel and the United States, neither of which is an ICC member, have opposed the Palestinians' efforts to join.
+    Reference: Membership gives the ICC jurisdiction over alleged crimes committed in Palestinian territories since last June .
+Israel and the United States opposed the move, which could open the door to war crimes investigations against Israelis .
+
+--- Sample 2 ---
+(a) Optimization method: ILP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (11 sentences):
+    [0] Utility=0.2010 | Theia is a one-year-old bully breed mix.
+    [1] Utility=0.2039 | She suffered a dislocated jaw, leg injuries and a caved-in sinus cavity.
+    [2] Utility=0.2033 | "She's a true miracle dog and she deserves a good life," the dog's foster says.
+    [3] Utility=0.2024 | Theia is not the only animal to apparently rise from the grave.
+    [4] Utility=0.2019 | "She's a true miracle dog and she deserves a good life," her foster mother says.
+    [5] Utility=0.2000 | A fundraising page has raised more than $10,000 for Theia.
+    [6] Utility=0.2002 | A fundraising page has raised more than $10,000 for her care.
+    [7] Utility=0.2016 | "She's a true miracle dog and she deserves a good life," her foster mom says.
+    [8] Utility=0.2000 | A fundraising page has surpassed its $10,000 target.
+    [9] Utility=0.1999 | A fundraising page has raised more than $10,000.
+    [10] Utility=0.1996 | A fundraising page has surpassed its target.
+(c) Redundancy matrix shape: (11, 11)
+    Highest redundancy pair: [4] vs [7], ROUGE-L F1=0.9375
+(d0) Effective weights: rouge=0.1000, minicheck=0.2000, redundancy=0.7000
+(d-timing) CO total seconds: 0.741229
+(d) Selected indices: [1, 3, 4, 8], utility sum: 0.8082
+(h) Final summary: She suffered a dislocated jaw, leg injuries and a caved-in sinus cavity. Theia is not the only animal to apparently rise from the grave. "She's a true miracle dog and she deserves a good life," her foster mother says. A fundraising page has surpassed its $10,000 target.
+    Reference: Theia, a bully breed mix, was apparently hit by a car, whacked with a hammer and buried in a field .
+"She's a true miracle dog and she deserves a good life," says Sara Mellado, who is looking for a home for Theia .
+
+--- Sample 3 ---
+(a) Optimization method: ILP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (9 sentences):
+    [0] Utility=0.2029 | Mohammad Javad Zarif received a hero's welcome as he arrived in Iran on a sunny Friday morning.
+    [1] Utility=0.2032 | He has gone a long way to bring Iran in from the cold and allow it to rejoin the international community.
+    [2] Utility=0.2011 | But there are some facts about Zarif that are less well-known.
+    [3] Utility=0.2035 | He has been U.S. Secretary of State John Kerry's opposite number in securing a breakthrough in nuclear discussions.
+    [4] Utility=0.2015 | The feds investigated him over his alleged role in controlling the Alavi Foundation.
+    [5] Utility=0.2026 | Mohammad Javad Zarif received a hero's welcome as he arrived in Iran on a sunny Friday.
+    [6] Utility=0.2008 | But there are some facts about him that are less well-known.
+    [7] Utility=0.2011 | But there are some facts about Zarif that are less well- known.
+    [8] Utility=0.2010 | Zarif left the country in 1977, received his undergraduate degree from San Francisco State.
+(c) Redundancy matrix shape: (9, 9)
+    Highest redundancy pair: [2] vs [7], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.1000, minicheck=0.2000, redundancy=0.7000
+(d-timing) CO total seconds: 0.810960
+(d) Selected indices: [0, 3, 6, 8], utility sum: 0.8082
+(h) Final summary: Mohammad Javad Zarif received a hero's welcome as he arrived in Iran on a sunny Friday morning. He has been U.S. Secretary of State John Kerry's opposite number in securing a breakthrough in nuclear discussions. But there are some facts about him that are less well-known. Zarif left the country in 1977, received his undergraduate degree from San Francisco State.
+    Reference: Mohammad Javad Zarif has spent more time with John Kerry than any other foreign minister .
+He once participated in a takeover of the Iranian Consulate in San Francisco .
+The Iranian foreign minister tweets in English .
+
+--- Sample 4 ---
+(a) Optimization method: ILP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (12 sentences):
+    [0] Utility=0.2128 | The five were exposed to Ebola in Sierra Leone in March, but none developed the deadly virus.
+    [1] Utility=0.2094 | They are clinicians for Partners in Health, a Boston-based aid group.
+    [2] Utility=0.2198 | They all had contact with a colleague who was diagnosed with the disease and is being treated at the National Institutes of Health.
+    [3] Utility=0.2176 | One of the five had a heart-related issue on Saturday and has been discharged but hasn't left the area.
+    [4] Utility=0.2187 | All had contact with a colleague who was diagnosed with the disease and is being treated at the National Institutes of Health.
+    [5] Utility=0.2185 | They had contact with a colleague who was diagnosed with the disease and is being treated at the National Institutes of Health.
+    [6] Utility=0.2149 | They all had contact with a colleague who was diagnosed with the disease and is being treated in Maryland.
+    [7] Utility=0.2149 | They all had contact with a colleague who is being treated at the National Institutes of Health in Maryland.
+    [8] Utility=0.2163 | They all had contact with a colleague who is being treated at the National Institutes of Health in Bethesda, Maryland.
+    [9] Utility=0.2161 | They all had contact with a colleague who was diagnosed with the disease and is being treated at a Maryland hospital.
+    [10] Utility=0.2159 | They all had contact with a colleague who was diagnosed with the disease and is being treated at the NIH.
+    [11] Utility=0.2157 | One of the five had a heart-related issue on Saturday and has been discharged but hasn't left.
+(c) Redundancy matrix shape: (12, 12)
+    Highest redundancy pair: [2] vs [4], ROUGE-L F1=0.9778
+(d0) Effective weights: rouge=0.1000, minicheck=0.2000, redundancy=0.7000
+(d-timing) CO total seconds: 0.419187
+(d) Selected indices: [0, 1, 4, 11], utility sum: 0.8567
+(h) Final summary: The five were exposed to Ebola in Sierra Leone in March, but none developed the deadly virus. They are clinicians for Partners in Health, a Boston-based aid group. All had contact with a colleague who was diagnosed with the disease and is being treated at the National Institutes of Health. One of the five had a heart-related issue on Saturday and has been discharged but hasn't left.
+    Reference: 17 Americans were exposed to the Ebola virus while in Sierra Leone in March .
+Another person was diagnosed with the disease and taken to hospital in Maryland .
+National Institutes of Health says the patient is in fair condition after weeks of treatment .
+
+--- Sample 5 ---
+(a) Optimization method: ILP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (13 sentences):
+    [0] Utility=0.2066 | A student has admitted to hanging a noose from a tree near a student union, university officials say.
+    [1] Utility=0.2040 | The prestigious private school didn't identify the student, citing federal privacy laws.
+    [2] Utility=0.2064 | The student was identified during an investigation by campus police and the office of student affairs.
+    [3] Utility=0.2034 | Officials are still trying to determine if other people were involved.
+    [4] Utility=0.2051 | A Duke student has admitted to hanging a noose from a tree, university officials say.
+    [5] Utility=0.2046 | The incident is one of several recent racist events to affect college students.
+    [6] Utility=0.2047 | Officials are still trying to determine if other people were involved in the incident.
+    [7] Utility=0.2042 | The vice president for student affairs called the incident a "cowardly act"
+    [8] Utility=0.2055 | The student is no longer on campus and will face student conduct review, the school says.
+    [9] Utility=0.2057 | The student is no longer on campus and will face student conduct review, the university says.
+    [10] Utility=0.2074 | The student was identified during an investigation by campus police and the office of student affairs, the university says.
+    [11] Utility=0.2070 | The student was identified during an investigation by campus police and the office of student affairs, the school says.
+    [12] Utility=0.2054 | The student is no longer on campus and will face student conduct review, the school said.
+(c) Redundancy matrix shape: (13, 13)
+    Highest redundancy pair: [10] vs [11], ROUGE-L F1=0.9474
+(d0) Effective weights: rouge=0.1000, minicheck=0.2000, redundancy=0.7000
+(d-timing) CO total seconds: 0.868181
+(d) Selected indices: [1, 3, 4, 12], utility sum: 0.8178
+(h) Final summary: The prestigious private school didn't identify the student, citing federal privacy laws. Officials are still trying to determine if other people were involved. A Duke student has admitted to hanging a noose from a tree, university officials say. The student is no longer on campus and will face student conduct review, the school said.
+    Reference: Student is no longer on Duke University campus and will face disciplinary review .
+School officials identified student during investigation and the person admitted to hanging the noose, Duke says .
+The noose, made of rope, was discovered on campus about 2 a.m.
+
+--- Sample 6 ---
+(a) Optimization method: ILP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (13 sentences):
+    [0] Utility=0.2036 | Trey Moses made the prom-posal in the gym during Ellie's P.E. class.
+    [1] Utility=0.2023 | "She's great... she listens and she's easy to talk to," he said.
+    [2] Utility=0.2027 | Trey's future coach at Ball State, James Whitford, said he felt great about theprom-posal.
+    [3] Utility=0.2042 | Trey's future coach at Ball State, James Whitford, said he felt great about the Prom-posal.
+    [4] Utility=0.2022 | Trey's future coach at Ball State, James Whitford, said he felt great about the prom.
+    [5] Utility=0.2033 | Trey's future coach at Ball State, James Whitford, said he felt great about the proposal.
+    [6] Utility=0.2033 | Trey's future coach at Ball State, James Whitford, said he felt great about the promposal.
+    [7] Utility=0.2008 | Trey's future coach at Ball State, James Whitford, said he felt great.
+    [8] Utility=0.2002 | Trey's future coach at Ball State, James Whitford, said he felt great about it.
+    [9] Utility=0.2038 | Trey's future coach at Ball State, James Whitford, said he felt great about the prom proposal.
+    [10] Utility=0.2014 | "She's great... she listens and she's easy to talk to," Trey says of his girlfriend.
+    [11] Utility=0.2020 | Ellie's mom: Ellie has struggled with friendships since elementary school.
+    [12] Utility=0.2024 | Trey's future coach at Ball State, James Whitford, said he felt great about the Promposal.
+(c) Redundancy matrix shape: (13, 13)
+    Highest redundancy pair: [6] vs [12], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.1000, minicheck=0.2000, redundancy=0.7000
+(d-timing) CO total seconds: 0.898548
+(d) Selected indices: [0, 5, 10, 11], utility sum: 0.8103
+(h) Final summary: Trey Moses made the prom-posal in the gym during Ellie's P.E. class. Trey's future coach at Ball State, James Whitford, said he felt great about the proposal. "She's great... she listens and she's easy to talk to," Trey says of his girlfriend. Ellie's mom: Ellie has struggled with friendships since elementary school.
+    Reference: College-bound basketball star asks girl with Down syndrome to high school prom .
+Pictures of the two during the "prom-posal" have gone viral .
+
+--- Sample 7 ---
+(a) Optimization method: ILP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (13 sentences):
+    [0] Utility=0.2015 | The number of executions worldwide has gone down by almost 22% on the previous year.
+    [1] Utility=0.2004 | At least 607 people were executed around the world in 2014, compared to 778 in 2013.
+    [2] Utility=0.2015 | The report notes some encouraging signs, but also highlights a marked increase in the number of people sentenced to death in 2014.
+    [3] Utility=0.2015 | The U.S. remains one of the worst offenders for imposing capital punishment, with only Iran and Iraq executing more people.
+    [4] Utility=0.2013 | The report notes some encouraging signs, but also highlights a marked increase in the number of people sentenced to death.
+    [5] Utility=0.2010 | The organization found "positive developments" worldwide, with most regions seeming to show reductions.
+    [6] Utility=0.2014 | The organization found "positive developments" worldwide, with most regions seeming to show reductions in executions.
+    [7] Utility=0.2025 | But the report also highlights a marked increase in the number of people sentenced to death in 2014.
+    [8] Utility=0.2015 | At least 2,466 people globally are confirmed to have been handed the sentence last year.
+    [9] Utility=0.2011 | The U.S. remains one of the worst offenders for imposing capital punishment.
+    [10] Utility=0.2007 | The organization finds "positive developments" worldwide, with most regions seeming to show reductions.
+    [11] Utility=0.2011 | The organization finds "positive developments" worldwide, with most regions seeming to show reductions in executions.
+    [12] Utility=0.2010 | The U.S. remains one of the worst offenders for imposing capital punishment, with only Iran.
+(c) Redundancy matrix shape: (13, 13)
+    Highest redundancy pair: [2] vs [4], ROUGE-L F1=0.9524
+(d0) Effective weights: rouge=0.1000, minicheck=0.2000, redundancy=0.7000
+(d-timing) CO total seconds: 1.380727
+(d) Selected indices: [2, 5, 8, 9], utility sum: 0.8051
+(h) Final summary: The report notes some encouraging signs, but also highlights a marked increase in the number of people sentenced to death in 2014. The organization found "positive developments" worldwide, with most regions seeming to show reductions. At least 2,466 people globally are confirmed to have been handed the sentence last year. The U.S. remains one of the worst offenders for imposing capital punishment.
+    Reference: Amnesty's annual death penalty report catalogs encouraging signs, but setbacks in numbers of those sentenced to death .
+Organization claims that governments around the world are using the threat of terrorism to advance executions .
+The number of executions worldwide has gone down by almost 22% compared with 2013, but death sentences up by 28% .
+
+--- Sample 8 ---
+(a) Optimization method: ILP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (12 sentences):
+    [0] Utility=0.2059 | Andrew Getty, grandson of oil tycoon J. Paul Getty, appears to have died of natural causes.
+    [1] Utility=0.2054 | Coroner's preliminary assessment is there was no foul play involved in the death.
+    [2] Utility=0.2027 | Andrew Getty, 47, had "several health issues," Detective Meghan Aguilar says.
+    [3] Utility=0.2033 | Andrew Getty, 47, had "several health issues," Detective Meghan Aguilar said.
+    [4] Utility=0.2048 | Andrew Getty was found on his side near a bathroom in his home, KTLA reports.
+    [5] Utility=0.2009 | Andrew Getty, 47, had "several health issues," a police spokesman says.
+    [6] Utility=0.1991 | Andrew Getty, 47, had "several health issues," police say.
+    [7] Utility=0.2007 | An autopsy will be conducted.
+    [8] Utility=0.2001 | Andrew Getty, 47, had "several health issues," a police spokesman said.
+    [9] Utility=0.2057 | Coroner's preliminary assessment is there was no foul play involved in Getty's death.
+    [10] Utility=0.2050 | Andrew Getty was found on his side near a bathroom in his home, KTLA reported.
+    [11] Utility=0.2041 | Andrew Getty was found on his side near a bathroom in his home, KTLA says.
+(c) Redundancy matrix shape: (12, 12)
+    Highest redundancy pair: [4] vs [10], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.1000, minicheck=0.2000, redundancy=0.7000
+(d-timing) CO total seconds: 0.735707
+(d) Selected indices: [0, 1, 3, 7], utility sum: 0.8153
+(h) Final summary: Andrew Getty, grandson of oil tycoon J. Paul Getty, appears to have died of natural causes. Coroner's preliminary assessment is there was no foul play involved in the death. Andrew Getty, 47, had "several health issues," Detective Meghan Aguilar said. An autopsy will be conducted.
+    Reference: Andrew Getty's death appears to be from natural causes, police say, citing coroner's early assessment .
+In a petition for a restraining order, Getty had written he had a serious medical condition.
+Police say this is not a criminal matter at this time .
+
+--- Sample 9 ---
+(a) Optimization method: ILP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (11 sentences):
+    [0] Utility=0.2041 | Maysak gained super typhoon status just a few days ago.
+    [1] Utility=0.2053 | It has since lost steam as it spins west in the Pacific Ocean.
+    [2] Utility=0.2144 | It boasts steady winds of more than 70 mph (115 kph) It's expected to make landfall Sunday morning on the southeastern coast of Isabela province.
+    [3] Utility=0.2035 | Maysak gained super typhoon status a few days ago.
+    [4] Utility=0.2088 | It boasts steady winds of more than 70 mph (115 kph) and gusts up to 90 mph.
+    [5] Utility=0.2033 | It's expected to make landfall Sunday morning.
+    [6] Utility=0.2033 | It's now classified as a tropical storm.
+    [7] Utility=0.2026 | It's expected to make landfall Sunday.
+    [8] Utility=0.2023 | It is expected to make landfall Sunday morning.
+    [9] Utility=0.2072 | It boasts steady winds of more than 70 mph and gusts up to 90 mph.
+    [10] Utility=0.2123 | It boasts steady winds of more than 70 mph (115 kph) It's expected to make landfall Sunday morning on the southeastern coast.
+(c) Redundancy matrix shape: (11, 11)
+    Highest redundancy pair: [0] vs [3], ROUGE-L F1=0.9474
+(d0) Effective weights: rouge=0.1000, minicheck=0.2000, redundancy=0.7000
+(d-timing) CO total seconds: 0.471644
+(d) Selected indices: [0, 1, 4, 5], utility sum: 0.8215
+(h) Final summary: Maysak gained super typhoon status just a few days ago. It has since lost steam as it spins west in the Pacific Ocean. It boasts steady winds of more than 70 mph (115 kph) and gusts up to 90 mph. It's expected to make landfall Sunday morning.
+    Reference: Once a super typhoon, Maysak is now a tropical storm with 70 mph winds .
+It could still cause flooding, landslides and other problems in the Philippines .
+
+--- Sample 10 ---
+(a) Optimization method: ILP (Tri-metric unified objective (ROUGE + MiniCheck + Redundancy))
+(b) Candidate pool (12 sentences):
+    [0] Utility=0.2183 | Bob Barker returned to "The Price Is Right" for the first time in eight years.
+    [1] Utility=0.2203 | Barker hosted the TV game show for 35 years before stepping down in 2007.
+    [2] Utility=0.2218 | The 91-year-old handled the first price-guessing game of the show, the classic "Lucky Seven"
+    [3] Utility=0.2197 | Bob Barker returned to host "The Price Is Right" for the first time in eight years.
+    [4] Utility=0.2202 | He handled the first price-guessing game of the show, the classic "Lucky Seven"
+    [5] Utility=0.2160 | The 91-year-old handled the first price-guessing game, the classic "Lucky Seven"
+    [6] Utility=0.2218 | The 91-year-old handled the first price-guessing game of the show, the classic "Lucky Seven."
+    [7] Utility=0.2200 | The 91-year-old handled the first price-guessing game of the show, the classic "Lucky 7"
+    [8] Utility=0.2237 | He handled the first price-guessing game, the classic "Lucky Seven," before turning hosting duties over to Carey.
+    [9] Utility=0.0715 | He handled the first price-guessing game, the classic "Lucky Seven," before turning hosting duties to Drew Carey.
+    [10] Utility=0.2135 | He handled the first price-guessing game, the classic "Lucky Seven," before turning hosting duties over.
+    [11] Utility=0.2203 | He handled the first price-guessing game of the show, the classic "Lucky Seven."
+(c) Redundancy matrix shape: (12, 12)
+    Highest redundancy pair: [2] vs [6], ROUGE-L F1=1.0000
+(d0) Effective weights: rouge=0.1000, minicheck=0.2000, redundancy=0.7000
+(d-timing) CO total seconds: 0.373650
+(d) Selected indices: [0, 1, 7, 8], utility sum: 0.8823
+(h) Final summary: Bob Barker returned to "The Price Is Right" for the first time in eight years. Barker hosted the TV game show for 35 years before stepping down in 2007. The 91-year-old handled the first price-guessing game of the show, the classic "Lucky 7" He handled the first price-guessing game, the classic "Lucky Seven," before turning hosting duties over to Carey.
+    Reference: Bob Barker returned to host "The Price Is Right" on Wednesday .
+Barker, 91, had retired as host in 2007 .
+

@@ -18,8 +18,11 @@ Authoritative paper source: `paper/Budget-constrained and faithful.tex`.
 - `results/paper_metrics.csv`: compact metrics regenerated from `results/raw/`.
 - `results/missing_results.csv`: rows or metrics that are still missing,
   pending, or only partially supported by release evidence.
+- `legacy/nlp_generatesummary/`: compact legacy BART/NLM scripts and result
+  artifacts copied from the older `NLP_generatesummary` workspace for audit
+  provenance only.
 - `docs/`: ACL/code-paper audit, dependency notes, and reproduction runbook.
-- `paper/`: raw authoritative paper snapshot, older draft snapshot, and paper-side audit notes.
+- `paper/`: raw authoritative paper snapshot and paper-side audit notes.
 
 Heavy artifacts are intentionally excluded: full `outputs/`, stage traces,
 progress checkpoints, training/evaluation run logs, caches, vendored
@@ -121,9 +124,9 @@ The GitHub repository is:
 https://github.com/wangzeyu2006729-beep/budget-constrained-faithful-summarization
 ```
 
-This server currently has no `gh` CLI, so creating or renaming repositories
-requires a token. The release directory is already initialized as a local git
-repository on branch `main`.
+This release directory is initialized as a local git repository on branch
+`main`. The server can use GitHub CLI authentication when `gh auth login` has
+been completed.
 
 ```bash
 cd /path/to/NLP_acl_repro_release
@@ -131,8 +134,7 @@ cd /path/to/NLP_acl_repro_release
 git config user.name "Your Name"
 git config user.email "you@example.com"
 
-GH_TOKEN=YOUR_GITHUB_TOKEN \
-  scripts/run_live.sh --name publish_github -- \
+scripts/run_live.sh --name publish_github -- \
   bash scripts/publish_to_github.sh
 ```
 

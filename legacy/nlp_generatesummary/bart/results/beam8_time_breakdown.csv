@@ -1,0 +1,5 @@
+method,beam_size,samples,generation_seconds,evaluation_seconds,selection_seconds,selection_mean_seconds,runtime_total_seconds
+DPP,8,11490,18167,6499,8611,0.75,24674
+MMR,8,11490,18733,6526,9186,0.80,25266
+ILP,8,11490,19502,6307,9940,0.87,25816
+LNS,8,11490,21839,6259,12303,1.07,28107

@@ -1,0 +1,7 @@
+method,w_rouge,w_minicheck,w_redundancy
+dpp,0.0,0.5,0.5
+dpp,0.0,0.5,1.0
+dpp,0.5,0.5,0.5
+dpp,1.0,0.5,0.5
+dpp,0.5,1.0,0.5
+dpp,0.5,0.5,1.0

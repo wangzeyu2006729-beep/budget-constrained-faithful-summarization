@@ -1,0 +1,11 @@
+group,method,method_id,variant,samples,R1,R2,RL,BERTScore,MoverScore,BARTScore,FactCC,Ent_DAE,DAE,MiniCheck,AlignScore,FactKB
+baseline,FactEdit-FF,factedit_ff,"FACTEDIT + FactCC Filter (FF), CNN/DM Table 1",11490.00,42.53,20.48,39.74,88.17,,,76.03,75.36,,94.82,91.46,98.68
+baseline,SimCLS,simcls,"SimCLS, CNNDM Table 1",11490.00,46.67,22.15,43.54,66.14,59.31,,59.49,,,83.34,82.37,80.75
+baseline,BRIO-Mul,brio_mul,"BRIO-Mul, CNNDM Table 2",11490.00,47.78,23.55,44.57,87.84,,,54.06,,,84.67,74.48,85.20
+baseline,BRIO-Ctr,brio_ctr,"BRIO-Ctr, CNNDM Table 2",11490.00,47.28,22.93,44.15,89.11,,,62.62,,,88.42,84.98,78.89
+baseline,EFactSum-BART,efactsum_bart,"EFACTSUM, CNN/DM Table 1",11490.00,44.37,21.28,40.92,88.36,,,60.74,,0.04,88.33,82.02,91.38
+baseline,SummaReranker-BART,summa_reranker_bart,"BART + SR, Table 5, 30 candidates, ROUGE objective",11490.00,46.62,22.39,43.59,88.47,,-2.18,68.17,,,93.81,88.27,98.10
+ours,beam8-dpp,beam8_dpp,MiniCheck + Redundancy,11490.00,41.52,19.02,38.69,87.64,,,78.46,,,97.25,93.71,98.88
+ours,beam8-mmr,beam8_mmr,Tri-metric unified objective (ROUGE + MiniCheck + Redundancy),11490.00,41.64,19.08,38.75,87.65,,,78.15,,,96.58,92.98,98.69
+ours,beam8-ilp,beam8_ilp,Tri-metric unified objective (ROUGE + MiniCheck + Redundancy),11490.00,42.31,19.34,39.33,87.75,,,78.26,,,96.83,92.93,98.67
+ours,beam8-lns,beam8_lns,Tri-metric unified objective (ROUGE + MiniCheck + Redundancy),11490.00,42.34,19.35,39.36,87.75,,,78.28,,,96.82,92.92,98.63

@@ -1,0 +1,44 @@
+BART Beam-5 + SUBMODULAR Summarization Results (Resume-Eval)
+Method: submodular
+Objective variant: MiniCheck + Redundancy
+Dataset: cnn_dailymail (3.0.0)
+Split: test
+Samples: 11490
+Sample mode: head
+Sample seed: 42
+Beam size: 5
+Budget: 4 sentences
+Runtime generation batch size: 12
+Runtime utility batch size: 128
+Runtime eval batch size: 32
+Runtime dtype: bf16
+Runtime total seconds: 13709.19
+Eval suite: full
+ROUGE implementation: huggingface_evaluate
+Recovered from progress_summaries checkpoint.
+ROUGE sentence split: pysbd
+============================================================
+
+
+Paper Metrics:
+ROUGE Scores (F1 only, impl=huggingface_evaluate):
+  rouge1    F1=29.34%
+  rouge2    F1=11.34%
+  rougeL    F1=21.39%
+  rougeLsum  F1=26.62%
+BERTScore (roberta-large):
+  Precision=85.51%  Recall=84.93%  F1=85.20%
+
+Extra Metrics:
+BARTScore (bart-large-cnn):
+  ref->hyp: -2.0994
+  hyp->ref: -3.8985
+  src->hyp: -0.7514
+Faithfulness (NLI, bart-large-mnli):
+  Entailment: 88.71%
+FactCC (manueldeprada/FactCC):
+  SentenceAvgCorrect: 74.75%
+MiniCheck (EMNLP 2024, MiniCheck-RoBERTa-Large):
+  SummaryAvgConsistent: 96.53%
+AlignScore (ACL 2023, yzha/AlignScore-base, nli_sp):
+  SummaryAvg: 92.08%

@@ -1,0 +1,4 @@
+method,w_rouge,w_minicheck,w_redundancy,effective_w_rouge,effective_w_minicheck,effective_w_redundancy,coverage_mean,MiniCheck,FactCC,faithfulness_mean,balanced_score,source_sweep,note
+mmr,0.50,1.00,0.50,0.2500,0.5000,0.2500,30.30,96.01,78.17,87.09,0.804,tri_metric_grid_search_mmr_redundancy_10pt_validation_n50.csv,best MMR row among existing all-three-nonzero sweep rows
+ilp,1.00,0.50,1.00,0.4000,0.2000,0.4000,30.13,94.41,78.88,86.64,0.777,tri_metric_grid_search_ilp_redundancy_10pt_validation_n50.csv,best ILP row among existing all-three-nonzero sweep rows
+dpp,0.50,1.00,0.50,0.2500,0.5000,0.2500,25.10,94.76,77.13,85.94,0.335,tri_metric_grid_search_dpp_light_validation_n50.csv,best DPP row among existing all-three-nonzero DPP light sweep rows

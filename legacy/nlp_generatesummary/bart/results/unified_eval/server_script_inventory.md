@@ -1,0 +1,332 @@
+# Server Script Inventory
+
+- Total scripts: 323
+- By scope: {'papers_baseline': 57, 'repo': 266}
+- By status: {'windows_only': 13, 'needs_server_cleanup': 18, 'server_visible': 239, 'legacy': 53}
+- By kind: {'windows_wrapper': 13, 'entrypoint': 44, 'support': 174, 'test': 39, 'legacy': 53}
+
+| scope | path | top_group | kind | status | windows_path |
+| --- | --- | --- | --- | --- | --- |
+| papers_baseline | FACTEDIT/scripts/run_build_baseline_summaries.ps1 | FACTEDIT | windows_wrapper | windows_only |  |
+| papers_baseline | FACTEDIT/scripts/run_correction_predict_ood.ps1 | FACTEDIT | windows_wrapper | windows_only |  |
+| papers_baseline | FACTEDIT/scripts/run_correction_train.ps1 | FACTEDIT | windows_wrapper | windows_only |  |
+| papers_baseline | FACTEDIT/scripts/run_eval.ps1 | FACTEDIT | windows_wrapper | windows_only |  |
+| papers_baseline | FACTEDIT/scripts/run_infill_predict.ps1 | FACTEDIT | windows_wrapper | windows_only |  |
+| papers_baseline | FACTEDIT/scripts/run_infill_train.ps1 | FACTEDIT | windows_wrapper | windows_only |  |
+| papers_baseline | FACTEDIT/scripts/run_materialize_correction_data.ps1 | FACTEDIT | windows_wrapper | windows_only |  |
+| papers_baseline | FACTEDIT/scripts/run_prepare_assets.ps1 | FACTEDIT | windows_wrapper | windows_only |  |
+| papers_baseline | FACTEDIT/src/build_factedit_trainset.py | FACTEDIT | entrypoint | needs_server_cleanup | yes |
+| papers_baseline | FACTEDIT/src/build_or_load_baseline_summaries.py | FACTEDIT | entrypoint | server_visible |  |
+| papers_baseline | FACTEDIT/src/prepare_cnndm_data.py | FACTEDIT | support | needs_server_cleanup | yes |
+| papers_baseline | FACTEDIT/src/run_factedit_eval.py | FACTEDIT | entrypoint | server_visible |  |
+| papers_baseline | FACTEDIT/src/run_factedit_inference.py | FACTEDIT | entrypoint | server_visible |  |
+| papers_baseline | FACTEDIT/src/run_official_fact_correction_training.py | FACTEDIT | entrypoint | needs_server_cleanup | yes |
+| papers_baseline | FACTEDIT/src/run_official_infill_prediction.py | FACTEDIT | entrypoint | needs_server_cleanup | yes |
+| papers_baseline | FACTEDIT/src/run_official_infill_training.py | FACTEDIT | entrypoint | needs_server_cleanup | yes |
+| papers_baseline | FACTEDIT/src/utils/__init__.py | FACTEDIT | support | server_visible |  |
+| papers_baseline | FACTEDIT/src/utils/data_utils.py | FACTEDIT | support | server_visible |  |
+| papers_baseline | FACTEDIT/src/utils/eval_bridge.py | FACTEDIT | entrypoint | server_visible |  |
+| papers_baseline | FACTEDIT/src/utils/path_config.py | FACTEDIT | support | needs_server_cleanup | yes |
+| papers_baseline | brio_ctr_reproduction/postprocess_unified.py | brio_ctr_reproduction | support | server_visible |  |
+| papers_baseline | brio_ctr_reproduction/run_unified.sh | brio_ctr_reproduction | entrypoint | server_visible |  |
+| papers_baseline | brio_ctr_reproduction/scripts/generate_brio_full_testset.py | brio_ctr_reproduction | support | server_visible |  |
+| papers_baseline | brio_ctr_reranker_cnndm/scripts/eval_rank_correlation.py | brio_ctr_reranker_cnndm | entrypoint | server_visible |  |
+| papers_baseline | brio_ctr_reranker_cnndm/scripts/gen_candidates.py | brio_ctr_reranker_cnndm | support | server_visible |  |
+| papers_baseline | brio_ctr_reranker_cnndm/scripts/inference_rerank.py | brio_ctr_reranker_cnndm | support | server_visible |  |
+| papers_baseline | brio_ctr_reranker_cnndm/scripts/preprocess_data.py | brio_ctr_reranker_cnndm | support | server_visible |  |
+| papers_baseline | brio_ctr_reranker_cnndm/scripts/run_eval.py | brio_ctr_reranker_cnndm | entrypoint | server_visible |  |
+| papers_baseline | brio_ctr_reranker_cnndm/scripts/run_metrics.py | brio_ctr_reranker_cnndm | entrypoint | server_visible |  |
+| papers_baseline | brio_ctr_reranker_cnndm/scripts/train_reranker.py | brio_ctr_reranker_cnndm | entrypoint | server_visible |  |
+| papers_baseline | consum_cnndm_second_stage_reranker/consum_pipeline_common.py | consum_cnndm_second_stage_reranker | support | server_visible |  |
+| papers_baseline | consum_cnndm_second_stage_reranker/scripts/build_pseudo_references.py | consum_cnndm_second_stage_reranker | entrypoint | server_visible |  |
+| papers_baseline | consum_cnndm_second_stage_reranker/scripts/check_cnndm_consum_assets.py | consum_cnndm_second_stage_reranker | support | server_visible |  |
+| papers_baseline | consum_cnndm_second_stage_reranker/scripts/prepare_bart_candidates.py | consum_cnndm_second_stage_reranker | support | server_visible |  |
+| papers_baseline | consum_cnndm_second_stage_reranker/scripts/rerank_and_evaluate.py | consum_cnndm_second_stage_reranker | support | server_visible |  |
+| papers_baseline | consum_cnndm_second_stage_reranker/scripts/score_consum.py | consum_cnndm_second_stage_reranker | support | server_visible |  |
+| papers_baseline | lexisem_reproduction/eval_lexisem.py | lexisem_reproduction | entrypoint | needs_server_cleanup | yes |
+| papers_baseline | lexisem_reproduction/lexisem_pipeline_common.py | lexisem_reproduction | support | server_visible |  |
+| papers_baseline | lexisem_reproduction/prepare_lexisem_data.py | lexisem_reproduction | support | server_visible |  |
+| papers_baseline | lexisem_reproduction/rerank_and_evaluate.py | lexisem_reproduction | support | needs_server_cleanup | yes |
+| papers_baseline | lexisem_reproduction/run_checkpoint_eval.ps1 | lexisem_reproduction | windows_wrapper | windows_only | yes |
+| papers_baseline | lexisem_reproduction/run_full_eval.ps1 | lexisem_reproduction | windows_wrapper | windows_only |  |
+| papers_baseline | lexisem_reproduction/run_prepare_data.ps1 | lexisem_reproduction | windows_wrapper | windows_only | yes |
+| papers_baseline | lexisem_reproduction/run_rouge_only_eval.ps1 | lexisem_reproduction | windows_wrapper | windows_only |  |
+| papers_baseline | lexisem_reproduction/run_train_smoke.ps1 | lexisem_reproduction | windows_wrapper | windows_only | yes |
+| papers_baseline | lexisem_reproduction/train_lexisem.py | lexisem_reproduction | entrypoint | server_visible |  |
+| papers_baseline | submodular_greedy/experiments/run_greedy.py | submodular_greedy | entrypoint | server_visible |  |
+| papers_baseline | submodular_greedy/src/evaluation.py | submodular_greedy | entrypoint | server_visible |  |
+| papers_baseline | submodular_greedy/src/preprocess.py | submodular_greedy | support | server_visible |  |
+| papers_baseline | submodular_greedy/src/submodular_greedy.py | submodular_greedy | support | server_visible |  |
+| papers_baseline | summa_reranker_cnndm_second_stage_reranker/scripts/check_cnndm_assets.py | summa_reranker_cnndm_second_stage_reranker | support | server_visible |  |
+| papers_baseline | summa_reranker_cnndm_second_stage_reranker/scripts/prepare_bart_candidates.py | summa_reranker_cnndm_second_stage_reranker | support | server_visible |  |
+| papers_baseline | summa_reranker_cnndm_second_stage_reranker/scripts/prepare_summa_cnndm_data.py | summa_reranker_cnndm_second_stage_reranker | support | server_visible |  |
+| papers_baseline | summa_reranker_cnndm_second_stage_reranker/scripts/rerank_and_evaluate.py | summa_reranker_cnndm_second_stage_reranker | support | server_visible |  |
+| papers_baseline | summa_reranker_cnndm_second_stage_reranker/scripts/score_candidates.py | summa_reranker_cnndm_second_stage_reranker | support | server_visible |  |
+| papers_baseline | summa_reranker_cnndm_second_stage_reranker/scripts/train_summa_reranker.py | summa_reranker_cnndm_second_stage_reranker | entrypoint | server_visible |  |
+| papers_baseline | summa_reranker_cnndm_second_stage_reranker/summa_pipeline_common.py | summa_reranker_cnndm_second_stage_reranker | support | server_visible |  |
+| repo | DPPy-master/docs/conf.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/context_plot_uniform_spanning_tree.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_carries_process.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_circular_banded_matrix_model.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_circular_full_matrix_model_hermite.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_circular_full_matrix_model_qr.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_correlation_K_kernel.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_descent_process.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_ginibre_full_matrix_model.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_hermite_banded_matrix_model.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_hermite_full_matrix_model.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_jacobi_banded_matrix_model.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_jacobi_full_matrix_model.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_laguerre_banded_matrix_model.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_laguerre_full_matrix_model.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_multivariate_jacobi_ensemble.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_number_of_points_finite_dpp_L_projection.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_poissonized_plancherel.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_uniform_spanning_tree.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/docs/plots/ex_plot_virtual_descent_process.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/__init__.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/beta_ensemble_polynomial_potential.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/beta_ensemble_polynomial_potential_core.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/beta_ensembles.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/bless.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/exact_sampling.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/exotic_dpps.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/exotic_dpps_core.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/finite_dpps.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/intermediate_sampling.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/mcmc_sampling.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/multivariate_jacobi_ope.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/random_matrices.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/dppy/utils.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/scripts/install.sh | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/setup.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/tests.py | DPPy-master | support | server_visible |  |
+| repo | DPPy-master/tests/test_RSK.py | DPPy-master | test | server_visible |  |
+| repo | DPPy-master/tests/test_beta_ensembles_samplers.py | DPPy-master | test | server_visible |  |
+| repo | DPPy-master/tests/test_bless.py | DPPy-master | test | server_visible |  |
+| repo | DPPy-master/tests/test_descent_processes.py | DPPy-master | test | server_visible |  |
+| repo | DPPy-master/tests/test_elementary_symmetric_polynomials.py | DPPy-master | test | server_visible |  |
+| repo | DPPy-master/tests/test_finite_dpps_instantiation.py | DPPy-master | test | server_visible |  |
+| repo | DPPy-master/tests/test_finite_dpps_samplers.py | DPPy-master | test | server_visible |  |
+| repo | DPPy-master/tests/test_multivariate_jacobi_ope.py | DPPy-master | test | server_visible |  |
+| repo | DPPy-master/tests/test_plots.py | DPPy-master | test | server_visible |  |
+| repo | DPPy-master/tests/test_tracy_widom.py | DPPy-master | test | server_visible |  |
+| repo | DPPy-master/tests/test_uniform_permutation.py | DPPy-master | test | server_visible |  |
+| repo | DPPy-master/tests/test_ust_samplers.py | DPPy-master | test | server_visible |  |
+| repo | DPPy-master/tests/test_utils.py | DPPy-master | test | server_visible |  |
+| repo | FactScoreLite-main/FactScoreLite/__init__.py | FactScoreLite-main | support | server_visible |  |
+| repo | FactScoreLite-main/FactScoreLite/atomic_facts.py | FactScoreLite-main | support | needs_server_cleanup | yes |
+| repo | FactScoreLite-main/FactScoreLite/configs.py | FactScoreLite-main | support | server_visible |  |
+| repo | FactScoreLite-main/FactScoreLite/fact_scorer.py | FactScoreLite-main | support | needs_server_cleanup | yes |
+| repo | FactScoreLite-main/FactScoreLite/factscore.py | FactScoreLite-main | support | server_visible |  |
+| repo | FactScoreLite-main/FactScoreLite/openai_agent.py | FactScoreLite-main | support | server_visible |  |
+| repo | FactScoreLite-main/FactScoreLite/state_handler.py | FactScoreLite-main | support | server_visible |  |
+| repo | FactScoreLite-main/setup.py | FactScoreLite-main | support | server_visible |  |
+| repo | FactScoreLite-main/tests/__init__.py | FactScoreLite-main | test | server_visible |  |
+| repo | FactScoreLite-main/tests/test_atomic_facts.py | FactScoreLite-main | test | needs_server_cleanup | yes |
+| repo | FactScoreLite-main/tests/test_fact_scorer.py | FactScoreLite-main | test | needs_server_cleanup | yes |
+| repo | FactScoreLite-main/tests/test_factscore.py | FactScoreLite-main | test | server_visible |  |
+| repo | FactScoreLite-main/tests/test_openai_agent.py | FactScoreLite-main | test | server_visible |  |
+| repo | FactScoreLite-main/tests/test_state_handler.py | FactScoreLite-main | test | server_visible |  |
+| repo | NLP-Extractive-NEWS-summarization-using-MMR-master/LexRank.py | NLP-Extractive-NEWS-summarization-using-MMR-master | support | server_visible |  |
+| repo | NLP-Extractive-NEWS-summarization-using-MMR-master/jaccardScore.py | NLP-Extractive-NEWS-summarization-using-MMR-master | support | server_visible |  |
+| repo | NLP-Extractive-NEWS-summarization-using-MMR-master/mmr_summarizer.py | NLP-Extractive-NEWS-summarization-using-MMR-master | support | server_visible |  |
+| repo | NLP-Extractive-NEWS-summarization-using-MMR-master/sentence.py | NLP-Extractive-NEWS-summarization-using-MMR-master | support | server_visible |  |
+| repo | NLP-Extractive-NEWS-summarization-using-MMR-master/test_pyrouge.py | NLP-Extractive-NEWS-summarization-using-MMR-master | test | server_visible |  |
+| repo | ScikitLearn_Tutorial/titanic_logistic_regression.py | ScikitLearn_Tutorial | support | server_visible |  |
+| repo | apricot-master/apricot/__init__.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/apricot/functions/__init__.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/apricot/functions/base.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/apricot/functions/custom.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/apricot/functions/facilityLocation.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/apricot/functions/featureBased.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/apricot/functions/graphCut.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/apricot/functions/maxCoverage.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/apricot/functions/mixture.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/apricot/functions/saturatedCoverage.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/apricot/functions/sumRedundancy.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/apricot/optimizers.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/apricot/utils.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/docs/conf.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/img/facilityLocationGIF.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/setup.py | apricot-master | support | server_visible |  |
+| repo | apricot-master/tests/__init__.py | apricot-master | test | server_visible |  |
+| repo | apricot-master/tests/test_functions/__init__.py | apricot-master | test | server_visible |  |
+| repo | apricot-master/tests/test_functions/test_facility_location.py | apricot-master | test | server_visible |  |
+| repo | apricot-master/tests/test_functions/test_feature_based.py | apricot-master | test | server_visible |  |
+| repo | apricot-master/tests/test_functions/test_graph_cut.py | apricot-master | test | server_visible |  |
+| repo | apricot-master/tests/test_functions/test_max_coverage.py | apricot-master | test | server_visible |  |
+| repo | apricot-master/tests/test_functions/test_mixture_feature_based.py | apricot-master | test | server_visible |  |
+| repo | apricot-master/tests/test_functions/test_mixture_graph_based.py | apricot-master | test | server_visible |  |
+| repo | apricot-master/tests/test_functions/test_saturated_coverage.py | apricot-master | test | server_visible |  |
+| repo | apricot-master/tests/test_functions/test_sum_redundancy.py | apricot-master | test | server_visible |  |
+| repo | apricot-master/tests/test_optimizers/__init__.py | apricot-master | test | server_visible |  |
+| repo | apricot-master/tests/test_optimizers/test_knapsack_facility_location.py | apricot-master | test | server_visible |  |
+| repo | apricot-master/tests/test_optimizers/test_knapsack_feature_based.py | apricot-master | test | server_visible |  |
+| repo | bart/__init__.py | bart | support | server_visible |  |
+| repo | bart/_legacy/beam_3optimization_baselines/alignscore_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_baselines/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_baselines/bart_beam3_summarize_budget3_baseline.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_baselines/factcc_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_baselines/minicheck_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_only/01_ILP/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_only/DPP/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_only/LNS/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_only/MMR/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_only/Submodular/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_only/alignscore_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_only/factcc_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_only/minicheck_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_only/objective_variant_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_redundancy/01_ILP/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_redundancy/DPP/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_redundancy/LNS/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_redundancy/MMR/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_redundancy/Submodular/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_redundancy/alignscore_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_redundancy/factcc_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_redundancy/minicheck_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_minicheck_redundancy/objective_variant_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_only/01_ILP/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_only/DPP/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_only/LNS/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_only/MMR/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_only/Submodular/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_only/alignscore_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_only/factcc_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_only/minicheck_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_only/objective_variant_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_redundancy/01_ILP/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_redundancy/DPP/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_redundancy/LNS/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_redundancy/MMR/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_redundancy/Submodular/bart_beam3_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_redundancy/alignscore_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_redundancy/factcc_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_redundancy/minicheck_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_rouge_redundancy/objective_variant_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_summary_mbr_minicheck/alignscore_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_summary_mbr_minicheck/bart_beam3_summarize.py | bart | legacy | legacy | yes |
+| repo | bart/_legacy/beam_3optimization_summary_mbr_minicheck/factcc_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_summary_mbr_minicheck/minicheck_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_summary_pareto_minicheck_multiobjective/alignscore_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_summary_pareto_minicheck_multiobjective/bart_beam3_summarize.py | bart | legacy | legacy | yes |
+| repo | bart/_legacy/beam_3optimization_summary_pareto_minicheck_multiobjective/factcc_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/beam_3optimization_summary_pareto_minicheck_multiobjective/minicheck_eval_utils.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/本地/bart_cnn_sentence_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/本地/bart_cnn_token_summarize.py | bart | legacy | legacy |  |
+| repo | bart/_legacy/本地/bart_cnn_whitening_summarize.py | bart | legacy | legacy |  |
+| repo | bart/assets/__init__.py | bart | support | server_visible |  |
+| repo | bart/assets/loader.py | bart | support | server_visible |  |
+| repo | bart/cli/__init__.py | bart | support | server_visible |  |
+| repo | bart/cli/args.py | bart | support | server_visible |  |
+| repo | bart/core/__init__.py | bart | support | server_visible |  |
+| repo | bart/core/beam_search.py | bart | support | server_visible |  |
+| repo | bart/core/config.py | bart | support | server_visible |  |
+| repo | bart/core/features.py | bart | support | server_visible |  |
+| repo | bart/core/orchestration.py | bart | support | server_visible |  |
+| repo | bart/legacy/__init__.py | bart | legacy | legacy |  |
+| repo | bart/metrics/__init__.py | bart | support | server_visible |  |
+| repo | bart/metrics/alignscore_eval_utils.py | bart | support | server_visible |  |
+| repo | bart/metrics/evaluation.py | bart | entrypoint | server_visible |  |
+| repo | bart/metrics/factcc_eval_utils.py | bart | support | server_visible |  |
+| repo | bart/metrics/minicheck_eval_utils.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/__init__.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/dpp.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/ilp.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/lns.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/mbr.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/mmr.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/pareto.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/sentence_level/__init__.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/sentence_level/dpp.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/sentence_level/ilp.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/sentence_level/lns.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/sentence_level/mmr.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/sentence_level/submodular.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/submodular.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/summary_level/__init__.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/summary_level/mbr.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/summary_level/pareto.py | bart | support | server_visible |  |
+| repo | bart/opt_selectors/tri_metric.py | bart | support | server_visible |  |
+| repo | bart/output/__init__.py | bart | support | server_visible |  |
+| repo | bart/output/result_saver.py | bart | support | needs_server_cleanup | yes |
+| repo | bart/presets/__init__.py | bart | support | server_visible |  |
+| repo | bart/run.py | bart | entrypoint | server_visible |  |
+| repo | bart/shared/__init__.py | bart | support | server_visible |  |
+| repo | bart/shared/alignscore_eval_utils.py | bart | support | server_visible |  |
+| repo | bart/shared/assets.py | bart | support | server_visible |  |
+| repo | bart/shared/beam_search.py | bart | support | server_visible |  |
+| repo | bart/shared/config.py | bart | support | server_visible |  |
+| repo | bart/shared/evaluation.py | bart | entrypoint | server_visible |  |
+| repo | bart/shared/factcc_eval_utils.py | bart | support | server_visible |  |
+| repo | bart/shared/features.py | bart | support | server_visible |  |
+| repo | bart/shared/minicheck_eval_utils.py | bart | support | server_visible |  |
+| repo | bart/shared/objective_variant_utils.py | bart | support | server_visible |  |
+| repo | bart/shared/result_saver.py | bart | support | server_visible |  |
+| repo | bart/tests/test_combopt_csv_regression.py | bart | test | server_visible |  |
+| repo | bart/tests/test_tri_metric.py | bart | test | server_visible |  |
+| repo | bert_score-master/bert_score/__init__.py | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/bert_score/score.py | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/bert_score/scorer.py | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/bert_score/utils.py | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/bert_score_cli/__init__.py | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/bert_score_cli/score.py | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/bert_score_cli/visualize.py | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/example/demo.py | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/get_rescale_baseline/download_text_data.sh | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/get_rescale_baseline/get_baseline_example.sh | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/get_rescale_baseline/get_rescale_baseline.py | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/reproduce/download_wmt17.sh | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/reproduce/download_wmt18.sh | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/reproduce/get_wmt17_sys_results.py | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/reproduce/get_wmt18_seg_results.py | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/setup.py | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/tests/__init__.py | bert_score-master | test | server_visible |  |
+| repo | bert_score-master/tests/custom_assertions.py | bert_score-master | test | server_visible |  |
+| repo | bert_score-master/tests/test_score_function.py | bert_score-master | test | server_visible |  |
+| repo | bert_score-master/tests/test_scorer.py | bert_score-master | test | server_visible |  |
+| repo | bert_score-master/tune_layers/download_data.sh | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/tune_layers/tune.sh | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/tune_layers/tune_layers.py | bert_score-master | support | server_visible |  |
+| repo | bert_score-master/upload_pypi.sh | bert_score-master | support | server_visible |  |
+| repo | rebel-main/datasets/ade.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/datasets/conll04_typed.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/datasets/docred_typed.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/datasets/nyt_typed.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/datasets/rebel-short.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/datasets/tacred-punct.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/demo.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/setup.sh | rebel-main | support | server_visible |  |
+| repo | rebel-main/spacy_component.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/src/generate_samples.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/src/model_saving.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/src/modeling_bart.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/src/pl_data_modules.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/src/pl_modules.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/src/scheduler.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/src/score.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/src/test.py | rebel-main | support | server_visible |  |
+| repo | rebel-main/src/train.py | rebel-main | entrypoint | server_visible |  |
+| repo | rebel-main/src/utils.py | rebel-main | support | server_visible |  |
+| repo | scripts/build_method_inventory.py | scripts | entrypoint | server_visible |  |
+| repo | scripts/build_server_script_inventory.py | scripts | entrypoint | needs_server_cleanup | yes |
+| repo | scripts/build_summary_metrics_csv.py | scripts | entrypoint | needs_server_cleanup | yes |
+| repo | scripts/build_unified_report.py | scripts | entrypoint | server_visible |  |
+| repo | scripts/migrate_assets.py | scripts | entrypoint | needs_server_cleanup | yes |
+| repo | scripts/plot_results_by_objective.py | scripts | entrypoint | needs_server_cleanup | yes |
+| repo | scripts/plot_tri_metric_pareto.py | scripts | entrypoint | server_visible |  |
+| repo | scripts/render_results_tables.py | scripts | entrypoint | server_visible |  |
+| repo | scripts/resumable_sftp_upload.py | scripts | entrypoint | server_visible |  |
+| repo | scripts/run_bart_gb10.sh | scripts | entrypoint | server_visible |  |
+| repo | scripts/run_brio_smoke.sh | scripts | entrypoint | server_visible |  |
+| repo | scripts/run_factedit_unified.sh | scripts | entrypoint | server_visible |  |
+| repo | scripts/run_persistent.sh | scripts | entrypoint | server_visible |  |
+| repo | scripts/run_simcls_train.sh | scripts | entrypoint | server_visible |  |
+| repo | scripts/run_tri_metric_grid.py | scripts | entrypoint | server_visible |  |
+| repo | scripts/run_tri_metric_grid.sh | scripts | entrypoint | server_visible |  |
+| repo | scripts/run_tri_metric_representative.sh | scripts | entrypoint | server_visible |  |
+| repo | scripts/run_unified_eval.py | scripts | entrypoint | server_visible |  |
+| repo | scripts/select_tri_metric_weight.py | scripts | entrypoint | server_visible |  |
+| repo | scripts/start_tri_metric_representative.sh | scripts | entrypoint | server_visible |  |
+| repo | scripts/unified_eval_common.py | scripts | entrypoint | needs_server_cleanup | yes |
