@@ -1,0 +1,126 @@
+Llama-3.1-8B-Instruct Baseline + BASELINE Summarization Results (Generate-then-Optimize)
+Generator: llama3_8b
+Method: baseline
+Objective variant: Baseline from the generation backend
+Model: meta-llama/Llama-3.1-8B-Instruct
+Dataset: multi_news
+Split: test
+Samples: 5622
+Sample mode: shuffle
+Sample seed: 42
+Generation mode: direct baseline
+Budget: direct full output
+Runtime generation batch size: 8
+Runtime utility batch size: 12
+Runtime eval batch size: 12
+Runtime dtype: bf16
+ROUGE sentence split: nltk
+Ordering: none (baseline direct generation)
+Stage output trace: <SOURCE_EXPERIMENT_ROOT>/outputs/multi_news/llama3_8b/baseline/full_multi_news_baseline_requested_full_resume_llama_multinews_baseline/baseline_hfrouge_shuffle_seed42_stage_outputs.jsonl
+Stage1 reuse source: None
+Started at: 2026-05-13T12:56:11.084634
+Finished at: 2026-05-14T15:38:48.173699
+Runtime total seconds (this process): 96157.09
+Stage seconds: generation=84539.02 (cumulative across resumes), evaluation=11355.42
+Resume: resumed=False, resumed_from=0, prior_gen_seconds=0.00
+Eval suite: full
+ROUGE implementation: huggingface_evaluate
+MaxInputTokens: 8192
+MaxNewTokens: 32768
+Temperature: 0.6
+TopP: 0.9
+TopK: 0
+MinP: 0.0
+PresencePenalty: 0.0
+RepetitionPenalty: 1.0
+Thinking: False
+DoSample: auto
+PromptVersion: llama3_multi_news_summary_only_v4
+Paper metrics: ['rouge', 'bertscore']
+Extra metrics: ['factcc', 'minicheck', 'alignscore', 'factgraph', 'factkb']
+ROUGE sentence split: nltk
+============================================================
+
+
+Paper Metrics:
+ROUGE Scores (F1 only, impl=huggingface_evaluate):
+  rouge1    F1=38.84%
+  rouge2    F1=8.68%
+  rougeL    F1=18.16%
+  rougeLsum  F1=34.81%
+BERTScore (roberta-large):
+  Precision=86.39%  Recall=84.49%  F1=85.42%
+
+Extra Metrics:
+FactCC (manueldeprada/FactCC):
+  SentenceAvgCorrect: 38.35%
+MiniCheck: unavailable (ValueError('torch.cat(): expected a non-empty list of Tensors'))
+AlignScore (ACL 2023, yzha/AlignScore-base, nli_sp):
+  SummaryAvg: 59.04%
+FactGraph: unavailable (FileNotFoundError('FACTGRAPH repo dir not configured. Set $FACTGRAPH_REPO_DIR or pass repo_dir explicitly. Clone https://github.com/amazon-science/fact-graph first.'))
+FactKB (bunsenfeng/FactKB):
+  FactualProb: 90.99%
+
+Runtime:
+  StartedAt: 2026-05-13T12:56:11.084634
+  FinishedAt: 2026-05-14T15:38:48.173699
+  MethodTotalSeconds: 96157.09
+  GenerationSeconds: 84539.02
+  EvaluationSeconds: 11355.42
+  Resume: resumed=False, resumed_from=0, prior_generation_seconds=0.00
+  MetricSeconds: rouge=60.60s, bertscore=200.41s, factcc=412.52s, minicheck=6432.95s, alignscore=4180.94s, factgraph=0.00s, factkb=67.72s
+
+============================================================
+Detailed selection logs (first 10 samples):
+============================================================
+
+--- Sample 1 ---
+(a) Optimization method: Baseline
+(h) Final summary: Voters in 10 states will choose their governors on election day, with Republicans expected to gain at least 1 seat, potentially increasing their hold on the nation to more two-thirds. Republicans already hold 28 governorships and are likely retain control of Utah, Indiana, and North Dakota. Democrats are expected hold their seats West Virginia's Earl Ray Tomin and Missouri's Jay Nixon. In North Carolina, former Charlotte Mayor Pat McCory is expected win the governor seat, while in Montana, Steve Bullocks is in tough race to keep his party in the state. In New Hampshire, former Democratic state senator Maggie Hassan and lawyer Ovid Lamontage are in a close contest.
+    Reference: – It's a race for the governor's mansion in 11 states today, and the GOP could end the night at the helm of more than two-thirds of the 50 states. The GOP currently controls 29 of the country's top state offices; it's expected to keep the three Republican ones that are up for grabs (Utah, North Dakota, and Indiana), and wrest North Carolina from the Dems. That brings its toll to 30, with the potential to take three more, reports NPR. Races in Montana, New Hampshire, and Washington are still too close to call, and in all three, Democrat incumbents aren't seeking reelection. The results could have a big impact on health care, since a Supreme Court ruling grants states the ability to opt out of ObamaCare's Medicaid expansion. "A Romney victory would dramatically empower Republican governors," said one analyst. Click for NPR's state-by-state breakdown of what could happen.
+
+--- Sample 2 ---
+(a) Optimization method: Baseline
+(h) Final summary: A Facebook event, the "John Snow Kiss-in," was organized to protest a London bar's decision to expel a same sex couple for displaying affection. The event's page was made private, not removed, by its creator, and was visible only to those invited. The original post about this event on the blog BoingBoing included a photo from a British soap, which was considered mild, but had previously caused controversy in the show's home country. Facebook removed the post, but later stated the photo did not violate their community standards and was taken down in error. The removal of this post prompted a wave of users to post pictures of gay couples kissing as a form of protest.
+    Reference: – It turns out Facebook is only guilty of about half of what it’s been accused of in the gay kiss incident. The social networking site apologized yesterday for taking down an image used to promote a “kiss-in” event in London. “The photo in question does not violate our Statement of Rights and Responsibilities, and was removed in error,” the site said in a statement, according to the Advocate. But Facebook did not, as has been reported in several places, take down the kiss-in event itself. Here’s what happened: The photo Facebook took down was posted by the Dangerous Minds blog to promote the event. In its initial write-up about the incident, the blog observed that the page organizing the protest had been taken down. But it was actually the organizer himself who "removed" the event, Dangerous Minds clarified. Organizer Paul Shetler explains that he decided to switch it from a public event to a private one, as "there were starting to be trolls posting abusive nonsense on it."
+
+--- Sample 3 ---
+(a) Optimization method: Baseline
+(h) Final summary: The Siskeyou County Board in Northern, California voted 3-1 to pursue forming a new independent state called Jefferson, joining other rural counties and parts of Southern Oregon. Over 100 residents attended the meeting, with nearly every hand raised in support. Protagonists argue that California's regulations deny their God-giving rights and that a new government would better address their concerns, such water rights, rural fire fees, and representation in the state capital. The secession would require the approval of the California state legislature and the US Congress. Neighburing counties such as Humboldt and Shasta are considering similar declarations, with some officials supporting the idea. However, others have expressed skepticism about the economic feasibility of such a move, citing a small tax base and the need for infrastructure maintenance.
+    Reference: – Not a big fan of Southern California? Neither is Northern California, apparently. Supervisors in rural Siskiyou County voted 4-1 Tuesday in favor of seceding from the state, reports the Times-Standard. The county thinks state officials in Sacramento are too focused on the big metro areas of the south and thus want to form a state of its own—to be called Jefferson. Supporters want to invite other northern counties, and perhaps a few from Oregon, to join, too, notes the Los Angeles Times. ”We have to have government that's local, understands our issues, and has empathy,” says one local rancher. It's clearly a very long-shot bid, one that would eventually require the blessing of both the state legislature and the US Congress. Still, neighboring Humboldt County is expected to meet soon to consider the idea. (Meanwhile, some counties in Colorado want to form a new state of their own.)
+
+--- Sample 4 ---
+(a) Optimization method: Baseline
+(h) Final summary: Microsoft acquired Nokia's phone business for 5 billion euros, including 1 billion euros for Nokia's patent portfolio. This move is part of Microsoft evolving into a device and services business, away its traditional services business. The acquisition aims to help Microsoft regain market share and compete with Apple and Google in the mobile market. Microsoft plans to license its Windows Phone operating system to other manufacturers, but will also build its devices business through Nokia's hardware. However Nokia's collapse in the phone market has been significant, with its market share decreasing from over 35% in 203 to a current estimated 5%. The company's failure to adapt to the smartphone era, including the lack of a compelling smartphone when the market shifted, has led to its downfall. Nokia's former CEO, Stephen Elok, described the company as being on a 'burning' platform, where it had to decide to change its behavior and adapt to new technologies or risk being consumed by competition. Microsoft's goal is to achieve 15 percent of the global smartphone revenue market by 2028, but this seems like a modest goal considering the time it has lost in the past decade.
+    Reference: – Why did Microsoft buy Nokia's phone business? We now know Microsoft's answer: The computing giant released a 30-slide presentation today arguing that the move will improve Microsoft's margins on Windows phones, which will allow it to invest more in the platform, which will accelerate sales and market share growth, the Washington Post reports. But John Herrman at Buzzfeed has another explanation: "Fear of dying alone." Here's what he and other pundits are saying: The presentation "manages to sound both insane and uninspiring, outlining modest goals that still sound unrealistic," Herman argues—like capturing a whole 15% of the smartphone market. "It's a fitting end for the close of Microsoft's Ballmer era, during which the company … missed out on the most important change in consumer electronics in decades" while remaining profitable in unglamorous ways. Like everyone, Microsoft is trying to ape the Apple model, MobileOpportunity observes. But it's not so sure that's a good idea. "There already is an apple," the blog points out, and other software/hardware hybrid companies, like Palm and BlackBerry, have been crushed under its heel. Maybe Microsoft should have tried to patch up its tried-and-true strategy of licensing its OS. The move risks complicating Microsoft's crucial relationships with other PC and device manufacturers, one analyst tells ZDNet. But he adds that "Microsoft needed to make a bold move" or face "certain terminal decline," and that the price it paid for Nokia "seems extremely reasonable." Meanwhile, Matthew Yglesias at Slate digs up a fairly interesting memo from Nokia CEO (and, perhaps, Microsoft heir apparent) Stephen Elop, in which he uses the story of a Deepwater Horizon worker leaping from the burning oil platform—a seemingly desperate, yet necessary move—to explain the company's shift from its own failed OS to Windows Phone. Of course, Yglesias notes, that move "was basically a total failure." To read the full parable, click here.
+
+--- Sample 5 ---
+(a) Optimization method: Baseline
+(h) Final summary: The US Supreme Court's new session has begun, with several high-profile cases on contentious issues likely to be decided. The cases include a challenge from public sector workers against mandatory union dues, which could weaken labor unions, and another on affirmative action in university admissions, which may limit the use of racial preferences. The justices are also considering a case that could shift power in state legislatures from urban to rural districts. Additionally, the Court is set hear cases involving abortion clinic regulation, religious exemptions to the contraception mandate under Obamacare, and immigration policy. The Court's decisions will be made by June and will likely have significant implications for the 2020 presidential election. The death penalty will also be a major issue, with six capital punishment cases on its docket following a recent surge in executions.
+    Reference: – The Supreme Court is facing a docket of high-profile political cases that will test whether recent liberal victories were more fluke or firm conviction, the New York Times reports. The court—which is divided 5-4 for conservatives, but saw Justice Roberts vote liberal on Obamacare and same-sex marriage—will look at cases including unions, affirmative action, and possibly abortion. A primer: Unions: Since 1977, unions have been allowed to charge non-union workers for dues that go to collective bargaining efforts, but not political ones. Now California teachers have brought a case saying collective bargaining is itself political. "It could set the stage for a Citizens United-style reconsideration in the area of union dues," a lawyer says. Affirmative Action: Abigail Fisher says that being white played a role in the University of Texas denying her admission back in 2008. The Supreme Court punted on her case in 2013, and now it's back on the docket. Like the unions case, this was brought by a conservative group that recruited the plaintiffs. The death penalty: Justices will decide on capital-punishment cases in Pennsylvania, Kansas, Georgia, and Florida, the Wall Street Journal reports. Justices Ruth Bader Ginsburg and Stephen Breyer have already expressed doubts about whether capital punishment is constitutional. "One person, one vote": Should state legislative districts be drawn based on their number of people or eligible voters? If justices choose the latter—leaving out immigrants and children—Latinos could lose political clout and rural areas will gain, Politico reports. Abortion: Justices may opt to revisit a Texas law that could reduce the state's abortion clinics from more than 40 to roughly 10. At issue is whether new clinic requirements are an "undue burden" on women's right to an abortion. One commentator believes this Supreme Court session will be ugly for liberals.
+
+--- Sample 6 ---
+(a) Optimization method: Baseline
+(h) Final summary: A preservationist named Adam Woodward found evidence in the foundation and cellar of a Manhattan property at 52 Bowery that he thinks may be the remains of the 250-year-old Bull'sHead Tavern. The tavern is believed by some to be the site where George Washinton stopped for a celebrational drink after the British withdrawal in 18, and its preservation could make it the oldest remaining building in Manhattan. Woodward discovered hand-hewed and hand-planned joists, foundation walls, and a brick and stone structure that date back to the 1700s. Historian David Freland supports Woodward's claim, saying the discovery would make the building likely the most ancient in Manhattan if confirmed. The building is slated for demolition to make room for a proposed hotel, but Woodward is hoping the city will act to preserve it. The Landmark Preservation Commission is aware of the potential historical significance but cannot mandate a site survey, and instead can only recommend archaeologists to the property owner.
+    Reference: – In 1783, after the British soldiers left New York City, George Washington is believed to have stopped for a celebratory drink at the Bull's Head tavern. Now a preservationist thinks he's found the historic site—and if he's right, it could be the oldest building in Manhattan. Adam Woodward had heard that the building at 50 Bowery, currently scheduled to be demolished so a hotel can go up, might have "the Bull's Head's structure, cellar, bones," he tells CBS New York. So he searched the basement, and "found myself in what I am pretty certain is the 1750s historic tavern," he says. Specifically, he found what he thinks are hand-hewn and hand-planed joists and foundation walls from the Colonial era. Since that time, the building has housed a drugstore, a Chinese restaurant, and a beer garden, among other things. Now he's hoping city officials will preserve the site, saying, "What an incredible opportunity that the city suddenly has for this thing to re-emerge." A historian is also convinced it is indeed the old tavern, and investigations have been launched by elected officials and the Landmarks Preservation Commission, Eater NY reports. But ultimately, the commission says, it "cannot require the owner to conduct archaeology," so a lot depends on him. He's apparently not talking yet; the New York Times couldn't get hold of him.
+
+--- Sample 7 ---
+(a) Optimization method: Baseline
+(h) Final summary: An Iranian military officer, Jamaludding Aberouman, claimed that the recent drone incident over Israel exposed the weaknesses of Israel's air defenses. The incident occurred on October 2011, when Israel shot down the drone after it entered southern Israel. Aberoumann attributed the incident to a psychological operation by Israel. However, Israeli parliamentarian Miri Regev suggested that the drone may have been launched by Iran-backed Hezbollah. The drone's origin remains unclear. The event has sparked tensions between Israel and Iran, with Iran threatening to attack US military bases and Israel. In response to the drone incident, Israel launched airstrikes on the Gaza strip, killing a Palestinian militant and wounding another. The Palestinian militant group Hamas, which controls the Gaza region, responded with rocket attacks on southern Israel and claimed that it will not remain silent in the wake of what they call "one sided" Israeli aggression. The situation has led to concerns about a potential escalation of violence in the area.
+    Reference: – Israel launched a round of airstrikes on Gaza today, wounding two militants and eight bystanders, including some children. Israel says the attack was retaliation for a round of Palestinian rockets fired yesterday, which Palestinians say were in response to another Israeli airstrike earlier in the day, Reuters reports. More than 470 rockets have been fired from Gaza since June, but this was the first time Hamas acknowledged responsibility. As usual the rockets failed to harm anyone, though one did kill some goats at a petting zoo. The incident comes in the wake of a drone flight into Israeli airspace this weekend, which some have speculated came from Iran. An Iranian military official today boasted that the incident proved that Israel is vulnerable, and that its anti-missile defense system "does not work and lacks the necessary capacity." But he denied that the drone was made by Iran, saying such accusations represented a "psychological operation" on Israel's part. "The Zionist regime has many enemies," he said. Iran, meanwhile, is blaming Israel for a hack attack on its oil rigs.
+
+--- Sample 8 ---
+(a) Optimization method: Baseline
+(h) Final summary: A Picasso cubist oil painting, "La coiffeuse" or "The hairdresser", valued at over $2 million, was stolen from the Centre Pompidon in Paris in 2011 but later recovered by US customs authorities in December 2014. The painting was shipped from Belgium with false documentation, described as a "$37 art craft" and "Joyeoux Noel", and was intended for a climate controlled storage facility. French authorities were notified and officials confirmed the painting's authenticity in April 2015. US authorities have filed a complaint to return the painting back to its rightful owners in France. The recovery of the painting comes as relief to the cultural community after the destruction caused by the Islamic State in Iraq, according to Pompidu director Alian Seban. The case remains under investigation, with no arrests announced.
+    Reference: – A Picasso painting that was found to have vanished from a Paris museum more than a decade ago has turned up—in the US, in a package shipped from Belgium. Its papers identified it as a $37 "art craft/toy" and also included the line "Joyeux Noel," or Merry Christmas, the New York Times reports. A man named "Robert" attempted to send the package to a climate-controlled warehouse in Queens, New York, in December, but custom officials at the Port of Newark seized what turned out to be Picasso's 1911 La Coiffeuse (The Hairdresser). French museum officials traveled to New York last month and confirmed the find is indeed the missing Picasso work, which the Centre Georges Pompidou realized was missing from its storerooms in 2001 following a loan request; it was then valued at more than $2.5 million. Court documents don't specify whether the sender or would-be recipient have been identified, NBC News reports, but "a lost treasure has been found," US attorney Loretta Lynch said in a statement. She filed a civil complaint yesterday that will have the painting returned to France. The Pompidou's director, who called the painting's rediscovery a "true comfort," hopes the painting can go on display at the museum as early as May, the AP reports. (Another Picasso work was stolen days before this one was found.)
+
+--- Sample 9 ---
+(a) Optimization method: Baseline
+(h) Final summary: Alexa Internet has donated its crawl data since 1995 to the internet archive, with the data being added to The Wayback Machine. The data is released after an unspecified embargo period. In Minnesota, Que Viet in northeast Minnesota has been voted the best egg roll by WCCCO viewers. The Sunshine factory in Plymouth is a popular destination for those looking for a 1970s vibe. There are several top distillery options in Minneapolis including those found in the article Minneapolis Moonshines. St. Paull offers various artsy events and deals, including those listed in the Artsy deals worth seeking out in St. paul this week article. A unique cocktail, the 'BB'Boulevardier, is described in the Mike's mix section.
+    Reference: – A dispute over the freshness of Wendy’s fries leaves a 25-year-old Minnesota woman facing criminal charges. According to CBS Minnesota, Wendy's employees claim that Eiram Chanel Amir Dixson became argumentative during a drive-thru transaction just after noon Thursday after the woman asked specifically for fresh French fries. Reports don't specify the condition of the fries, or whether she even received them, but do make clear that an argument followed. Employees allege Dixson reached through the drive-thru window and, after an employee threw a soft drink at her, proceeded to spray them with Mace. The restaurant manager was hit directly in the face while two more employees were also in the line of the spray, per the police report. All three employees provided similar accounts of the incident, according to ABC News 5. Dixson is being charged with felony use of tear gas to immobilize. If found guilty, she’ll face a maximum sentence of up to five years in prison and/or a $3,000 to $10,000 fine. Wendy’s drive-thrus see their share of action: last year, a worker was allegedly bit over a wrong order in Virginia, while a Florida man reportedly threw an alligator through a drive-thru window as a prank.
+
+--- Sample 10 ---
+(a) Optimization method: Baseline
+(h) Final summary: Dallas Police Officer Rogello Santander has died after being fatally shot during an incident at a Home depot store in Dallas, Texas. Two other victims, Officer Cristal Almeira and Home Depot employee Scott Painter were also shot and remain in critical but stable condition. The suspect Armando Luiz Juarez is a 29 year old man who was arrested after a high speed chase. Juarex had an existing warrant for felony theft and was being detained by Officer Sewart, another off-duty Dallas police office, at the time the shooting occurred. After being detained, Juarez opened fire, shooting all three men before fleeing the scene. A massive manhunt ensued, with police reviewing security footage and issuing a BOLO alert for a white work truck with distinctive features. The truck was spotted in Southeast, Dallas, and Juarez led police on a chase before being apprehended in a neighbourhood near Love field. Juirez is now charged with capital murder and aggravated assault of a public servent.
+    Reference: – A 27-year-old Dallas police officer died Wednesday after being shot the day prior at a Home Depot in Lake Highlands. The Morning News identifies the officer as Rogelio Santander. He'd been called to the store around 4pm by a cop who was working an off-duty job there and noticed Armando Luis Juarez was behaving oddly. The off-duty cop detained Juarez and learned he had an outstanding felony warrant. Santander and Crystal Almeida, 26, responded to the scene; authorities say they and a loss prevention officer employed by Home Depot were shot by Juarez as he was being escorted from the store. A source tells CBS Dallas Santander was shot in the back of the head and Almeida was shot in the face. She remains in critical condition, as does the Home Depot employee. Police say Juarez fled and a high-speed car chase ensued, per the AP. He was apprehended Tuesday night and is being held on charges of aggravated assault on a public servant and felony theft. "We got our man," said Mayor Mike Rawlings.
+

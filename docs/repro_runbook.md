@@ -6,9 +6,9 @@ All commands below stream logs in real time and save the same output under
 ## Validate The Release
 
 ```bash
-cd /home/zeyu/projects/NLP_acl_repro_release
+cd /path/to/NLP_acl_repro_release
 
-PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
+PYTHON=python3 \
   scripts/run_live.sh --name validate_release -- \
   bash scripts/validate_release_static.sh
 ```
@@ -16,7 +16,7 @@ PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
 ## Regenerate Compact Result Table
 
 ```bash
-cd /home/zeyu/projects/NLP_acl_repro_release
+cd /path/to/NLP_acl_repro_release
 
 scripts/run_live.sh --name collect_paper_metrics -- \
   python3 scripts/collect_paper_metrics.py
@@ -29,9 +29,9 @@ The output is `results/paper_metrics.csv`.
 BART direct baseline on CNN/DailyMail:
 
 ```bash
-cd /home/zeyu/projects/NLP_acl_repro_release
+cd /path/to/NLP_acl_repro_release
 
-PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
+PYTHON=python3 \
   scripts/run_live.sh --name smoke_bart_baseline -- \
   bash scripts/run_release_experiment.sh \
     --model bart \
@@ -45,9 +45,9 @@ PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
 PRIMERA plus MMR on Multi-News:
 
 ```bash
-cd /home/zeyu/projects/NLP_acl_repro_release
+cd /path/to/NLP_acl_repro_release
 
-PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
+PYTHON=python3 \
   scripts/run_live.sh --name smoke_primera_mmr -- \
   bash scripts/run_release_experiment.sh \
     --model primera_multinews \
@@ -66,9 +66,9 @@ Set `--num-samples 0` for the full split.
 CNN/DailyMail Llama baseline:
 
 ```bash
-cd /home/zeyu/projects/NLP_acl_repro_release
+cd /path/to/NLP_acl_repro_release
 
-PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
+PYTHON=python3 \
   scripts/run_live.sh --name full_llama_cnn_baseline -- \
   bash scripts/run_release_experiment.sh \
     --model llama3_8b \
@@ -81,9 +81,9 @@ PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
 CNN/DailyMail Llama CO selectors:
 
 ```bash
-cd /home/zeyu/projects/NLP_acl_repro_release
+cd /path/to/NLP_acl_repro_release
 
-PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
+PYTHON=python3 \
   scripts/run_live.sh --name full_llama_cnn_ilp -- \
   bash scripts/run_release_experiment.sh \
     --model llama3_8b \
@@ -94,7 +94,7 @@ PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
     --budget-sentences 4 \
     --output-tag full_llama_cnn_ilp
 
-PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
+PYTHON=python3 \
   scripts/run_live.sh --name full_llama_cnn_dpp -- \
   bash scripts/run_release_experiment.sh \
     --model llama3_8b \
@@ -105,7 +105,7 @@ PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
     --budget-sentences 4 \
     --output-tag full_llama_cnn_dpp
 
-PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
+PYTHON=python3 \
   scripts/run_live.sh --name full_llama_cnn_mmr -- \
   bash scripts/run_release_experiment.sh \
     --model llama3_8b \
@@ -120,9 +120,9 @@ PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
 Multi-News PRIMERA baseline and CO selectors:
 
 ```bash
-cd /home/zeyu/projects/NLP_acl_repro_release
+cd /path/to/NLP_acl_repro_release
 
-PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
+PYTHON=python3 \
   scripts/run_live.sh --name full_primera_baseline -- \
   bash scripts/run_release_experiment.sh \
     --model primera_multinews \
@@ -133,7 +133,7 @@ PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
     --output-tag full_primera_baseline
 
 for method in ilp dpp mmr; do
-  PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
+  PYTHON=python3 \
     scripts/run_live.sh --name "full_primera_${method}" -- \
     bash scripts/run_release_experiment.sh \
       --model primera_multinews \
@@ -148,6 +148,7 @@ done
 
 ## Pending Result
 
-As of May 14, 2026, the original Llama Multi-News baseline was still running in
-the source experiment directory and only had progress files, not a final
-`*_results.txt`. It is intentionally not copied into `results/raw/`.
+As of May 14, 2026 23:29 EDT, the Llama Multi-News direct baseline has a final
+`*_results.txt` and is copied into `results/raw/`. The Llama Multi-News CO
+selector run is still pending; do not report Llama+ILP/MMR/DPP Multi-News rows
+until final selector result files exist.

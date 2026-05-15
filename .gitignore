@@ -7,6 +7,7 @@ results/**/*.partial.txt
 results/**/*_progress.json
 results/**/*_progress_summaries.jsonl
 results/**/*_stage_outputs.jsonl
+src/.nlm_assets.json
 outputs/
 scratch/
 archived_large_models/

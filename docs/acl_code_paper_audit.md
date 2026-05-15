@@ -26,25 +26,22 @@ ACL/ARR references used for this release:
 | Budgets are dataset-specific sentence budgets. | BART and LLM CNN/DM use 4 sentences; PRIMERA Multi-News CO uses 8 sentences in copied result headers. | Matches. |
 | Candidate count is larger for CO than direct baselines. | CO result headers show `Candidate count: 8` or `Beam size: 8`; PRIMERA baseline uses beam 5; BART baseline uses beam 4. | Matches. |
 | Evaluation reports ROUGE, BERTScore, FactCC, MiniCheck, AlignScore, FactKB. | `src/*/metrics/evaluation.py`, copied `results/raw/**/*_results.txt`, and one archived BART selector summary CSV. | Mostly matches. Several LLM Multi-News baseline result files still lack MiniCheck; FactGraph is unavailable. The corrected Multi-News BART v2 result is kept only as non-paper auxiliary evidence. |
-| Objective is a monotone submodular function with facility-location-style diversity. | Budget draft line 93 claims this, but release code implements weighted modular utility plus selector-specific pairwise redundancy/DPP-inspired log-det behavior. | Does not match; revise paper wording before submission. |
+| Objective should be described as the implemented sentence-level utility plus selector-specific redundancy handling, not as a proven monotone submodular objective. | `paper/Budget-constrained and faithful.tex` now states that the release implementation uses modular utility/factuality scores and pairwise redundancy penalties or greedy diversity terms, without claiming a general submodularity guarantee. | Matches after release edit; do not reintroduce the stronger theoretical claim without new code/theory evidence. |
 | Commands produce real-time logs. | `scripts/run_live.sh` wraps commands with `stdbuf` and `tee`. README and runbook use it for documented commands. | Matches project instruction. |
 
 ## Known Paper-Side Issues To Fix Before Submission
 
-- `paper/Budget-constrained and faithful.tex` contains placeholder abstract text from the ACL template.
-- `paper/Budget-constrained and faithful.tex` currently claims a monotone submodular objective; the copied implementation does not establish that objective class.
-- `paper/Budget-constrained and faithful.tex` contains ACL template material after the main paper draft; this should be removed before submission.
-- `paper/Budget-constrained and faithful.tex` references `latex/Pipeline.png`, but that asset is not present in the release.
 - `paper/Budget-constrained and faithful.tex` references `custom.bib`, but no bibliography file is present in the source experiment directory or release.
 - `paper/Budget-constrained and faithful.tex` contains author names and affiliations in the source. If this package is submitted for anonymous review, the paper source and supplementary files must be anonymized.
-- The release paper snapshot now fills locally available Multi-News Qwen3.5-9B and Gemma-4-E4B-it baseline rows and uses `--` for unavailable or unreproduced cells instead of silent blanks.
+- The release paper snapshot now fills locally available Multi-News Qwen3.5-9B, Llama-3-8B, and Gemma-4-E4B-it baseline rows and uses `--` for unavailable or unreproduced cells instead of silent blanks.
 - The CNN/DM BART baseline row in the Budget paper has no completed full-test `*_results.txt` evidence found in the source tree.
 - CNN/DM BART selector rows are supported only by an archived summary CSV in this release; full selector `*_results.txt` evidence was not found in the source tree.
 - The Multi-News BART baseline is a real Multi-News result and must not be used to fill the CNN/DM BART baseline row.
 - Remaining missing or limited result evidence is tracked in `results/missing_results.csv`.
 - Original README/code comments sometimes say LLM CO uses "sampled candidates"; in the current LLM implementation, `GENERATION_DO_SAMPLE=auto` means baselines sample while CO candidate generation uses beam-style generation unless `--do-sample true` is explicitly passed. Paper wording should say "candidate count" or "beam candidates" for the copied CO runs.
 - The paper should not claim FactGraph as a completed reported metric unless a final FactGraph evaluation is added.
-- The active Llama Multi-News baseline was not copied because, on May 14, 2026, it still had only progress files and no final result file.
+- The Llama Multi-News baseline completed on May 14, 2026 and is now copied into `results/raw/`; its MiniCheck metric is unavailable in the copied result due a recorded `torch.cat()` empty-tensor failure.
+- Llama Multi-News CO selector rows remain pending until final `*_results.txt` files exist.
 
 ## Code-Side Release Adjustments
 
@@ -53,3 +50,6 @@ ACL/ARR references used for this release:
 - The original source tree vendored `bert_score-master`; this release prefers the installed `bert_score` package and only falls back to an external asset if needed.
 - Source directories no longer contain historical `results/` subfolders. Compact result artifacts live under `results/raw/`.
 - Copied result files replace the original absolute experiment root with `<SOURCE_EXPERIMENT_ROOT>` to avoid leaking local filesystem paths in the release metrics artifacts.
+- The committed release no longer includes a machine-specific `src/.nlm_assets.json`; users should set `NLM_ASSETS_DIR` or create their own local untracked config file.
+- AlignScore and MiniCheck asset checks are lazy in the release copy so `run.py --help` works without local metric assets; actual metric computation still requires the documented assets.
+- The release paper snapshot replaces the ACL-template abstract, removes trailing ACL template material, replaces the missing `latex/Pipeline.png` include with an inline text pipeline, and weakens the method wording to match the implemented selectors.

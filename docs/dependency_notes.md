@@ -2,19 +2,12 @@
 
 ## Python Environment
 
-The release code was copied from the working experiment environment. The current
-server environment already has a project virtualenv at:
-
-```bash
-/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python
-```
-
 For a fresh environment, install the baseline dependencies listed in
 `requirements.txt`. Some metric packages and checkpoints are large and may need
 manual installation or local paths.
 
 ```bash
-cd /home/zeyu/projects/NLP_acl_repro_release
+cd /path/to/NLP_acl_repro_release
 
 python3 -m venv .venv
 . .venv/bin/activate
@@ -23,17 +16,10 @@ pip install -r requirements.txt
 
 ## External Assets
 
-The source code resolves external assets through `NLM_ASSETS_DIR` or
-`src/.nlm_assets.json`. This release includes:
-
-```json
-{
-  "assets_root": "/mnt/stu/zeyu/NLM_data/assets/NLM_generatesummary"
-}
-```
-
-That asset root currently contains FactCC, MiniCheck, AlignScore, FactGraph, and
-checkpoint folders. If you run elsewhere, set:
+The source code resolves external assets through `NLM_ASSETS_DIR`, a local
+`src/.nlm_assets.json` file, or the default sibling directory
+`../NLM_assets/NLP_acl_repro_release`. This release does not commit a
+machine-specific asset path. If you run elsewhere, set:
 
 ```bash
 export NLM_ASSETS_DIR=/path/to/assets/root
@@ -47,6 +33,10 @@ Expected optional subdirectories include:
 - `alignscore_ckpt`
 - `factCC-master`
 - `FACTGRAPH-main`
+
+CLI help and static validation do not require these asset directories. The
+release code resolves AlignScore and MiniCheck assets lazily when the
+corresponding metric is actually loaded.
 
 ## DPP Dependency
 

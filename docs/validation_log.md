@@ -32,15 +32,24 @@ Relevant logs:
 - `logs/validate_release_paper_table_fix_20260514_*.log`
 - `logs/collect_paper_metrics_aux_move_20260514_*.log`
 - `logs/validate_release_aux_move_20260514_*.log`
+- `logs/collect_paper_metrics_llama_mn_baseline_20260514_232910.log`
+- `logs/validate_release_static_after_llama_mn_baseline_20260514_233210.log` records a failed validation with system `python3` because `pysbd` was not installed.
+- `logs/validate_release_static_after_llama_mn_baseline_venv_20260514_233218.log` records a failed validation after removing the machine-specific asset config; AlignScore was resolved too early at import time.
+- `logs/validate_release_static_after_lazy_assets_20260514_233326.log` records the next failed validation; MiniCheck was resolved too early at import time.
+- `logs/validate_release_static_after_lazy_minicheck_20260514_233415.log` records the passing static validation after AlignScore and MiniCheck asset checks were made lazy.
+- `logs/collect_paper_metrics_lf_20260514_233544.log` records regeneration after normalizing CSV line endings.
+- `logs/validate_release_static_final_20260514_233550.log` records the final passing static validation.
 
 ## Deferred
 
 The planned actual `NUM_SAMPLES=2` model smoke runs were not started during
-release creation because the original experiment directory still had an active
-Llama Multi-News full baseline process using the GPU:
+release creation because the original experiment directory had an active
+full-test GPU job. The earlier Llama Multi-News full baseline later completed
+and was copied into `results/raw/`; the current pending job is Llama Multi-News
+CO selection:
 
 ```text
-PID 2474746, elapsed over 22 hours, about 42GB GPU memory in use
+tmux session llama_mn_ilp_b6, Llama Multi-News ILP, generation batch size 6
 ```
 
 Starting additional model and metric evaluation jobs during that run could

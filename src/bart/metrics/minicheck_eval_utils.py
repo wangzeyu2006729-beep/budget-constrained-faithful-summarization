@@ -7,17 +7,11 @@ import os
 from assets.loader import ensure_asset_repo_on_sys_path, get_asset_dir
 
 
-ensure_asset_repo_on_sys_path("MiniCheck-main")
-
-from minicheck import inference as minicheck_inference
-from minicheck.minicheck import MiniCheck
-
-
 MINICHECK_MODEL_NAME = "roberta-large"
 MINICHECK_CACHE_DIR = str(get_asset_dir("minicheck_ckpts"))
 
 
-def _disable_minicheck_progress_bars() -> None:
+def _disable_minicheck_progress_bars(minicheck_inference) -> None:
     def _passthrough(iterable, *args, **kwargs):
         return iterable
 
@@ -36,8 +30,12 @@ def load_minicheck_model(
     cache_dir: str = MINICHECK_CACHE_DIR,
 ):
     _ = device
+    ensure_asset_repo_on_sys_path("MiniCheck-main")
+    from minicheck import inference as minicheck_inference
+    from minicheck.minicheck import MiniCheck
+
     if _should_disable_minicheck_progress_bars():
-        _disable_minicheck_progress_bars()
+        _disable_minicheck_progress_bars(minicheck_inference)
     return MiniCheck(model_name=model_name, batch_size=batch_size, cache_dir=cache_dir)
 
 

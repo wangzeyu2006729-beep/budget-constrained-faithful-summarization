@@ -16,8 +16,17 @@ from assets.loader import ensure_path_on_sys_path, require_asset_dir
 
 ALIGNSCORE_MODEL_NAME = "roberta-base"
 ALIGNSCORE_EVAL_MODE = "nli_sp"
-ALIGNSCORE_SRC = str(require_asset_dir("AlignScore-main") / "src")
-ALIGNSCORE_CKPT = str(require_asset_dir("alignscore_ckpt") / "AlignScore-base.ckpt")
+ALIGNSCORE_SRC_DIR = "AlignScore-main"
+ALIGNSCORE_CKPT_DIR = "alignscore_ckpt"
+ALIGNSCORE_CKPT_FILE = "AlignScore-base.ckpt"
+
+
+def _resolve_alignscore_src() -> str:
+    return str(require_asset_dir(ALIGNSCORE_SRC_DIR) / "src")
+
+
+def _resolve_alignscore_ckpt() -> str:
+    return str(require_asset_dir(ALIGNSCORE_CKPT_DIR) / ALIGNSCORE_CKPT_FILE)
 
 
 def _device_to_alignscore(device) -> str:
@@ -42,7 +51,7 @@ def _patch_alignscore_compat() -> None:
     live_transformers = sys.modules.get("transformers", transformers)
     live_transformers.AdamW = torch.optim.AdamW
     live_transformers.__dict__["AdamW"] = torch.optim.AdamW
-    ensure_path_on_sys_path(ALIGNSCORE_SRC)
+    ensure_path_on_sys_path(_resolve_alignscore_src())
 
     from alignscore.model import BERTAlignModel
     import alignscore.inference as inference_mod
@@ -82,10 +91,12 @@ def load_alignscore_model(
     device,
     model_name: str = ALIGNSCORE_MODEL_NAME,
     batch_size: int = 8,
-    ckpt_path: str = ALIGNSCORE_CKPT,
+    ckpt_path: str | None = None,
     evaluation_mode: str = ALIGNSCORE_EVAL_MODE,
     verbose: bool = False,
 ):
+    if ckpt_path is None:
+        ckpt_path = _resolve_alignscore_ckpt()
     if not os.path.exists(ckpt_path):
         raise FileNotFoundError(f"AlignScore checkpoint not found: {ckpt_path}")
 

@@ -1,9 +1,9 @@
 # NLP ACL Reproducibility Release
 
 This directory is a clean reproducibility package for the ILP, DPP, and MMR
-summarization experiments. It was built from
-`/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment` without moving or modifying the
-original experiment directory.
+summarization experiments. It was built from the original experiment source
+tree, referred to in this release as `<SOURCE_EXPERIMENT_ROOT>`, without moving
+or modifying that original directory.
 
 Authoritative paper source: `paper/Budget-constrained and faithful.tex`.
 
@@ -32,9 +32,9 @@ Run all documented commands through `scripts/run_live.sh` so logs print in real
 time and are also saved under `logs/`.
 
 ```bash
-cd /home/zeyu/projects/NLP_acl_repro_release
+cd /path/to/NLP_acl_repro_release
 
-PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
+PYTHON=python3 \
   scripts/run_live.sh --name validate_release -- \
   bash scripts/validate_release_static.sh
 ```
@@ -42,9 +42,9 @@ PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
 Dry-run a release wrapper without loading a model:
 
 ```bash
-cd /home/zeyu/projects/NLP_acl_repro_release
+cd /path/to/NLP_acl_repro_release
 
-DRY_RUN=1 PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
+DRY_RUN=1 PYTHON=python3 \
   scripts/run_live.sh --name dryrun_primera_mmr -- \
   bash scripts/run_release_experiment.sh \
     --model primera_multinews \
@@ -59,7 +59,7 @@ DRY_RUN=1 PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python
 Regenerate the compact metrics table:
 
 ```bash
-cd /home/zeyu/projects/NLP_acl_repro_release
+cd /path/to/NLP_acl_repro_release
 
 scripts/run_live.sh --name collect_paper_metrics -- \
   python3 scripts/collect_paper_metrics.py
@@ -70,9 +70,9 @@ scripts/run_live.sh --name collect_paper_metrics -- \
 These smoke commands run tiny experiments and stream logs live:
 
 ```bash
-cd /home/zeyu/projects/NLP_acl_repro_release
+cd /path/to/NLP_acl_repro_release
 
-PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
+PYTHON=python3 \
   scripts/run_live.sh --name smoke_bart_baseline -- \
   bash scripts/run_release_experiment.sh \
     --model bart \
@@ -82,7 +82,7 @@ PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
     --beam-size 4 \
     --output-tag smoke_bart_baseline
 
-PYTHON=/home/zeyu/projects/NLP_ilp_dpp_mmr_experiment/.venv/bin/python \
+PYTHON=python3 \
   scripts/run_live.sh --name smoke_primera_mmr -- \
   bash scripts/run_release_experiment.sh \
     --model primera_multinews \
@@ -126,7 +126,7 @@ requires a token. The release directory is already initialized as a local git
 repository on branch `main`.
 
 ```bash
-cd /home/zeyu/projects/NLP_acl_repro_release
+cd /path/to/NLP_acl_repro_release
 
 git config user.name "Your Name"
 git config user.email "you@example.com"

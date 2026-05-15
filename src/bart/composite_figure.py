@@ -91,8 +91,8 @@ def create_radar_and_stitch(input_path, output_path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input', type=str, default='/home/zeyu/projects/NLM_ilp_dpp_mmr_experiment/bart/results/source_figure.png')
-    parser.add_argument('--output', type=str, default='/home/zeyu/projects/NLM_ilp_dpp_mmr_experiment/bart/results/acl_figure_revised.png')
+    parser.add_argument('--input', type=str, default='results/source_figure.png')
+    parser.add_argument('--output', type=str, default='results/acl_figure_revised.png')
     args = parser.parse_args()
     
     if os.path.exists(args.input):
