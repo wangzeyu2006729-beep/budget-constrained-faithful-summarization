@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Collect compact metrics from copied *_results.txt files."""
+"""Collect compact metrics for the locally reported rows in zeyu.tex."""
 
 from __future__ import annotations
 
@@ -12,6 +12,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RESULTS_ROOT = ROOT / "results" / "raw"
 DEFAULT_OUTPUT_CSV = ROOT / "results" / "paper_metrics.csv"
+
+REPORTED_ZEYU_ROWS = {
+    ("cnn_dailymail", "bart", "baseline"),
+    ("cnn_dailymail", "qwen3.5_9B", "baseline"),
+    ("cnn_dailymail", "llama3_8b", "baseline"),
+    ("cnn_dailymail", "gemma_4_e4b", "baseline"),
+    ("cnn_dailymail", "bart", "mmr"),
+    ("cnn_dailymail", "bart", "ilp"),
+    ("cnn_dailymail", "bart", "dpp"),
+}
 
 HEADER_KEYS = [
     "Generator",
@@ -119,107 +129,48 @@ def parse_result(path: Path, root: Path) -> dict[str, str]:
     return row
 
 
-def parse_bart_archive_csv(path: Path, root: Path) -> list[dict[str, str]]:
-    """Parse the archived BART selector summary CSV.
-
-    The original full BART selector result text files were not present in the
-    source tree. This CSV still supports the CNN/DM BART selector rows, but it
-    lacks BERTScore and FactKB, so those fields are explicit missing statuses.
-    """
-    rows: list[dict[str, str]] = []
-    with path.open("r", encoding="utf-8", newline="") as handle:
-        reader = csv.DictReader(handle)
-        for archive_row in reader:
-            method = archive_row.get("method", "").strip()
-            beam_size = archive_row.get("beam_size", "").strip()
-            if beam_size != "5":
-                continue
-
-            row: dict[str, str] = {field: "" for field in FIELDNAMES}
-            row.update(
-                {
-                    "dataset": "cnn_dailymail",
-                    "generator": "bart",
-                    "method": method,
-                    "model": "facebook/bart-large-cnn",
-                    "samples": archive_row.get("samples", "").strip(),
-                    "sample_mode": "shuffle",
-                    "sample_seed": archive_row.get("sample_seed", "").strip(),
-                    "candidate_count": beam_size,
-                    "beam_size": beam_size,
-                    "budget": archive_row.get("budget", "").strip(),
-                    "rouge1": archive_row.get("rouge1_f1", "").strip(),
-                    "rouge2": archive_row.get("rouge2_f1", "").strip(),
-                    "rougeL": archive_row.get("rougeL_f1", "").strip(),
-                    "rougeLsum": archive_row.get("rougeLsum_f1", "").strip(),
-                    "bertscore_status": "missing from archived summary CSV",
-                    "factcc": archive_row.get("factcc", "").strip(),
-                    "minicheck": archive_row.get("minicheck", "").strip(),
-                    "alignscore": archive_row.get("alignscore", "").strip(),
-                    "factkb_status": "missing from archived summary CSV",
-                    "factgraph_status": "not reported in archived summary CSV",
-                    "ordering": "not recorded in archived summary CSV",
-                    "source_type": "archived_summary_csv",
-                    "source_result": (
-                        f"{path.relative_to(root)}#"
-                        f"{method}-beam{beam_size}"
-                    ),
-                }
-            )
-
-            weight_scheme = archive_row.get("weight_scheme", "").strip()
-            has_effective_weights = bool(
-                archive_row.get("effective_w_rouge", "").strip()
-                or archive_row.get("effective_w_minicheck", "").strip()
-                or archive_row.get("effective_w_redundancy", "").strip()
-            )
-            if has_effective_weights:
-                row["tri_metric_weights"] = (
-                    f"scheme={weight_scheme}; "
-                    f"rouge={archive_row.get('effective_w_rouge', '').strip()}, "
-                    f"minicheck={archive_row.get('effective_w_minicheck', '').strip()}, "
-                    f"redundancy={archive_row.get('effective_w_redundancy', '').strip()}"
-                )
-            elif weight_scheme:
-                row["tri_metric_weights"] = weight_scheme
-
-            rows.append(row)
-
-    return rows
+def normalize_dataset(dataset: str) -> str:
+    return dataset.split(" ", 1)[0].strip()
 
 
-def annotate_budget_table_status(row: dict[str, str]) -> None:
-    dataset = row.get("dataset", "")
-    generator = row.get("generator", "")
-    method = row.get("method", "")
+def infer_generator(row: dict[str, str]) -> str:
+    generator = row.get("generator", "").strip()
+    if generator:
+        return generator
+
+    model = row.get("model", "")
     source = row.get("source_result", "")
+    if "bart-large-cnn" in model or "/bart/" in source:
+        return "bart"
+    if "Qwen3.5-9B" in model:
+        return "qwen3.5_9B"
+    if "Llama-3.1-8B" in model:
+        return "llama3_8b"
+    if "gemma-4-E4B" in model:
+        return "gemma_4_e4b"
+    return generator
 
-    if dataset == "multi_news" and generator == "bart":
-        row["budget_table_status"] = "extra result; not a Budget paper table row"
-    elif dataset == "cnn_dailymail" and generator == "bart":
-        row["budget_table_status"] = "partial Budget table evidence from archive"
-    elif (
-        dataset == "cnn_dailymail"
-        and generator == "llama3_8b"
-        and method in {"ilp", "mmr"}
-    ):
-        if "balanced_wr020_wm060_wd020" in source:
-            row["budget_table_status"] = "matches Budget table new-weight row"
-        else:
-            row["budget_table_status"] = "extra old-weight result"
-    elif (
-        dataset == "cnn_dailymail"
-        and generator == "llama3_8b"
-        and method == "dpp"
-    ):
-        if "requested_full_resume" in source:
-            row["budget_table_status"] = "matches Budget table old-weight row"
-        else:
-            row["budget_table_status"] = "extra new-weight result"
-    elif dataset == "multi_news" and generator in {"qwen3.5_9B", "gemma_4_e4b"}:
-        row["budget_table_status"] = "available for blank Budget table baseline row"
+
+def normalize_method(method: str) -> str:
+    if method == "baseline_raw":
+        return "baseline"
+    return method
+
+
+def normalize_row(row: dict[str, str]) -> None:
+    row["dataset"] = normalize_dataset(row.get("dataset", ""))
+    row["generator"] = infer_generator(row)
+    row["method"] = normalize_method(row.get("method", ""))
+    if not row.get("candidate_count") and row.get("beam_size"):
+        row["candidate_count"] = row["beam_size"]
+
+
+def annotate_zeyu_table_status(row: dict[str, str]) -> None:
+    key = (row.get("dataset", ""), row.get("generator", ""), row.get("method", ""))
+    if key in REPORTED_ZEYU_ROWS:
+        row["budget_table_status"] = "reported local row in zeyu.tex main table"
     else:
-        row["budget_table_status"] = "matches or supports Budget table"
+        row["budget_table_status"] = "not reported in zeyu.tex main table"
 
 
 def sort_key(row: dict[str, str]) -> tuple[str, str, str, str]:
@@ -242,14 +193,13 @@ def main() -> None:
         parse_result(path, results_root)
         for path in sorted(results_root.rglob("*_results.txt"))
     ]
-    for path in sorted(results_root.rglob("*weights_annotated.csv")):
-        rows.extend(parse_bart_archive_csv(path, results_root))
     for row in rows:
-        annotate_budget_table_status(row)
+        normalize_row(row)
+        annotate_zeyu_table_status(row)
     rows = [
         row
         for row in rows
-        if row.get("budget_table_status") != "extra result; not a Budget paper table row"
+        if row.get("budget_table_status") == "reported local row in zeyu.tex main table"
     ]
     rows.sort(key=sort_key)
 

@@ -1,15 +1,19 @@
 dataset,generator,method,missing_or_limited_item,status,next_action
-cnn_dailymail,bart,baseline,completed full-test result txt,not found in source tree,locate original full result file or rerun src/bart baseline on cnn_dailymail
-cnn_dailymail,bart,mmr,completed full-test result txt,not found; archived summary CSV only,locate full selector result file or rerun src/bart mmr on cnn_dailymail
-cnn_dailymail,bart,ilp,completed full-test result txt,not found; archived summary CSV only,locate full selector result file or rerun src/bart ilp on cnn_dailymail
-cnn_dailymail,bart,dpp,completed full-test result txt,not found; archived summary CSV only,locate full selector result file or rerun src/bart dpp on cnn_dailymail
-cnn_dailymail,bart,mmr,BERTScore and FactKB,missing from archived summary CSV,rerun evaluation from full result/stage outputs if available
-cnn_dailymail,bart,ilp,BERTScore and FactKB,missing from archived summary CSV,rerun evaluation from full result/stage outputs if available
-cnn_dailymail,bart,dpp,BERTScore and FactKB,missing from archived summary CSV,rerun evaluation from full result/stage outputs if available
-multi_news,llama3_8b,baseline,MiniCheck,unavailable in copied full result due torch.cat empty tensor error,rerun MiniCheck with fallback if paper reports this cell
-multi_news,llama3_8b,mmr,completed full-test result txt,not found in source tree,run or locate Multi-News Llama CO selector result
-multi_news,llama3_8b,ilp,completed full-test result txt,not found in source tree,run or locate Multi-News Llama CO selector result
-multi_news,llama3_8b,dpp,completed full-test result txt,not found in source tree,run or locate Multi-News Llama CO selector result
-multi_news,qwen3.5_9B,baseline,MiniCheck,unavailable in copied full result due torch.cat empty tensor error,rerun MiniCheck with fallback as done for BART Multi-News
-multi_news,gemma_4_e4b,baseline,MiniCheck,unavailable in copied full result due torch.cat empty tensor error,rerun MiniCheck with fallback as done for BART Multi-News
-all,all,all,FactGraph,unavailable because FACTGRAPH_REPO_DIR is not configured,configure FactGraph repo and rerun evaluation if paper reports FactGraph
+paper,zeyu.tex,all,placeholder abstract,still present in authoritative paper snapshot,replace with the real paper abstract before ACL/ARR submission
+paper,zeyu.tex,all,trailing ACL template material,still present after the first Conclusion section,remove template text before submission
+paper,zeyu.tex,all,missing figure asset,latex/Pipeline.png is referenced but not included,add the figure or revise the paper source
+paper,zeyu.tex,all,missing bibliography,custom.bib is referenced but not included,add bibliography file or update bibliography command
+cnn_dailymail,llama3_8b,mmr,reported table values,blank in zeyu.tex,do not report unless the paper is updated and matching evidence is selected
+cnn_dailymail,llama3_8b,ilp,reported table values,blank in zeyu.tex,do not report unless the paper is updated and matching evidence is selected
+cnn_dailymail,llama3_8b,dpp,reported table values,blank in zeyu.tex,do not report unless the paper is updated and matching evidence is selected
+multi_news,primera_multinews,baseline,reported table values,blank in zeyu.tex,keep existing result artifacts auxiliary unless paper is updated
+multi_news,qwen3.5_9B,baseline,reported table values,blank in zeyu.tex,keep existing result artifacts auxiliary unless paper is updated
+multi_news,llama3_8b,baseline,reported table values,blank in zeyu.tex,keep existing result artifacts auxiliary unless paper is updated
+multi_news,gemma_4_e4b,baseline,reported table values,blank in zeyu.tex,keep existing result artifacts auxiliary unless paper is updated
+multi_news,primera_multinews,mmr,reported table values,blank in zeyu.tex,keep existing result artifacts auxiliary unless paper is updated
+multi_news,primera_multinews,ilp,reported table values,blank in zeyu.tex,keep existing result artifacts auxiliary unless paper is updated
+multi_news,primera_multinews,dpp,reported table values,blank in zeyu.tex,keep existing result artifacts auxiliary unless paper is updated
+multi_news,llama3_8b,mmr,completed full-test result txt,not found in source tree,run or locate Multi-News Llama CO selector result before reporting
+multi_news,llama3_8b,ilp,completed full-test result txt,currently running on server,wait for final *_results.txt before reporting
+multi_news,llama3_8b,dpp,completed full-test result txt,not found in source tree,run or locate Multi-News Llama CO selector result before reporting
+all,all,all,FactGraph,unavailable because FACTGRAPH_REPO_DIR is not configured,do not claim FactGraph as a reported metric unless configured and rerun

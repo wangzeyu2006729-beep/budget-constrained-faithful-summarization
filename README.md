@@ -1,142 +1,159 @@
-# NLP ACL Reproducibility Release
+# Budget-Constrained Faithful Summarization
 
-This directory is a clean reproducibility package for the ILP, DPP, and MMR
-summarization experiments. It was built from the original experiment source
-tree, referred to in this release as `<SOURCE_EXPERIMENT_ROOT>`, without moving
-or modifying that original directory.
+This repository is the ACL-style reproducibility release for the paper snapshot:
 
-Authoritative paper source: `paper/Budget-constrained and faithful.tex`.
+```text
+paper/zeyu.tex
+```
 
-## Layout
+The release was assembled from the original experiment workspace, referred to
+here as `<SOURCE_EXPERIMENT_ROOT>`, plus compact legacy BART/NLM artifacts from
+`<LEGACY_NLP_GENERATESUMMARY_ROOT>`. The original workspaces were not moved or
+rewritten.
 
-- `src/`: runnable model-specific experiment code.
+## What This Code Does
+
+The implemented pipeline decouples generation from sentence-level selection:
+
+1. A pretrained summarizer or instruction-tuned LLM generates candidate
+   summaries.
+2. Candidate summaries are split into sentences, exact duplicates are removed,
+   and sentence provenance is retained.
+3. Sentence utility is computed from ROUGE coverage and MiniCheck factuality.
+4. Pairwise redundancy is computed with ROUGE-L F1.
+5. ILP, MMR, or DPP-inspired greedy selection chooses a budgeted sentence set.
+6. Selected sentences are ordered by source similarity and evaluated.
+
+The DPP selector is a deterministic DPP-inspired greedy MAP heuristic over a
+quality-weighted similarity kernel. The release should not be cited as exact
+DPP sampling or as a proved submodular optimizer.
+
+## Repository Layout
+
+- `src/`: runnable model-specific code for BART, PRIMERA, Llama, Qwen, and Gemma.
 - `scripts/`: release wrappers, live logging, validation, and metric extraction.
-- `results/raw/`: copied compact `*_results.txt` files and one archived BART
-  selector summary CSV used only where full result text files were missing.
-- `results/auxiliary/`: non-paper result artifacts kept only to document earlier
-  debugging or re-evaluation runs.
-- `results/paper_metrics.csv`: compact metrics regenerated from `results/raw/`.
-- `results/missing_results.csv`: rows or metrics that are still missing,
-  pending, or only partially supported by release evidence.
-- `legacy/nlp_generatesummary/`: compact legacy BART/NLM scripts and result
-  artifacts copied from the older `NLP_generatesummary` workspace for audit
-  provenance only.
-- `docs/`: ACL/code-paper audit, dependency notes, and reproduction runbook.
-- `paper/`: raw authoritative paper snapshot and paper-side audit notes.
+- `results/raw/`: compact result evidence for the local rows filled in
+  `paper/zeyu.tex`.
+- `results/auxiliary/`: completed or partial artifacts that are useful for audit
+  but not reported in the current `zeyu.tex` main table.
+- `results/paper_metrics.csv`: regenerated metrics for the seven local
+  paper-reported rows.
+- `results/external_reference_metrics.csv`: external comparison rows copied from
+  `zeyu.tex`; these are not locally reproduced in this release.
+- `results/missing_results.csv`: blank, pending, or unsupported paper/result
+  items.
+- `docs/`: code-paper audit, dependency notes, runbook, validation log, and
+  result inventory.
+- `paper/`: authoritative paper source and paper audit notes.
+- `legacy/nlp_generatesummary/`: compact legacy BART/NLM scripts and inventories
+  kept for provenance.
 
-Heavy artifacts are intentionally excluded: full `outputs/`, stage traces,
-progress checkpoints, training/evaluation run logs, caches, vendored
-third-party repositories, and archived large-model folders. The small `logs/`
-directory in this release only records release validation and dry-run commands.
+Full `outputs/`, model weights, dataset caches, progress traces, vendored
+third-party repositories, and large archives are intentionally excluded.
 
-## Quick Checks
-
-Run all documented commands through `scripts/run_live.sh` so logs print in real
-time and are also saved under `logs/`.
+## Install
 
 ```bash
-cd /path/to/NLP_acl_repro_release
+cd /path/to/budget-constrained-faithful-summarization
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Optional metric assets are resolved through `NLM_ASSETS_DIR` or an untracked
+`src/.nlm_assets.json`. See `docs/dependency_notes.md`.
+
+## Validate And Regenerate Tables
+
+All documented commands stream logs in real time and save a copy under `logs/`.
+
+```bash
+cd /path/to/budget-constrained-faithful-summarization
 
 PYTHON=python3 \
   scripts/run_live.sh --name validate_release -- \
   bash scripts/validate_release_static.sh
-```
-
-Dry-run a release wrapper without loading a model:
-
-```bash
-cd /path/to/NLP_acl_repro_release
-
-DRY_RUN=1 PYTHON=python3 \
-  scripts/run_live.sh --name dryrun_primera_mmr -- \
-  bash scripts/run_release_experiment.sh \
-    --model primera_multinews \
-    --method mmr \
-    --dataset multi_news \
-    --num-samples 2 \
-    --beam-size 8 \
-    --budget-sentences 8 \
-    --output-tag dryrun_primera_mmr
-```
-
-Regenerate the compact metrics table:
-
-```bash
-cd /path/to/NLP_acl_repro_release
 
 scripts/run_live.sh --name collect_paper_metrics -- \
   python3 scripts/collect_paper_metrics.py
 ```
 
-## Small Reproduction
+## Paper-Reported Local Reproduction Commands
 
-These smoke commands run tiny experiments and stream logs live:
+Use `--num-samples 0` for the full test split. These commands match the local
+result rows that are filled in `paper/zeyu.tex`.
+
+BART CNN/DailyMail direct baseline:
 
 ```bash
-cd /path/to/NLP_acl_repro_release
-
 PYTHON=python3 \
-  scripts/run_live.sh --name smoke_bart_baseline -- \
+  scripts/run_live.sh --name full_bart_cnn_baseline -- \
   bash scripts/run_release_experiment.sh \
     --model bart \
     --method baseline \
     --dataset cnn_dailymail \
-    --num-samples 2 \
+    --num-samples 0 \
     --beam-size 4 \
-    --output-tag smoke_bart_baseline
-
-PYTHON=python3 \
-  scripts/run_live.sh --name smoke_primera_mmr -- \
-  bash scripts/run_release_experiment.sh \
-    --model primera_multinews \
-    --method mmr \
-    --dataset multi_news \
-    --num-samples 2 \
-    --beam-size 8 \
-    --budget-sentences 8 \
-    --output-tag smoke_primera_mmr
+    --output-tag full_bart_cnn_baseline
 ```
 
-Full commands and caveats are in `docs/repro_runbook.md`.
-Validation performed during release creation is recorded in
-`docs/validation_log.md`.
-Result-source caveats, including the CNN/DM versus Multi-News BART issue, are
-recorded in `docs/result_inventory.md`.
+BART CNN/DailyMail CO selectors:
 
-## ACL Notes
-
-The release follows the ACL supplemental-material principle that software and
-data artifacts should be documented and supplemental, while the paper should
-remain self-contained. The current paper snapshot still has paper-side issues;
-see `docs/acl_code_paper_audit.md` and `paper/AUDIT_NOTES.md` before submission.
-
-## Publish To GitHub
-
-The publication-style repository name derived from the paper topic is:
-
-```text
-budget-constrained-faithful-summarization
+```bash
+for method in mmr ilp dpp; do
+  PYTHON=python3 \
+    scripts/run_live.sh --name "full_bart_cnn_${method}" -- \
+    bash scripts/run_release_experiment.sh \
+      --model bart \
+      --method "$method" \
+      --dataset cnn_dailymail \
+      --num-samples 0 \
+      --beam-size 5 \
+      --output-tag "full_bart_cnn_${method}"
+done
 ```
 
-The GitHub repository is:
+Instruction-tuned CNN/DailyMail direct baselines:
+
+```bash
+for model in qwen3_5_9b llama3_8b gemma4_e4b; do
+  PYTHON=python3 \
+    scripts/run_live.sh --name "full_${model}_cnn_baseline" -- \
+    bash scripts/run_release_experiment.sh \
+      --model "$model" \
+      --method baseline \
+      --dataset cnn_dailymail \
+      --num-samples 0 \
+      --output-tag "full_${model}_cnn_baseline"
+done
+```
+
+## Output Files
+
+Each run writes under `results/runs/<dataset>/<model>/<method>/<output-tag>/`.
+The compact paper evidence copied into this release is under `results/raw/`.
+Auxiliary result files are retained under `results/auxiliary/` but are not
+parsed into `results/paper_metrics.csv`.
+
+## Paper-Code Consistency Notes
+
+- `paper/zeyu.tex` is authoritative for this release.
+- `results/paper_metrics.csv` contains only local rows with filled values in
+  `zeyu.tex`: CNN/DM BART, Qwen, Llama, Gemma baselines and CNN/DM BART+MMR,
+  BART+ILP, BART+DPP.
+- Multi-News rows and CNN/DM Llama CO rows are blank in `zeyu.tex`; matching or
+  related artifacts are kept as auxiliary evidence only.
+- FactGraph appears as unavailable in result files and should not be claimed as
+  reported.
+- The current paper source still contains placeholder ACL template material and
+  missing assets; see `paper/AUDIT_NOTES.md`.
+
+## GitHub
+
+Repository:
 
 ```text
 https://github.com/wangzeyu2006729-beep/budget-constrained-faithful-summarization
 ```
 
-This release directory is initialized as a local git repository on branch
-`main`. The server can use GitHub CLI authentication when `gh auth login` has
-been completed.
-
-```bash
-cd /path/to/NLP_acl_repro_release
-
-git config user.name "Your Name"
-git config user.email "you@example.com"
-
-scripts/run_live.sh --name publish_github -- \
-  bash scripts/publish_to_github.sh
-```
-
-By default this creates a private GitHub repo. To publish publicly, pass
-`VISIBILITY=public`, but do not do that for anonymous ACL review material.
+The release is maintained on `main` per the project request.

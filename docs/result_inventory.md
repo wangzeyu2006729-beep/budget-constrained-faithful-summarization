@@ -1,41 +1,46 @@
-# Result Inventory Corrections
+# Result Inventory
 
-Date: May 14, 2026
+Date: May 15, 2026
 
-Dataset assignment is taken from each result file's `Dataset:` header and
-checked against sample counts: CNN/DailyMail full test has 11,490 examples, and
-Multi-News full test has 5,622 examples.
+This release follows the result table as currently written in `paper/zeyu.tex`.
+The table has filled local CNN/DailyMail rows and blank Multi-News rows.
 
-## Corrected Items
+## Main Paper Evidence
 
-| Item | Correction |
-| --- | --- |
-| Multi-News BART baseline | The release keeps the corrected `beam4_baseline_hfrouge_shuffle_seed42_results_v2.txt` content only under `results/auxiliary/non_paper/`. This restores MiniCheck = 94.41 for audit traceability, but it is not parsed into paper metrics. |
-| CNN/DM BART selector rows | The only full-test local evidence found for BART+MMR/ILP/DPP is `scripts/_archive_bart_no_score_normalization_20260501/beam5_8_10_weights_annotated.csv`. It is copied under `results/raw/cnn_dailymail/bart/archive_bart_no_score_normalization_20260501/`; only its beam-5 rows are parsed into `paper_metrics.csv` because those are the Budget paper table values. |
-| CNN/DM vs Multi-News BART | The Multi-News BART baseline is outside `results/raw/` and excluded from `paper_metrics.csv`. It must not be used to fill the CNN/DM BART baseline row in the paper. |
-| Budget paper table | The release paper snapshot now fills Multi-News Qwen3.5-9B, Llama-3-8B, and Gemma-4-E4B-it from completed full-test results, marks unavailable MiniCheck cells with `--`, and replaces unsupported blank cells with `--`. |
+`results/paper_metrics.csv` is regenerated only from `results/raw/`. It contains
+these local rows:
 
-## Still Missing Or Limited
+| Dataset | Method family | Evidence |
+| --- | --- | --- |
+| CNN/DM | BART baseline | `results/raw/cnn_dailymail/bart/baseline/.../beam4_baseline_raw_hfrouge_shuffle_seed42_results.txt` |
+| CNN/DM | Qwen3.5-9B baseline | `results/raw/cnn_dailymail/qwen3_5_9b/baseline/.../baseline_hfrouge_shuffle_seed42_results.txt` |
+| CNN/DM | Llama-3-8B baseline | `results/raw/cnn_dailymail/llama3_8b/baseline/.../baseline_hfrouge_shuffle_seed42_results.txt` |
+| CNN/DM | Gemma-4-E4B-it baseline | `results/raw/cnn_dailymail/gemma4_e4b/baseline/.../baseline_hfrouge_shuffle_seed42_results.txt` |
+| CNN/DM | BART+MMR | `results/raw/cnn_dailymail/bart/mmr/.../beam5_mmr_tri_metric_hfrouge_shuffle_seed42_results.txt` |
+| CNN/DM | BART+ILP | `results/raw/cnn_dailymail/bart/ilp/.../beam5_ilp_tri_metric_hfrouge_shuffle_seed42_results.txt` |
+| CNN/DM | BART+DPP | `results/raw/cnn_dailymail/bart/dpp/.../beam5_dpp_minicheck_redundancy_hfrouge_shuffle_seed42_results.txt` |
 
-| Paper/result need | Current status |
-| --- | --- |
-| CNN/DM BART baseline full result text backing the Budget paper row | Not found as a completed full-test `*_results.txt` in the source tree. A one-sample archived result exists, but it is not valid evidence for the paper table. |
-| CNN/DM BART+MMR/ILP/DPP full result text files | Not found. Only the archived summary CSV is available, and it lacks BERTScore and FactKB. |
-| Multi-News Llama-3-8B baseline MiniCheck | The final baseline result exists and is copied, but MiniCheck is unavailable in that result due a recorded `torch.cat()` empty-tensor failure. Other metrics are parsed into `results/paper_metrics.csv`. |
-| Multi-News Llama-3-8B CO selector rows | Still pending as of May 14, 2026 23:29 EDT. Final `Llama+ILP/MMR/DPP` Multi-News rows should not be reported until completed selector `*_results.txt` files exist. |
-| FactGraph | Requested by code, but unavailable in copied result files because the FactGraph repository is not configured. |
-| External baselines in the Budget paper table | FactEdit, SimCLS, BRIO, EFactSum, and SummaReranker are paper comparison rows, not locally reproduced rows in this release. |
+The metric values in those files match the filled local rows in `zeyu.tex`.
 
-## Release Metrics Policy
+## External Reference Rows
 
-`results/paper_metrics.csv` is regenerated from paper-aligned copied compact
-artifacts only. Auxiliary rows such as Multi-News BART are not included there.
-Rows with `source_type=result_txt` come from completed result text files. Rows
-with `source_type=archived_summary_csv` are included only to preserve the
-available CNN/DM BART selector evidence and should be treated as lower-quality
-evidence than full result text files. The `budget_table_status` column states
-whether a row matches the Budget paper table, fills a previously blank
-paper-table cell, or is only partial archive evidence. Extra non-paper rows are
-excluded from `paper_metrics.csv`.
+FactEdit, SimCLS, BRIO-Mul, BRIO-Ctr, EFactSum, and SummaReranker are kept in
+`results/external_reference_metrics.csv`. They are comparison rows from the
+paper table, not locally reproduced rows in this release.
 
-Outstanding gaps are listed in `results/missing_results.csv`.
+## Auxiliary Evidence
+
+The following artifacts are retained but excluded from `paper_metrics.csv`:
+
+- Multi-News baseline and PRIMERA CO results.
+- CNN/DM Llama CO result variants.
+- The older BART selector archive CSV.
+- The corrected Multi-News BART baseline kept under `results/auxiliary/non_paper/`.
+
+These files are useful for audit history but must not be treated as paper table
+values until `zeyu.tex` is updated and the intended run is selected.
+
+## Missing Or Pending
+
+See `results/missing_results.csv`. The active server run is a Llama Multi-News
+ILP CO run, so no final Llama Multi-News CO value should be reported yet.
