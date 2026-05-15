@@ -9,14 +9,7 @@ from time import perf_counter
 import torch
 from rouge_score import rouge_scorer
 
-try:
-    from bert_score import score as bert_score_fn
-except ImportError:
-    from assets.loader import ensure_asset_repo_on_sys_path
-
-    ensure_asset_repo_on_sys_path("bert_score-master")
-    from bert_score import score as bert_score_fn
-
+from assets.loader import ensure_asset_repo_on_sys_path
 from metrics.alignscore_eval_utils import compute_alignscore_summary_scores, load_alignscore_model
 from metrics.factcc_eval_utils import compute_factcc_summary_scores, load_factcc_eval_model
 from metrics.factgraph_eval_utils import compute_factgraph_summary_scores, load_factgraph_config
@@ -103,6 +96,16 @@ def compute_moverscore(generated_summaries, references, device, batch_size: int 
         device=str(device),
     )
     return sum(scores) / len(scores) * 100
+
+
+def get_bert_score_fn():
+    """Import BERTScore only when the metric is actually requested."""
+    try:
+        from bert_score import score as score_fn
+    except ImportError:
+        ensure_asset_repo_on_sys_path("bert_score-master")
+        from bert_score import score as score_fn
+    return score_fn
 
 
 def _resolve_metric_batch_sizes(eval_batch_size: int | None):
@@ -482,6 +485,7 @@ def run_all_evaluations(
             metric_started_at = perf_counter()
             torch.cuda.empty_cache()
             try:
+                bert_score_fn = get_bert_score_fn()
                 bert_precision, bert_recall, bert_f1 = bert_score_fn(
                     generated_summaries,
                     references,

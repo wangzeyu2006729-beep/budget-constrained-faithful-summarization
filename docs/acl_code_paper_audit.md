@@ -67,4 +67,6 @@ ACL/ARR references used for this release:
 - Multi-News Qwen/Gemma/Llama rows, Multi-News Llama CO rows, non-selected
   CNN/DM Llama CO variants, and older BART archive CSV evidence remain in
   `results/auxiliary/`.
-- No core experiment logic was changed for this paper-table alignment pass.
+- No generation or selector logic was changed for this paper-table alignment
+  pass. The only runtime-code cleanup was lazy BERTScore import handling so
+  release validation can run without optional metric source assets.

@@ -110,7 +110,7 @@ FIELDNAMES = [
 def parse_result(path: Path, root: Path) -> dict[str, str]:
     row: dict[str, str] = {field: "" for field in FIELDNAMES}
     row["source_type"] = "result_txt"
-    row["source_result"] = str(path.relative_to(root))
+    row["source_result"] = path.relative_to(root).as_posix()
 
     for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
         for key in HEADER_KEYS:
