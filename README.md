@@ -1,173 +1,439 @@
-# Decoupling Generation and Selection for Budget-Constrained Faithful Summarization
+````markdown
+# Budget-Constrained Faithful Summarization
 
-This is the compact reproducibility release for **Decoupling Generation and Selection for Budget-Constrained Faithful Summarization**.
+This repository contains experiment code, run scripts, and compact result evidence for **budget-constrained faithful summarization**.
 
-The code follows the paper's final experimental table, not every exploratory run from the original server workspace. The release keeps the runnable source code, the final-table launch scripts, compact result evidence, and table parsing utilities. Large model weights, dataset caches, full logs, and full generation traces are intentionally excluded.
+The main idea is to decouple **generation** from **selection**. Instead of using a single generated summary directly, the system first generates multiple candidate summaries, decomposes them into sentence-level candidates, scores each sentence for coverage and factuality, penalizes redundancy, and then selects a budgeted set of final sentences using optimization-based methods.
 
-## Start Here
+## Overview
 
-| Need | File |
-| --- | --- |
-| Run the final selected experiments | `scripts/current_runs/run_current_results.sh` |
-| Run one model/method manually | `scripts/run_experiment.sh` |
-| Get real-time logs | `scripts/run_live.sh` |
-| See final parsed metrics | `results/tables/current_metrics.csv` |
-| See selected result files | `results/tables/selected_rows.csv` |
-| See unavailable or pending rows | `results/tables/missing_or_pending.csv` |
+The pipeline follows a generate-then-select framework:
 
-## Current Final-Table Scope
+```text
+Input document(s)
+    ↓
+Generation model produces multiple candidate summaries
+    ↓
+Candidate summaries are split into sentence candidates
+    ↓
+Duplicate candidate sentences are removed
+    ↓
+Each candidate sentence is scored by:
+    - source coverage
+    - factuality
+    - pairwise redundancy
+    ↓
+A selector chooses a budgeted sentence set:
+    - MMR
+    - ILP
+    - DPP-inspired greedy selection
+    ↓
+Selected sentences are ordered by source similarity
+    ↓
+Final summary
+    ↓
+Evaluation
+````
 
-The committed table currently contains **17 selected rows**.
-
-| Dataset | Included rows |
-| --- | --- |
-| CNN/DailyMail | BART baseline; BART+MMR/ILP/DPP; Qwen3.5-9B, Llama-3-8B, Gemma-4-E4B baselines; Llama-3-8B+MMR/ILP/DPP. |
-| Multi-News | PRIMERA baseline; PRIMERA+MMR/ILP/DPP; Qwen3.5-9B, Llama-3-8B, Gemma-4-E4B baselines. |
-
-Rows that are not in `results/tables/selected_rows.csv` should not be treated as reported paper results. In particular, Multi-News Llama CO rows are pending until completed result files are added and selected.
+This repository is organized as a **multi-model experiment pipeline**. Each model has its own runner under `src/`, while shared experiment launching, logging, validation, and result collection are handled by `scripts/`.
 
 ## Repository Layout
 
 ```text
-src/                 model-specific runnable code
-scripts/             release wrappers and current-run launchers
-results/raw/         compact evidence files used by the table
-results/tables/      selected rows, parsed metrics, missing/pending notes
-docs/                short dependency, runbook, and alignment notes
-requirements.txt     core Python dependencies
+budget-constrained-faithful-summarization/
+│
+├── scripts/
+│   ├── run_experiment.sh
+│   ├── run_live.sh
+│   ├── collect_current_metrics.py
+│   ├── validate_static.sh
+│   └── current_runs/
+│
+├── src/
+│   ├── bart/
+│   ├── primera_multinews/
+│   ├── qwen3_5_9b/
+│   ├── llama3_8b/
+│   └── gemma4_e4b/
+│
+├── results/
+│   ├── raw/
+│   ├── auxiliary/
+│   └── tables/
+│       ├── selected_rows.csv
+│       ├── current_metrics.csv
+│       └── missing_or_pending.csv
+│
+├── docs/
+├── requirements.txt
+└── README.md
 ```
 
-Model entrypoints:
+### Main directories
+
+| Path                                    | Purpose                                                                                   |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `src/`                                  | Model-specific experiment code.                                                           |
+| `src/bart/`                             | BART experiments on CNN/DailyMail.                                                        |
+| `src/primera_multinews/`                | PRIMERA experiments on Multi-News.                                                        |
+| `src/qwen3_5_9b/`                       | Qwen instruction-tuned generation experiments.                                            |
+| `src/llama3_8b/`                        | Llama instruction-tuned generation and selected optimization experiments.                 |
+| `src/gemma4_e4b/`                       | Gemma instruction-tuned generation experiments.                                           |
+| `scripts/`                              | Common experiment launchers, logging wrappers, validators, and metric collection scripts. |
+| `scripts/current_runs/`                 | Commands for the currently selected experiment set.                                       |
+| `results/raw/`                          | Compact result evidence used by the current result table.                                 |
+| `results/auxiliary/`                    | Auxiliary runs, ablations, or useful outputs not selected into the main table.            |
+| `results/tables/selected_rows.csv`      | Configurable list of result files selected for the current table.                         |
+| `results/tables/current_metrics.csv`    | Generated metric table.                                                                   |
+| `results/tables/missing_or_pending.csv` | Known incomplete, unavailable, or pending items.                                          |
+| `docs/`                                 | Run notes, dependency notes, result inventory, and maintenance notes.                     |
+
+Large model weights, dataset caches, full generation traces, local virtual environments, and full output trees are intentionally excluded from version control.
+
+## Code Architecture
+
+The code is organized by model. Each model directory contains a self-contained experiment runner. The BART pipeline is the clearest reference implementation.
+
+### BART pipeline structure
 
 ```text
+src/bart/
+├── run.py
+├── cli/
+│   └── args.py
+├── core/
+│   ├── config.py
+│   ├── data.py
+│   ├── beam_search.py
+│   ├── features.py
+│   └── orchestration.py
+├── opt_selectors/
+│   ├── __init__.py
+│   ├── tri_metric.py
+│   └── sentence_level/
+│       ├── mmr.py
+│       ├── ilp.py
+│       └── dpp.py
+├── metrics/
+│   ├── evaluation.py
+│   ├── factcc_eval_utils.py
+│   ├── minicheck_eval_utils.py
+│   ├── alignscore_eval_utils.py
+│   ├── factkb_eval_utils.py
+│   └── factgraph_eval_utils.py
+└── output/
+    └── result_saver.py
+```
+
+### BART execution flow
+
+```text
+scripts/run_experiment.sh
+        ↓
 src/bart/run.py
-src/primera_multinews/run.py
-src/llama3_8b/run.py
-src/qwen3_5_9b/run.py
-src/gemma4_e4b/run.py
+        ↓
+src/bart/cli/args.py
+        ↓
+src/bart/core/orchestration.py
+        ↓
+ ┌─────────────────────────────────────────────┐
+ │ 1. data.py                                  │
+ │    Load CNN/DailyMail                       │
+ │                                             │
+ │ 2. beam_search.py                           │
+ │    Generate candidate summaries             │
+ │                                             │
+ │ 3. features.py                              │
+ │    Build sentence pool                      │
+ │    Compute coverage/factuality/redundancy   │
+ │                                             │
+ │ 4. opt_selectors/                           │
+ │    MMR / ILP / DPP select sentences          │
+ │                                             │
+ │ 5. orchestration.py                         │
+ │    Order selected sentences                 │
+ │    Build final summary                      │
+ │                                             │
+ │ 6. metrics/evaluation.py                    │
+ │    Evaluate summaries                       │
+ │                                             │
+ │ 7. output/result_saver.py                   │
+ │    Save results                             │
+ └─────────────────────────────────────────────┘
+        ↓
+results/
+        ↓
+scripts/collect_current_metrics.py
+        ↓
+results/tables/current_metrics.csv
 ```
 
-The public CLI is kept consistent across model folders:
+## Main Components
+
+### 1. Candidate Generation
+
+For encoder-decoder models such as BART and PRIMERA, candidate summaries are generated with beam search.
+
+Relevant files:
 
 ```text
-run.py --method {baseline,mmr,ilp,dpp} --dataset {cnn_dailymail,multi_news}
+src/bart/core/beam_search.py
+src/primera_multinews/core/beam_search.py
 ```
 
-Use `scripts/run_experiment.sh` instead of calling these directly unless you need low-level control.
+For instruction-tuned language models such as Qwen, Llama, and Gemma, candidate summaries are generated through prompt-based generation.
 
-## Method in This Code
+Relevant files:
 
-The release implements a generate-then-select summarization pipeline.
+```text
+src/qwen3_5_9b/core/model_generation.py
+src/llama3_8b/core/model_generation.py
+src/gemma4_e4b/core/model_generation.py
+```
 
-1. A backbone model generates candidate summaries.
-2. CO runs split generated summaries into sentence candidates and remove exact duplicates.
-3. Candidate sentences are scored for coverage and factuality, with pairwise redundancy penalties.
-4. `MMR`, `ILP`, or `DPP` selects a sentence subset under a sentence budget.
-5. Selected sentences are ordered by source similarity and concatenated.
-6. Outputs are evaluated with ROUGE, BERTScore, FactCC, MiniCheck, AlignScore, and FactKB when available.
+### 2. Candidate Pool Construction
 
-## Important Claim Boundaries
+Generated summaries are decomposed into sentence-level candidate pools. Exact duplicate sentences are removed. The optimization stage operates on this deduplicated sentence pool.
 
-- The budget used here is a **sentence-count budget**, not a strict token-level budget.
-- `DPP` is a **DPP-inspired greedy selector**, not exact probabilistic DPP inference.
-- Coverage and redundancy are mainly ROUGE-style lexical overlap signals.
-- FactGraph is not reported in the current table because the external evaluator is not configured.
-- Some Multi-News LLM baseline MiniCheck values are marked unavailable in the committed evidence; see `results/tables/missing_or_pending.csv`.
+Relevant files:
+
+```text
+src/*/core/features.py
+src/*/core/orchestration.py
+```
+
+### 3. Feature Scoring
+
+Each candidate sentence receives a utility score based on:
+
+* source coverage
+* factuality
+
+In the current implementation, coverage is computed using ROUGE-based overlap, and factuality is estimated with MiniCheck. Pairwise redundancy is computed between candidate sentences, mainly using ROUGE-L-style overlap.
+
+Relevant files:
+
+```text
+src/*/core/features.py
+src/*/opt_selectors/tri_metric.py
+```
+
+### 4. Budgeted Sentence Selection
+
+The repository implements three sentence-level selection methods:
+
+| Method | Description                                                                |
+| ------ | -------------------------------------------------------------------------- |
+| `MMR`  | Greedy relevance-diversity selection.                                      |
+| `ILP`  | Integer linear programming with utility and pairwise redundancy penalty.   |
+| `DPP`  | DPP-inspired greedy subset selection using quality and similarity signals. |
+
+Relevant files:
+
+```text
+src/*/opt_selectors/sentence_level/mmr.py
+src/*/opt_selectors/sentence_level/ilp.py
+src/*/opt_selectors/sentence_level/dpp.py
+```
+
+The current implementation uses a sentence-count budget. For example, BART experiments on CNN/DailyMail use a sentence budget such as 4 selected sentences, while Multi-News experiments can use a larger sentence budget.
+
+### 5. Summary Realization
+
+The selected sentences are unordered after optimization. The realization step orders selected sentences by source similarity. Each selected sentence is matched to the most similar source sentence, and the final selected sentences are sorted according to the matched source positions.
+
+Relevant file:
+
+```text
+src/*/core/orchestration.py
+```
+
+### 6. Evaluation
+
+The final summaries are evaluated with generation-quality and faithfulness metrics.
+
+Supported metrics include:
+
+* ROUGE
+* BERTScore
+* FactCC
+* MiniCheck
+* AlignScore
+* FactKB
+* FactGraph
+
+Relevant files:
+
+```text
+src/*/metrics/evaluation.py
+src/*/metrics/*_eval_utils.py
+```
 
 ## Installation
 
 ```bash
-git clone https://github.com/wangzeyu2006729-beep/budget-constrained-faithful-summarization.git
-cd budget-constrained-faithful-summarization
+cd /path/to/budget-constrained-faithful-summarization
 
 python3 -m venv .venv
 . .venv/bin/activate
-mkdir -p logs
-PYTHONUNBUFFERED=1 pip install -r requirements.txt 2>&1 | tee logs/install_$(date +%Y%m%d_%H%M%S).log
+
+pip install -r requirements.txt
 ```
 
-The runners use Hugging Face `datasets` for `cnn_dailymail` and `multi_news`. Optional factuality evaluators may need local model assets; see `docs/dependency_notes.md`.
+Some factuality metrics require additional external assets or model checkpoints. Optional metric assets can be resolved with `NLM_ASSETS_DIR` or an untracked `src/.nlm_assets.json`. See `docs/dependency_notes.md` for details.
 
-## Reproduce a Small Run
+## Running Experiments
+
+### Smoke run
+
+A small run can be launched through the shared experiment wrapper:
 
 ```bash
-PYTHON=python3 scripts/run_live.sh --name smoke_bart_cnn_baseline -- \
-  bash scripts/run_experiment.sh \
-    --model bart \
-    --method baseline \
-    --dataset cnn_dailymail \
-    --num-samples 2
+PYTHON=python3 \
+scripts/run_live.sh --name bart_cnn_smoke -- \
+bash scripts/run_experiment.sh \
+  --model bart \
+  --method baseline \
+  --dataset cnn_dailymail \
+  --num-samples 2
 ```
 
-## Reproduce the Selected Run Set
-
-This launches the run set corresponding to the rows currently selected for the table.
+### Full BART baseline on CNN/DailyMail
 
 ```bash
-PYTHON=python3 scripts/run_live.sh --name current_selected_runs -- \
-  bash scripts/current_runs/run_current_results.sh
+PYTHON=python3 \
+scripts/run_live.sh --name full_bart_cnn_baseline -- \
+bash scripts/run_experiment.sh \
+  --model bart \
+  --method baseline \
+  --dataset cnn_dailymail \
+  --num-samples 0 \
+  --beam-size 4 \
+  --output-tag full_bart_cnn_baseline
 ```
 
-Full runs are expensive and require local GPU/model/dataset cache availability.
+`--num-samples 0` indicates a full test split run in the current experiment scripts.
 
-## Run One Final-Table Style Experiment
-
-Direct baseline example:
+### BART optimization runs
 
 ```bash
-PYTHON=python3 scripts/run_live.sh --name full_bart_cnn_baseline -- \
-  bash scripts/run_experiment.sh \
-    --model bart \
-    --method baseline \
-    --dataset cnn_dailymail \
-    --num-samples 0 \
-    --beam-size 4 \
-    --output-tag full_bart_cnn_baseline
+PYTHON=python3 \
+scripts/run_live.sh --name full_bart_cnn_ilp -- \
+bash scripts/run_experiment.sh \
+  --model bart \
+  --method ilp \
+  --dataset cnn_dailymail \
+  --num-samples 0 \
+  --beam-size 5 \
+  --output-tag full_bart_cnn_ilp
 ```
 
-CO selection example:
+The `--method` argument can be:
+
+```text
+baseline
+mmr
+ilp
+dpp
+```
+
+### Current selected run set
+
+To launch the currently selected run set:
 
 ```bash
-PYTHON=python3 scripts/run_live.sh --name full_primera_multinews_ilp -- \
-  bash scripts/run_experiment.sh \
-    --model primera_multinews \
-    --method ilp \
-    --dataset multi_news \
-    --num-samples 0 \
-    --beam-size 8 \
-    --budget-sentences 8 \
-    --output-tag full_primera_multinews_ilp
+PYTHON=python3 \
+bash scripts/current_runs/run_current_results.sh
 ```
 
-`--num-samples 0` means the full selected split in these scripts.
+## Result Table Workflow
 
-## Regenerate the Table
+This repository separates raw experiment evidence from the current reported table.
 
-Do not edit `results/tables/current_metrics.csv` by hand. It is generated from `selected_rows.csv`.
+The workflow is:
+
+```text
+new experiment output
+    ↓
+save compact result file under results/raw/ or results/auxiliary/
+    ↓
+add selected result path to results/tables/selected_rows.csv
+    ↓
+run scripts/collect_current_metrics.py
+    ↓
+generate results/tables/current_metrics.csv
+```
+
+To regenerate the current table:
 
 ```bash
-PYTHON=python3 scripts/run_live.sh --name collect_current_metrics -- \
-  python3 scripts/collect_current_metrics.py
+python3 scripts/collect_current_metrics.py
 ```
 
-Selected compact evidence lives in `results/raw/`. If a new result should become part of the paper table, add its compact result file under `results/raw/`, add a row to `results/tables/selected_rows.csv`, then regenerate `current_metrics.csv`.
+The generated file is:
 
-## Static Checks
+```text
+results/tables/current_metrics.csv
+```
+
+Known unavailable or pending items are tracked in:
+
+```text
+results/tables/missing_or_pending.csv
+```
+
+## Static Validation
+
+Before pushing changes, run:
 
 ```bash
-PYTHON=python3 scripts/run_live.sh --name validate_static -- \
-  bash scripts/validate_static.sh
+bash scripts/validate_static.sh
+python3 scripts/collect_current_metrics.py
 ```
 
-This checks shell syntax, Python syntax, and runner `--help` imports. It does not run smoke tests or full experiments.
+This helps verify that tracked code and table files are internally consistent.
+
+## Alignment Between Code and Paper
+
+The implementation is organized around the following paper-level components:
+
+| Paper component             | Code location                                                                                                         |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Candidate generation        | `src/*/core/beam_search.py` for encoder-decoder models; `src/*/core/model_generation.py` for instruction-tuned models |
+| Candidate pool construction | `src/*/core/features.py`, `src/*/core/orchestration.py`                                                               |
+| Coverage scoring            | `src/*/core/features.py`                                                                                              |
+| Factuality scoring          | `src/*/core/features.py`, `src/*/metrics/minicheck_eval_utils.py`                                                     |
+| Redundancy scoring          | `src/*/core/features.py`                                                                                              |
+| Budgeted selection          | `src/*/opt_selectors/sentence_level/`                                                                                 |
+| Realization ordering        | `src/*/core/orchestration.py`                                                                                         |
+| Evaluation                  | `src/*/metrics/evaluation.py`                                                                                         |
+| Result saving               | `src/*/output/result_saver.py`                                                                                        |
+| Current result table        | `results/tables/selected_rows.csv`, `results/tables/current_metrics.csv`                                              |
+
+## Notes on the Current Implementation
+
+* The current budget is implemented as a **sentence-count budget**, not a strict token-level budget.
+* DPP selection is implemented as a **DPP-inspired greedy selector**, not as a probabilistically exact DPP model.
+* Coverage and redundancy features are primarily ROUGE-based.
+* Factuality utility is based on MiniCheck when available.
+* Some external factuality metrics may be unavailable depending on local dependencies and model assets.
+* `selected_rows.csv` controls which compact result files are included in the current table.
 
 ## Citation
+
+If this repository is used, please cite the corresponding paper or project report:
 
 ```bibtex
 @misc{wang2026budgetfaithfulsummarization,
   title  = {Decoupling Generation and Selection for Budget-Constrained Faithful Summarization},
   author = {Wang, Zeyu and Wang, Guanghua},
   year   = {2026},
-  note   = {Reproducibility release}
+  note   = {Project repository}
 }
 ```
+
+```
+
+```
+
+[1]: https://github.com/wangzeyu2006729-beep/budget-constrained-faithful-summarization "GitHub - wangzeyu2006729-beep/budget-constrained-faithful-summarization · GitHub"

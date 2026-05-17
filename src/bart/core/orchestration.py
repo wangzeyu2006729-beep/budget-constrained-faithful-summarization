@@ -39,7 +39,7 @@ from core.features import (
     load_utility_model,
 )
 from metrics.evaluation import run_all_evaluations
-from opt_selectors import get_selector, is_summary_level
+from opt_selectors import get_selector
 from opt_selectors.tri_metric import normalize_tri_metric_weights
 from output.result_saver import save_results
 
@@ -112,12 +112,6 @@ def _setup_run_logger(method: str, output_dir: str | None):
 
 
 def _tri_metric_weight_labels(method: str) -> dict[str, str]:
-    if method == "mbr":
-        return {
-            "rouge": "consensus",
-            "minicheck": "minicheck",
-            "redundancy": "redundancy",
-        }
     return {
         "rouge": "rouge",
         "minicheck": "minicheck",
@@ -201,7 +195,6 @@ def resolve_objective(method: str, objective_arg: str | None, tri_metric: bool =
     is_baseline3 = method == "baseline3"
     is_generation_baseline = method == "baseline"
     is_any_baseline = is_baseline_raw or is_baseline3 or is_generation_baseline
-    summary_level = (not is_any_baseline) and is_summary_level(method)
 
     if is_baseline_raw:
         return "baseline_raw", False, False, "Raw Baseline (Top-1 Beam, Full Output)"
@@ -214,9 +207,6 @@ def resolve_objective(method: str, objective_arg: str | None, tri_metric: bool =
             print("Error: --tri-metric is only supported for optimization methods, not baselines.")
             sys.exit(1)
         return "tri_metric", False, True, "Tri-metric unified objective (ROUGE + MiniCheck + Redundancy)"
-    if summary_level:
-        return f"summary_{method}", False, False, f"Summary-level {method.upper()}"
-
     if objective_arg is None:
         print("Error: --objective is required for sentence-level methods (ilp, mmr, dpp)")
         sys.exit(1)
@@ -517,41 +507,7 @@ def _summarize_co_timing(all_sample_logs):
     return summary
 
 
-def generate_summary_level_summary(
-    candidates,
-    tokenizer,
-    segmenter,
-    article,
-    method,
-    selector_fn,
-    minicheck_scorer,
-    tri_metric_weights=None,
-):
-    """Generate a summary with a summary-level selector."""
-    unique_sentences = build_sentence_pool(candidates, tokenizer, segmenter)
-    selector_kwargs = {}
-    if tri_metric_weights is not None:
-        selector_kwargs = {
-            "utility_mode": "tri_metric",
-            "tri_metric_weights": tri_metric_weights,
-        }
-    selected_indices, final_summary, sample_log = selector_fn(
-        unique_sentences,
-        article,
-        BUDGET_SENTENCES,
-        minicheck_scorer=minicheck_scorer,
-        segmenter=segmenter,
-        **selector_kwargs,
-    )
-    sample_log["optimization_method"] = f"{method.upper()} (Summary-level)"
-    if selector_kwargs:
-        sample_log["selector_kwargs"] = selector_kwargs
-    if tri_metric_weights is not None and method == "mbr":
-        sample_log["effective_weight_labels"] = _tri_metric_weight_labels(method)
-    return final_summary, selected_indices, sample_log
-
-
-def _build_result_paths(args, method, objective_name, is_any_baseline, summary_level):
+def _build_result_paths(args, method, objective_name, is_any_baseline):
     generator = getattr(args, "generator", DEFAULT_GENERATOR)
     if args.output_dir:
         save_dir = args.output_dir
@@ -566,7 +522,7 @@ def _build_result_paths(args, method, objective_name, is_any_baseline, summary_l
     os.makedirs(save_dir, exist_ok=True)
 
     result_name_parts = [f"beam{args.beam_size}", method]
-    append_objective_tag = (not is_any_baseline) and ((not summary_level) or objective_name == "tri_metric")
+    append_objective_tag = not is_any_baseline
     if append_objective_tag:
         result_name_parts.append(objective_name)
     if not args.use_local_rouge:
@@ -1068,7 +1024,6 @@ def _run_experiment_impl(args) -> str:
     is_baseline3 = method == "baseline3"
     is_generation_baseline = method == "baseline"
     is_any_baseline = is_baseline_raw or is_baseline3 or is_generation_baseline
-    summary_level = (not is_any_baseline) and is_summary_level(method)
     tri_metric_weights = _resolve_tri_metric_weights(args)
     tri_metric_calibrator = _resolve_tri_metric_calibrator(args) if tri_metric_weights is not None else None
 
@@ -1105,7 +1060,7 @@ def _run_experiment_impl(args) -> str:
     else:
         budget_desc = f"{BUDGET_SENTENCES} sentences"
     ordering_desc = "none (baseline direct generation)" if is_any_baseline else ordering_method
-    result_file = _build_result_paths(args, method, objective_name, is_any_baseline, summary_level)
+    result_file = _build_result_paths(args, method, objective_name, is_any_baseline)
     checkpoint_json = result_file.replace("_results.txt", "_progress.json")
     checkpoint_jsonl = result_file.replace("_results.txt", "_progress_summaries.jsonl")
     stage_trace_jsonl = _stage_trace_path(result_file)
@@ -1149,7 +1104,7 @@ def _run_experiment_impl(args) -> str:
         f"EarlyStopping={generation_config.early_stopping}\n"
     )
 
-    needs_sentence_level_utility_scorer = (not is_any_baseline) and (not summary_level) and (
+    needs_sentence_level_utility_scorer = (not is_any_baseline) and (
         use_minicheck_utility or tri_metric_weights is not None
     )
     minicheck_utility_scorer = load_utility_model(
@@ -1157,16 +1112,6 @@ def _run_experiment_impl(args) -> str:
         needs_sentence_level_utility_scorer,
         batch_size=runtime_profile["utility_batch_size"],
     )
-
-    minicheck_scorer = None
-    if summary_level:
-        from metrics.minicheck_eval_utils import load_minicheck_model
-
-        print(f"Loading MiniCheck scorer for {method.upper()} selection...")
-        minicheck_scorer = load_minicheck_model(
-            device=device,
-            batch_size=runtime_profile["utility_batch_size"],
-        )
 
     selector_fn = None if is_any_baseline else get_selector(method)
 
@@ -1286,17 +1231,6 @@ def _run_experiment_impl(args) -> str:
                         segmenter,
                         is_baseline_raw or is_generation_baseline,
                         label="Baseline" if is_generation_baseline else None,
-                    )
-                elif summary_level:
-                    final_summary, selected_indices, sample_log = generate_summary_level_summary(
-                        candidates,
-                        tokenizer,
-                        segmenter,
-                        article,
-                        method,
-                        selector_fn,
-                        minicheck_scorer,
-                        tri_metric_weights=tri_metric_weights,
                     )
                 else:
                     final_summary, selected_indices, sample_log = generate_sentence_level_summary(
