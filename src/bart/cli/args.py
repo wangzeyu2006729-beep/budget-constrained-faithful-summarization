@@ -158,7 +158,7 @@ def parse_args():
         default=TRI_ROUGE_WEIGHT,
         help=(
             f"Tri-metric ROUGE utility weight (fallback default: {TRI_ROUGE_WEIGHT}); "
-            "when all three weights are omitted, method-specific defaults from config are used."
+            "when all three weights remain at fallback defaults, method-specific defaults from config are used."
         ),
     )
     parser.add_argument(
@@ -167,7 +167,7 @@ def parse_args():
         default=TRI_MINICHECK_WEIGHT,
         help=(
             f"Tri-metric MiniCheck utility weight (fallback default: {TRI_MINICHECK_WEIGHT}); "
-            "when all three weights are omitted, method-specific defaults from config are used."
+            "when all three weights remain at fallback defaults, method-specific defaults from config are used."
         ),
     )
     parser.add_argument(
@@ -176,7 +176,7 @@ def parse_args():
         default=TRI_REDUNDANCY_WEIGHT,
         help=(
             f"Tri-metric redundancy weight (fallback default: {TRI_REDUNDANCY_WEIGHT}); "
-            "when all three weights are omitted, method-specific defaults from config are used."
+            "when all three weights remain at fallback defaults, method-specific defaults from config are used."
         ),
     )
     parser.add_argument(

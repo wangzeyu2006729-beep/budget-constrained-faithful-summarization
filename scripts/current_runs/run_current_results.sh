@@ -18,18 +18,46 @@ run_logged full_bart_cnn_baseline \
     --dataset cnn_dailymail \
     --num-samples 0 \
     --beam-size 4 \
-    --output-tag full_bart_cnn_baseline
+    --output-tag full_bart_cnn_baseline -- \
+    --rouge-sentence-split pysbd
 
-for method in mmr ilp dpp; do
-  run_logged "full_bart_cnn_${method}" \
-    bash "$ROOT/scripts/run_experiment.sh" \
-      --model bart \
-      --method "$method" \
-      --dataset cnn_dailymail \
-      --num-samples 0 \
-      --beam-size 5 \
-      --output-tag "full_bart_cnn_${method}"
-done
+run_logged full_bart_cnn_mmr \
+  bash "$ROOT/scripts/run_experiment.sh" \
+    --model bart \
+    --method mmr \
+    --dataset cnn_dailymail \
+    --num-samples 0 \
+    --beam-size 5 \
+    --output-tag mmr_tri_metric -- \
+    --rouge-sentence-split pysbd \
+    --w-rouge 0.0 \
+    --w-minicheck 0.5 \
+    --w-redundancy 0.5
+
+run_logged full_bart_cnn_ilp \
+  bash "$ROOT/scripts/run_experiment.sh" \
+    --model bart \
+    --method ilp \
+    --dataset cnn_dailymail \
+    --num-samples 0 \
+    --beam-size 5 \
+    --output-tag ilp_tri_metric_softilp_per_edge_wr010_wm020_wd070 -- \
+    --rouge-sentence-split pysbd \
+    --w-rouge 0.1 \
+    --w-minicheck 0.2 \
+    --w-redundancy 0.7
+
+run_logged full_bart_cnn_dpp \
+  bash "$ROOT/scripts/run_experiment.sh" \
+    --model bart \
+    --method dpp \
+    --dataset cnn_dailymail \
+    --num-samples 0 \
+    --beam-size 5 \
+    --no-tri-metric \
+    --output-tag dpp_minicheck_redundancy -- \
+    --objective minicheck_redundancy \
+    --rouge-sentence-split pysbd
 
 for model in qwen3_5_9b llama3_8b gemma4_e4b; do
   run_logged "full_${model}_cnn_baseline" \

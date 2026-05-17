@@ -24,6 +24,7 @@ Options:
   --budget-sentences N       supported for PRIMERA and instruction-tuned runners
   --output-tag TAG           default: run_TIMESTAMP
   --compute-dtype DTYPE      auto, fp32, fp16, or bf16
+  --no-tri-metric            for non-baseline legacy objective evidence only
 
 Environment:
   DRY_RUN=1 prints and records the command without running model code.
@@ -41,6 +42,7 @@ BEAM_SIZE=""
 BUDGET_SENTENCES=""
 OUTPUT_TAG=""
 COMPUTE_DTYPE=""
+TRI_METRIC="1"
 EXTRA_ARGS=()
 
 while [ $# -gt 0 ]; do
@@ -56,6 +58,7 @@ while [ $# -gt 0 ]; do
     --budget-sentences) BUDGET_SENTENCES="${2:?missing value for --budget-sentences}"; shift 2 ;;
     --output-tag) OUTPUT_TAG="${2:?missing value for --output-tag}"; shift 2 ;;
     --compute-dtype) COMPUTE_DTYPE="${2:?missing value for --compute-dtype}"; shift 2 ;;
+    --no-tri-metric) TRI_METRIC="0"; shift ;;
     -h|--help) usage; exit 0 ;;
     --) shift; EXTRA_ARGS+=("$@"); break ;;
     *) echo "Unknown option: $1" >&2; usage >&2; exit 1 ;;
@@ -146,7 +149,7 @@ CMD=(
   --output-dir "$OUTPUT_DIR"
 )
 
-if [ "$METHOD" != "baseline" ]; then
+if [ "$METHOD" != "baseline" ] && [ "$TRI_METRIC" = "1" ]; then
   CMD+=(--tri-metric)
 fi
 
