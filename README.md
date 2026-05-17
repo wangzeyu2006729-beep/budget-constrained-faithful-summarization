@@ -1,15 +1,7 @@
 # Budget-Constrained Faithful Summarization
 
-This repository is the ACL-style reproducibility release for the paper snapshot:
-
-```text
-paper/zeyu.tex
-```
-
-The release was assembled from the original experiment workspace, referred to
-here as `<SOURCE_EXPERIMENT_ROOT>`, plus compact legacy BART/NLM artifacts from
-`<LEGACY_NLP_GENERATESUMMARY_ROOT>`. The original workspaces were not moved or
-rewritten.
+Code, scripts, and compact result evidence for budget-constrained faithful
+summarization experiments.
 
 ## What This Code Does
 
