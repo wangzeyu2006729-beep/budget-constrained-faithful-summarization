@@ -17,7 +17,6 @@ from bert_score import score as bert_score_fn
 
 from metrics.alignscore_eval_utils import compute_alignscore_summary_scores, load_alignscore_model
 from metrics.factcc_eval_utils import compute_factcc_summary_scores, load_factcc_eval_model
-from metrics.factgraph_eval_utils import compute_factgraph_summary_scores, load_factgraph_config
 from metrics.factkb_eval_utils import compute_factkb_summary_scores, load_factkb_model
 from metrics.minicheck_eval_utils import compute_minicheck_summary_scores, load_minicheck_model
 
@@ -34,12 +33,11 @@ SUPPORTED_METRIC_NAMES = {
     "factcc",
     "minicheck",
     "alignscore",
-    "factgraph",
     "factkb",
 }
 
 DEFAULT_table_metric_names = ["rouge", "bertscore"]
-DEFAULT_EXTRA_METRIC_NAMES = ["factcc", "minicheck", "alignscore", "factgraph", "factkb"]
+DEFAULT_EXTRA_METRIC_NAMES = ["factcc", "minicheck", "alignscore", "factkb"]
 
 
 def split_sentences_for_rouge(text, segmenter, sentence_split_for_rouge="nltk"):
@@ -113,7 +111,6 @@ def _resolve_metric_batch_sizes(eval_batch_size: int | None):
         "factcc": eval_batch_size,
         "minicheck": eval_batch_size,
         "alignscore": eval_batch_size,
-        "factgraph": eval_batch_size,
         "factkb": eval_batch_size,
     }
 
@@ -296,7 +293,6 @@ METRIC_RESULT_KEYS = {
     "factcc": ("factcc",),
     "minicheck": ("minicheck",),
     "alignscore": ("alignscore",),
-    "factgraph": ("factgraph",),
     "factkb": ("factkb",),
 }
 
@@ -449,7 +445,6 @@ def run_all_evaluations(
             "factcc",
             "minicheck",
             "alignscore",
-            "factgraph",
             "factkb",
         }
 
@@ -633,34 +628,6 @@ def run_all_evaluations(
                 if alignscore_scorer is not None:
                     del alignscore_scorer
                 _record_metric_seconds(metrics, "alignscore", perf_counter() - metric_started_at)
-                torch.cuda.empty_cache()
-                _persist_eval_checkpoint(checkpoint_path, metrics)
-
-    if "factgraph" in requested_metric_names:
-        print(f"\n{'=' * 60}")
-        print("FactGraph Evaluation")
-        print(f"{'=' * 60}")
-        if _metric_is_complete(metrics, "factgraph"):
-            _print_reused_metric("factgraph", metrics)
-        else:
-            metric_started_at = perf_counter()
-            torch.cuda.empty_cache()
-            try:
-                factgraph_config = load_factgraph_config()
-                factgraph_scores = compute_factgraph_summary_scores(
-                    generated_summaries,
-                    articles,
-                    factgraph_config,
-                    segmenter,
-                )
-                metrics["factgraph"] = sum(factgraph_scores) / len(factgraph_scores) * 100
-                print(f"  FactGraph (sentence-avg): {metrics['factgraph']:.2f}%")
-            except Exception as exc:
-                metric_errors = metrics.setdefault("metric_errors", {})
-                metric_errors["factgraph"] = repr(exc)
-                print(f"  FactGraph unavailable: {exc}")
-            finally:
-                _record_metric_seconds(metrics, "factgraph", perf_counter() - metric_started_at)
                 torch.cuda.empty_cache()
                 _persist_eval_checkpoint(checkpoint_path, metrics)
 

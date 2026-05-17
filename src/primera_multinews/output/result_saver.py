@@ -2,7 +2,7 @@
 
 
 DEFAULT_TABLE_METRIC_NAMES = ["rouge", "bertscore"]
-DEFAULT_EXTRA_METRIC_NAMES = ["factcc", "minicheck", "alignscore", "factgraph", "factkb"]
+DEFAULT_EXTRA_METRIC_NAMES = ["factcc", "minicheck", "alignscore", "factkb"]
 
 
 def _available_rouge_keys(metrics):
@@ -126,12 +126,6 @@ def _write_named_metrics(f, metrics, metric_names, title, num_samples):
                 f.write(f"  SummaryAvg: {metrics['alignscore']:.2f}%\n")
             elif "alignscore" in metric_errors:
                 f.write(f"AlignScore: unavailable ({metric_errors['alignscore']})\n")
-        elif metric_name == "factgraph":
-            if "factgraph" in metrics:
-                f.write("FactGraph (official evaluate.sh wrapper):\n")
-                f.write(f"  SentenceAvg: {metrics['factgraph']:.2f}%\n")
-            elif "factgraph" in metric_errors:
-                f.write(f"FactGraph: unavailable ({metric_errors['factgraph']})\n")
         elif metric_name == "factkb":
             if "factkb" in metrics:
                 f.write("FactKB (bunsenfeng/FactKB):\n")
@@ -166,7 +160,7 @@ def _write_runtime_block(f, metrics):
         )
 
     if metric_seconds:
-        ordered = ["rouge", "bertscore", "factcc", "minicheck", "alignscore", "factgraph", "factkb", "moverscore"]
+        ordered = ["rouge", "bertscore", "factcc", "minicheck", "alignscore", "factkb", "moverscore"]
         seen = set()
         formatted = []
         for name in ordered:

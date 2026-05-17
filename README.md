@@ -82,7 +82,6 @@ The release is written to match the current implementation, not to overstate it.
 - DPP is implemented as a DPP-inspired greedy selector; the release does not claim exact DPP inference or a guaranteed positive semidefinite DPP kernel.
 - Coverage and redundancy are primarily ROUGE-style lexical overlap signals in the current code.
 - MiniCheck is used for factuality utility and evaluation where available.
-- FactGraph support exists as an optional evaluator hook, but current selected results mark it unavailable because the external FactGraph repository is not configured.
 - Some Multi-News LLM baseline MiniCheck values are unavailable in the committed compact evidence; these rows are tracked in `results/tables/missing_or_pending.csv`.
 - Multi-News Llama CO rows are still pending unless completed result files are added to `results/raw/` and selected in `results/tables/selected_rows.csv`.
 

@@ -53,7 +53,6 @@ UNAVAILABLE_PATTERNS = {
     "minicheck_status": re.compile(r"^MiniCheck:\s*unavailable\s*(.*)$"),
     "alignscore_status": re.compile(r"^AlignScore:\s*unavailable\s*(.*)$"),
     "factkb_status": re.compile(r"^FactKB:\s*unavailable\s*(.*)$"),
-    "factgraph_status": re.compile(r"^FactGraph:\s*unavailable\s*(.*)$"),
 }
 
 FIELDNAMES = [
@@ -82,7 +81,6 @@ FIELDNAMES = [
     "alignscore_status",
     "factkb",
     "factkb_status",
-    "factgraph_status",
     "ordering",
     "stage1_reuse_source",
     "selection_group",

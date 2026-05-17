@@ -191,21 +191,11 @@ def _resolve_runtime_profile(args, device: torch.device, beam_size: int):
 
 def resolve_objective(method: str, objective_arg: str | None, tri_metric: bool = False):
     """Resolve the effective objective and selector mode."""
-    is_baseline_raw = method == "baseline_raw"
-    is_baseline3 = method == "baseline3"
     is_generation_baseline = method == "baseline"
-    is_any_baseline = is_baseline_raw or is_baseline3 or is_generation_baseline
 
-    if is_baseline_raw:
-        return "baseline_raw", False, False, "Raw Baseline (Top-1 Beam, Full Output)"
-    if is_baseline3:
-        return "baseline3", False, False, f"Baseline3 (Top-1 Beam -> First {BUDGET_SENTENCES} Sentences)"
     if is_generation_baseline:
         return "baseline", False, False, "Baseline from the generation backend"
     if tri_metric:
-        if is_any_baseline:
-            print("Error: --tri-metric is only supported for optimization methods, not baselines.")
-            sys.exit(1)
         return "tri_metric", False, True, "Tri-metric unified objective (ROUGE + MiniCheck + Redundancy)"
     if objective_arg is None:
         print("Error: --objective is required for sentence-level methods (ilp, mmr, dpp)")
@@ -239,7 +229,7 @@ def generate_baseline_summary(candidates, tokenizer, segmenter, is_raw: bool, la
         selected_indices = list(range(min(len(sentences), BUDGET_SENTENCES)))
 
     sample_log = {
-        "optimization_method": label or ("Raw Baseline" if is_raw else f"Baseline3 (first {BUDGET_SENTENCES})"),
+        "optimization_method": label or ("Baseline" if is_raw else f"Baseline first {BUDGET_SENTENCES} sentences"),
         "beam_candidates": [
             {
                 "score": score,
@@ -378,10 +368,8 @@ def generate_sentence_level_summary(
     selector_fn,
     device,
     tri_metric_weights=None,
-    tri_metric_calibrator=None,
     redundancy_threshold_override=None,
     ilp_penalty_scale=None,
-    lns_penalty_scale=None,
     ordering_method="source_similarity",
 ):
     """Generate a summary with a sentence-level selector."""
@@ -395,7 +383,6 @@ def generate_sentence_level_summary(
             tri_metric_weights["rouge"],
             tri_metric_weights["minicheck"],
             tri_metric_weights["redundancy"],
-            tri_metric_calibrator=tri_metric_calibrator,
         )
         utility_mode = "tri_metric"
         selector_kwargs = {
@@ -414,12 +401,10 @@ def generate_sentence_level_summary(
         tri_metric_metadata = None
         utility_mode = "legacy"
         selector_kwargs = {}
-    if redundancy_threshold_override is not None and method in {"ilp", "lns"}:
+    if redundancy_threshold_override is not None and method == "ilp":
         selector_kwargs["redundancy_threshold"] = float(redundancy_threshold_override)
     if method == "ilp" and ilp_penalty_scale is not None:
         selector_kwargs["penalty_scale"] = ilp_penalty_scale
-    if method == "lns" and lns_penalty_scale is not None:
-        selector_kwargs["penalty_scale"] = lns_penalty_scale
     raw_redundancy_matrix = compute_redundancy_matrix(unique_sentences, use_rouge_redundancy)
     if tri_metric_weights is not None and use_rouge_redundancy:
         # Per-sample min-max normalization on off-diagonal redundancy values
@@ -481,9 +466,6 @@ def generate_sentence_level_summary(
         sample_log["calibrated_rouge_sentence_scores"] = list(tri_metric_metadata["calibrated_rouge_scores"])
         sample_log["calibrated_minicheck_sentence_scores"] = list(tri_metric_metadata["calibrated_minicheck_scores"])
         sample_log["effective_weights"] = dict(tri_metric_metadata["effective_weights"])
-        if "tri_metric_calibration" in tri_metric_metadata:
-            sample_log["tri_metric_calibration"] = dict(tri_metric_metadata["tri_metric_calibration"])
-            sample_log["raw_redundancy_matrix"] = raw_redundancy_matrix
     return final_summary, selected_indices, sample_log
 
 
@@ -735,7 +717,7 @@ def _build_stage_trace_entry(
         "source_document": article,
         "reference_summary": reference,
     }
-    if method in {"baseline", "baseline_raw", "baseline3"}:
+    if method == "baseline":
         return {
             **common,
             "stage1_llm_summary_generation": {
@@ -792,7 +774,6 @@ def _build_stage_trace_entry(
             "selected_pair_raw_redundancy": selected_pair_raw_scores,
             "redundancy_matrix": log.get("redundancy_matrix"),
             "raw_redundancy_matrix": log.get("raw_redundancy_matrix"),
-            "tri_metric_calibration": log.get("tri_metric_calibration"),
             "co_timing_seconds": log.get("co_timing_seconds"),
         },
         "stage3_ordering_and_final_realization": {
@@ -961,19 +942,6 @@ def _resolve_tri_metric_weights(args):
     return raw_weights
 
 
-def _resolve_tri_metric_calibrator(args):
-    calibration_path = getattr(args, "tri_metric_calibration", None)
-    if not calibration_path:
-        return None
-
-    print(
-        "[tri-metric] Score calibration disabled; "
-        f"ignoring --tri-metric-calibration={calibration_path}. "
-        "Using raw coverage, MiniCheck, and redundancy scores."
-    )
-    return None
-
-
 def run_experiment(args) -> str:
     """Run a full BART experiment and return the result file path."""
     log_path, _restore_logger = _setup_run_logger(
@@ -1012,21 +980,9 @@ def _run_experiment_impl(args) -> str:
         print("Error: --beam-size must be >= 1")
         sys.exit(1)
 
-    if method == "baseline_raw" and beam_size != 4:
-        print(
-            f"[baseline_raw] Forcing beam_size=4 to align with official HF BART baseline "
-            f"(requested {beam_size})."
-        )
-        beam_size = 4
-        args.beam_size = 4
-
-    is_baseline_raw = method == "baseline_raw"
-    is_baseline3 = method == "baseline3"
     is_generation_baseline = method == "baseline"
-    is_any_baseline = is_baseline_raw or is_baseline3 or is_generation_baseline
+    is_any_baseline = is_generation_baseline
     tri_metric_weights = _resolve_tri_metric_weights(args)
-    tri_metric_calibrator = _resolve_tri_metric_calibrator(args) if tri_metric_weights is not None else None
-
     objective_name, use_minicheck_utility, use_rouge_redundancy, objective_desc = resolve_objective(
         method,
         args.objective,
@@ -1055,7 +1011,7 @@ def _run_experiment_impl(args) -> str:
     model = BartForConditionalGeneration.from_pretrained(model_path, **model_kwargs).to(device)
     model.eval()
     generation_config = model.generation_config
-    if is_baseline_raw or is_generation_baseline:
+    if is_generation_baseline:
         budget_desc = "direct full output"
     else:
         budget_desc = f"{BUDGET_SENTENCES} sentences"
@@ -1075,16 +1031,6 @@ def _run_experiment_impl(args) -> str:
     print(f"Stage output trace: {stage_trace_jsonl}")
     if tri_metric_weights is not None:
         print(f"Tri-metric weights: {_format_tri_metric_weights(method, tri_metric_weights, precision=4)}")
-        if tri_metric_calibrator is not None:
-            calibration_meta = tri_metric_calibrator.metadata()
-            print(
-                "Tri-metric calibration: "
-                f"method={calibration_meta.get('method')} "
-                f"redundancy_transform={calibration_meta.get('redundancy_transform')} "
-                f"redundancy_gamma={calibration_meta.get('redundancy_gamma')} "
-                f"counts={calibration_meta.get('counts')} "
-                f"path={calibration_meta.get('source_path')}"
-            )
     print(
         "Runtime profile: "
         f"big_gpu={runtime_profile['big_gpu']} "
@@ -1140,21 +1086,7 @@ def _run_experiment_impl(args) -> str:
         "beam_size": beam_size,
         "sentence_split_for_rouge": rouge_sentence_split,
         "ordering": ordering_desc,
-        "tri_metric_calibration_method": None,
-        "tri_metric_calibration_path": None,
-        "tri_metric_calibration_counts": None,
-        "tri_metric_redundancy_gamma": None,
     }
-    if tri_metric_calibrator is not None:
-        calibration_meta = tri_metric_calibrator.metadata()
-        expected_checkpoint_config.update(
-            {
-                "tri_metric_calibration_method": calibration_meta.get("method"),
-                "tri_metric_calibration_path": calibration_meta.get("source_path"),
-                "tri_metric_calibration_counts": calibration_meta.get("counts"),
-                "tri_metric_redundancy_gamma": calibration_meta.get("redundancy_gamma"),
-            }
-        )
     if not no_resume:
         resume_state = _try_resume_from_checkpoint(
             checkpoint_json,
@@ -1229,7 +1161,7 @@ def _run_experiment_impl(args) -> str:
                         candidates,
                         tokenizer,
                         segmenter,
-                        is_baseline_raw or is_generation_baseline,
+                        is_generation_baseline,
                         label="Baseline" if is_generation_baseline else None,
                     )
                 else:
@@ -1246,10 +1178,8 @@ def _run_experiment_impl(args) -> str:
                         selector_fn,
                         device,
                         tri_metric_weights=tri_metric_weights,
-                        tri_metric_calibrator=tri_metric_calibrator,
                         redundancy_threshold_override=getattr(args, "redundancy_threshold_override", None),
                         ilp_penalty_scale=getattr(args, "ilp_penalty_scale", None),
-                        lns_penalty_scale=getattr(args, "lns_penalty_scale", None),
                         ordering_method=ordering_method,
                     )
 
@@ -1458,16 +1388,6 @@ def _run_experiment_impl(args) -> str:
     )
     if tri_metric_weights is not None:
         config_header += f"Tri-metric weights: {_format_tri_metric_weights(method, tri_metric_weights, precision=6)}\n"
-        if tri_metric_calibrator is not None:
-            calibration_meta = tri_metric_calibrator.metadata()
-            config_header += (
-                "Tri-metric calibration: "
-                f"{calibration_meta.get('method')} "
-                f"redundancy_transform={calibration_meta.get('redundancy_transform')} "
-                f"redundancy_gamma={calibration_meta.get('redundancy_gamma')} "
-                f"counts={calibration_meta.get('counts')} "
-                f"path={calibration_meta.get('source_path')}\n"
-            )
     if table_metric_names is not None or extra_metric_names is not None:
         config_header += f"Table Metrics: {table_metric_names or ['rouge']}\n"
         config_header += f"Extra metrics: {extra_metric_names or []}\n"
@@ -1488,6 +1408,5 @@ def _run_experiment_impl(args) -> str:
             "objective_name": objective_name,
             "objective_desc": objective_desc,
             "tri_metric_weights": tri_metric_weights,
-            "tri_metric_calibration": tri_metric_calibrator.metadata() if tri_metric_calibrator is not None else None,
         }
     return result_file

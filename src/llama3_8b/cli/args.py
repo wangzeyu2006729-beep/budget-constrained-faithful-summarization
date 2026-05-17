@@ -31,7 +31,7 @@ ALL_METHODS = ["ilp", "mmr", "dpp", "baseline"]
 OBJECTIVE_CHOICES = ["rouge_only", "rouge_redundancy", "minicheck_only", "minicheck_redundancy"]
 GENERATOR_CHOICES = [GENERATOR_NAME]
 FIXED_table_metric_names = ["rouge", "bertscore"]
-FIXED_EXTRA_METRIC_NAMES = ["factcc", "minicheck", "alignscore", "factgraph", "factkb"]
+FIXED_EXTRA_METRIC_NAMES = ["factcc", "minicheck", "alignscore", "factkb"]
 
 
 def parse_args():
@@ -278,17 +278,6 @@ def parse_args():
             f"Tri-metric redundancy weight (fallback default: {TRI_REDUNDANCY_WEIGHT}); "
             "when all three weights are omitted, method-specific defaults from config are used."
         ),
-    )
-    parser.add_argument(
-        "--tri-metric-calibration",
-        default=None,
-        help="Accepted for compatibility, but ignored; CO uses raw coverage, MiniCheck, and redundancy scores.",
-    )
-    parser.add_argument(
-        "--tri-metric-redundancy-gamma",
-        type=float,
-        default=2.0,
-        help="Accepted for compatibility, but ignored when score calibration is disabled.",
     )
     parser.add_argument(
         "--redundancy-threshold-override",

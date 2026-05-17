@@ -109,7 +109,6 @@ def compute_tri_metric_utility_scores(
     w_rouge: float,
     w_minicheck: float,
     w_redundancy: float,
-    tri_metric_calibrator=None,
 ):
     """Compute weighted utility plus the per-sentence component breakdown."""
     effective_weights, _ = normalize_tri_metric_weights(w_rouge, w_minicheck, w_redundancy)

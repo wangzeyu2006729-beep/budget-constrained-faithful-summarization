@@ -51,7 +51,7 @@ FACTCC_BATCH_SIZE = 16                       # FactCC 推理时的批大小
 #   - utility 函数：用 ROUGE（覆盖度）还是 MiniCheck（事实一致性）
 #   - redundancy 矩阵：是否启用句间冗余惩罚
 #
-# 每个句子级选择器（ILP/MMR/DPP/Submodular/LNS）都会跑这 4 种变体，
+# 每个句子级选择器（ILP/MMR/DPP）都会跑这 4 种变体，
 # 所以总共有 5×4 = 20 个句子级实验 + 2 个摘要级实验 = 22 个实验
 #
 # 【重要】minicheck_only 和 minicheck_redundancy 变体的 utility 函数
