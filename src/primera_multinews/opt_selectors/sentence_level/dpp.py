@@ -7,7 +7,12 @@ DPP 倾向于选出内容不重复的高质量子集。
 
 import numpy as np
 
+from assets.loader import ensure_asset_repo_on_sys_path
 from opt_selectors.tri_metric import scale_pairwise_matrix
+
+ensure_asset_repo_on_sys_path("DPPy-master")
+
+from dppy.finite_dpps import FiniteDPP
 
 
 def dpp_select(

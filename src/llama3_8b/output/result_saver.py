@@ -1,7 +1,7 @@
 """Helpers for writing experiment outputs to text files."""
 
 
-DEFAULT_PAPER_METRIC_NAMES = ["rouge", "bertscore"]
+DEFAULT_TABLE_METRIC_NAMES = ["rouge", "bertscore"]
 DEFAULT_EXTRA_METRIC_NAMES = ["factcc", "minicheck", "alignscore", "factgraph", "factkb"]
 
 
@@ -122,7 +122,7 @@ def _write_named_metrics(f, metrics, metric_names, title, num_samples):
                 f.write(f"MiniCheck: unavailable ({metric_errors['minicheck']})\n")
         elif metric_name == "alignscore":
             if "alignscore" in metrics:
-                f.write("AlignScore (ACL 2023, yzha/AlignScore-base, nli_sp):\n")
+                f.write("AlignScore (yzha/AlignScore-base, nli_sp):\n")
                 f.write(f"  SummaryAvg: {metrics['alignscore']:.2f}%\n")
             elif "alignscore" in metric_errors:
                 f.write(f"AlignScore: unavailable ({metric_errors['alignscore']})\n")
@@ -448,7 +448,7 @@ def _save_default_results(result_file, metrics, generated_summaries, references,
 
 def _save_extended_results(result_file, metrics, generated_summaries, references, config_header, all_sample_logs=None):
     num_samples = len(generated_summaries)
-    paper_metric_names = metrics.get("paper_metric_names")
+    table_metric_names = metrics.get("table_metric_names")
     extra_metric_names = metrics.get("extra_metric_names")
 
     with open(result_file, "w", encoding="utf-8") as f:
@@ -457,7 +457,7 @@ def _save_extended_results(result_file, metrics, generated_summaries, references
             f.write(f"ROUGE sentence split: {metrics['sentence_split_for_rouge']}\n")
         f.write(f"{'=' * 60}\n\n")
 
-        _write_named_metrics(f, metrics, paper_metric_names or ["rouge"], "Paper Metrics", num_samples)
+        _write_named_metrics(f, metrics, table_metric_names or ["rouge"], "Table Metrics", num_samples)
         _write_named_metrics(f, metrics, extra_metric_names or [], "Extra Metrics", num_samples)
         _write_runtime_block(f, metrics)
 
@@ -500,12 +500,12 @@ def _save_extended_results(result_file, metrics, generated_summaries, references
 
 def save_results(result_file, metrics, generated_summaries, references, config_header, all_sample_logs=None):
     """Persist aggregate metrics and a small sample of selection logs."""
-    paper_metric_names = metrics.get("paper_metric_names")
+    table_metric_names = metrics.get("table_metric_names")
     extra_metric_names = metrics.get("extra_metric_names")
 
-    if paper_metric_names is None and extra_metric_names is None:
+    if table_metric_names is None and extra_metric_names is None:
         metrics = dict(metrics)
-        metrics["paper_metric_names"] = list(DEFAULT_PAPER_METRIC_NAMES)
+        metrics["table_metric_names"] = list(DEFAULT_TABLE_METRIC_NAMES)
         metrics["extra_metric_names"] = list(DEFAULT_EXTRA_METRIC_NAMES)
 
     _save_extended_results(result_file, metrics, generated_summaries, references, config_header, all_sample_logs)

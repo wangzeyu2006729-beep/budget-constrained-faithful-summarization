@@ -13,3 +13,7 @@ scratch/
 archived_large_models/
 bert_score-master/
 DPPy-master/
+.codex_tmp/
+*.tex
+*.bib
+latex/

@@ -1,9 +1,0 @@
-Method,Objective,Beam,Budget,w_rouge,w_minicheck,w_redundancy,ROUGE-1,ROUGE-2,ROUGE-L,ROUGE-Lsum,BERTScore_F1,FactCC,MiniCheck,AlignScore,ResultFile
-baseline_raw,"Raw Baseline (Top-1 Beam, Full Output)",4,full output,,,,44.09,21.13,30.68,41.04,88.22,75.91,94.96,91.55,baseline_raw_baseline_raw/beam4_baseline_raw_hfrouge_shuffle_seed42_results.txt
-baseline_raw,"Raw Baseline (Top-1 Beam, Full Output)",10,full output,,,,43.48,20.54,30.05,40.30,88.06,80.31,95.56,93.11,baseline_raw_baseline_raw/beam10_baseline_raw_hfrouge_shuffle_seed42_results.txt
-mmr,Tri-metric (ROUGE + MiniCheck + Redundancy),10,4 sentences,0.00,0.50,0.50,41.49,18.86,26.62,38.56,87.59,78.64,96.68,93.22,mmr_tri_metric/beam10_mmr_tri_metric_hfrouge_shuffle_seed42_results.txt
-dpp,MiniCheck + Redundancy (2-term; no ROUGE),10,4 sentences,,0.50,0.50,41.43,18.87,26.68,38.56,87.60,79.06,97.33,94.01,dpp_minicheck_redundancy/beam10_dpp_minicheck_redundancy_hfrouge_shuffle_seed42_results.txt
-ilp,Tri-metric hard-constraint (ROUGE + MiniCheck + Redundancy),10,4 sentences,0.25,0.25,0.50,39.75,18.23,25.96,36.80,87.36,79.36,97.03,93.71,ilp_tri_metric/beam10_ilp_tri_metric_hfrouge_shuffle_seed42_results.txt
-ilp,Tri-metric soft-per-edge (ROUGE + MiniCheck + Redundancy),10,4 sentences,0.10,0.20,0.70,42.02,19.03,26.73,39.02,87.67,78.68,96.85,93.11,ilp_tri_metric_softilp_per_edge_wr010_wm020_wd070/beam10_ilp_tri_metric_hfrouge_shuffle_seed42_results.txt
-lns,Tri-metric hard-constraint (ROUGE + MiniCheck + Redundancy),10,4 sentences,0.25,0.25,0.50,40.56,18.60,26.32,37.54,87.50,79.36,97.03,93.65,lns_tri_metric/beam10_lns_tri_metric_hfrouge_shuffle_seed42_results.txt
-lns,Tri-metric soft-per-edge (ROUGE + MiniCheck + Redundancy),10,4 sentences,0.10,0.20,0.70,42.05,19.04,26.74,39.05,87.67,78.70,96.87,93.12,lns_tri_metric_softlns_per_edge_wr010_wm020_wd070/beam10_lns_tri_metric_hfrouge_shuffle_seed42_results.txt

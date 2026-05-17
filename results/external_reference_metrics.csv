@@ -1,7 +1,0 @@
-dataset,method,rouge1,rouge2,rougeL,rougeLsum,bertscore_f1,factcc,minicheck,alignscore,factkb,source_type,note
-cnn_dailymail,FactEdit,42.53,20.48,39.74,40.76,88.17,76.03,94.82,91.46,98.68,external_reference,zeyu.tex comparison row; not locally reproduced in this release
-cnn_dailymail,SimCLS,46.67,22.15,43.54,43.09,66.14,59.49,83.34,82.37,80.75,external_reference,zeyu.tex comparison row; not locally reproduced in this release
-cnn_dailymail,BRIO-Mul,47.78,23.55,44.57,44.12,87.84,54.06,84.67,74.48,85.20,external_reference,zeyu.tex comparison row; not locally reproduced in this release
-cnn_dailymail,BRIO-Ctr,47.28,22.93,44.15,44.10,89.11,62.62,88.42,84.98,78.89,external_reference,zeyu.tex comparison row; not locally reproduced in this release
-cnn_dailymail,EFactSum,44.37,21.28,40.92,41.07,88.36,60.74,88.33,82.02,91.38,external_reference,zeyu.tex comparison row; not locally reproduced in this release
-cnn_dailymail,SummaReranker,46.62,22.39,43.59,43.80,88.47,68.17,93.81,88.27,98.10,external_reference,zeyu.tex comparison row; not locally reproduced in this release

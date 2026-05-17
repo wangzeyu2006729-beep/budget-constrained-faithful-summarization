@@ -7,11 +7,12 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from cli.args import parse_args
-from core.orchestration import run_experiment
 
 
 def main():
     args = parse_args()
+    from core.orchestration import run_experiment
+
     run_experiment(args)
 
 

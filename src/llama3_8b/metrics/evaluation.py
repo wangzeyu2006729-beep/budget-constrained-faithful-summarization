@@ -10,6 +10,11 @@ import torch
 from rouge_score import rouge_scorer
 
 from assets.loader import ensure_asset_repo_on_sys_path
+
+ensure_asset_repo_on_sys_path("bert_score-master")
+
+from bert_score import score as bert_score_fn
+
 from metrics.alignscore_eval_utils import compute_alignscore_summary_scores, load_alignscore_model
 from metrics.factcc_eval_utils import compute_factcc_summary_scores, load_factcc_eval_model
 from metrics.factgraph_eval_utils import compute_factgraph_summary_scores, load_factgraph_config
@@ -33,7 +38,7 @@ SUPPORTED_METRIC_NAMES = {
     "factkb",
 }
 
-DEFAULT_PAPER_METRIC_NAMES = ["rouge", "bertscore"]
+DEFAULT_table_metric_names = ["rouge", "bertscore"]
 DEFAULT_EXTRA_METRIC_NAMES = ["factcc", "minicheck", "alignscore", "factgraph", "factkb"]
 
 
@@ -98,16 +103,6 @@ def compute_moverscore(generated_summaries, references, device, batch_size: int 
     return sum(scores) / len(scores) * 100
 
 
-def get_bert_score_fn():
-    """Import BERTScore only when the metric is actually requested."""
-    try:
-        from bert_score import score as score_fn
-    except ImportError:
-        ensure_asset_repo_on_sys_path("bert_score-master")
-        from bert_score import score as score_fn
-    return score_fn
-
-
 def _resolve_metric_batch_sizes(eval_batch_size: int | None):
     if eval_batch_size is None or eval_batch_size < 1:
         eval_batch_size = 16
@@ -129,7 +124,7 @@ def _run_rouge(
     segmenter,
     num_samples,
     rouge_impl,
-    use_paper_sentence_split,
+    use_table_sentence_split,
     sentence_split_for_rouge="nltk",
 ):
     metrics = {}
@@ -160,7 +155,7 @@ def _run_rouge(
 
     if effective_rouge_impl == "hf":
 
-        if use_paper_sentence_split:
+        if use_table_sentence_split:
             predictions_for_rouge = [
                 split_sentences_for_rouge(
                     generated,
@@ -217,7 +212,7 @@ def _run_rouge(
         }
 
         for generated, reference in zip(generated_summaries, references):
-            if use_paper_sentence_split:
+            if use_table_sentence_split:
                 generated_lsum = split_sentences_for_rouge(
                     generated,
                     segmenter,
@@ -380,7 +375,7 @@ def run_all_evaluations(
     num_samples,
     rouge_impl="hf",
     eval_suite="full",
-    paper_metric_names=None,
+    table_metric_names=None,
     extra_metric_names=None,
     sentence_split_for_rouge="nltk",
     eval_batch_size=None,
@@ -391,7 +386,7 @@ def run_all_evaluations(
     references = list(references)
     num_samples = len(generated_summaries) if num_samples is None else int(num_samples)
 
-    use_extended_mode = paper_metric_names is not None or extra_metric_names is not None or eval_suite != "full"
+    use_extended_mode = table_metric_names is not None or extra_metric_names is not None or eval_suite != "full"
 
     if use_extended_mode:
         rouge_started_at = perf_counter()
@@ -401,31 +396,31 @@ def run_all_evaluations(
             segmenter,
             num_samples,
             rouge_impl=rouge_impl,
-            use_paper_sentence_split=True,
+            use_table_sentence_split=True,
             sentence_split_for_rouge=sentence_split_for_rouge,
         )
         _record_metric_seconds(metrics, "rouge", perf_counter() - rouge_started_at)
         metrics["eval_suite"] = eval_suite
         metrics["metric_errors"] = {}
 
-        if paper_metric_names is None and extra_metric_names is None:
+        if table_metric_names is None and extra_metric_names is None:
             if eval_suite == "rouge_only":
-                paper_metric_names = ["rouge"]
+                table_metric_names = ["rouge"]
                 extra_metric_names = []
             else:
-                paper_metric_names = list(DEFAULT_PAPER_METRIC_NAMES)
+                table_metric_names = list(DEFAULT_table_metric_names)
                 extra_metric_names = list(DEFAULT_EXTRA_METRIC_NAMES)
         else:
-            paper_metric_names = normalize_metric_names(paper_metric_names)
+            table_metric_names = normalize_metric_names(table_metric_names)
             extra_metric_names = normalize_metric_names(extra_metric_names)
 
-        requested_metric_names = set(paper_metric_names) | set(extra_metric_names)
+        requested_metric_names = set(table_metric_names) | set(extra_metric_names)
         if not requested_metric_names:
             requested_metric_names.add("rouge")
-            paper_metric_names = ["rouge"]
+            table_metric_names = ["rouge"]
             extra_metric_names = []
 
-        metrics["paper_metric_names"] = paper_metric_names
+        metrics["table_metric_names"] = table_metric_names
         metrics["extra_metric_names"] = extra_metric_names
 
         if requested_metric_names == {"rouge"}:
@@ -441,13 +436,13 @@ def run_all_evaluations(
             segmenter,
             num_samples,
             rouge_impl=rouge_impl,
-            use_paper_sentence_split=False,
+            use_table_sentence_split=False,
             sentence_split_for_rouge=sentence_split_for_rouge,
         )
         _record_metric_seconds(metrics, "rouge", perf_counter() - rouge_started_at)
         metrics["eval_suite"] = eval_suite
         metrics["metric_errors"] = {}
-        metrics["paper_metric_names"] = list(DEFAULT_PAPER_METRIC_NAMES)
+        metrics["table_metric_names"] = list(DEFAULT_table_metric_names)
         metrics["extra_metric_names"] = list(DEFAULT_EXTRA_METRIC_NAMES)
         requested_metric_names = {
             "bertscore",
@@ -485,7 +480,6 @@ def run_all_evaluations(
             metric_started_at = perf_counter()
             torch.cuda.empty_cache()
             try:
-                bert_score_fn = get_bert_score_fn()
                 bert_precision, bert_recall, bert_f1 = bert_score_fn(
                     generated_summaries,
                     references,

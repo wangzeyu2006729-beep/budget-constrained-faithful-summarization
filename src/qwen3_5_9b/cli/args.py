@@ -30,7 +30,7 @@ from core.config import (
 ALL_METHODS = ["ilp", "mmr", "dpp", "baseline"]
 OBJECTIVE_CHOICES = ["rouge_only", "rouge_redundancy", "minicheck_only", "minicheck_redundancy"]
 GENERATOR_CHOICES = [GENERATOR_NAME]
-FIXED_PAPER_METRIC_NAMES = ["rouge", "bertscore"]
+FIXED_table_metric_names = ["rouge", "bertscore"]
 FIXED_EXTRA_METRIC_NAMES = ["factcc", "minicheck", "alignscore", "factgraph", "factkb"]
 
 
@@ -182,11 +182,11 @@ def parse_args():
         help="Skip non-ROUGE metrics and run a fast ROUGE-only evaluation pass.",
     )
     parser.add_argument(
-        "--paper-metrics",
+        "--table-metrics",
         nargs="+",
-        dest="paper_metric_names",
+        dest="table_metric_names",
         default=None,
-        help="Metrics to report in the paper-metrics block, e.g. rouge bertscore.",
+        help="Metrics to report in the table-metrics block, e.g. rouge bertscore.",
     )
     parser.add_argument(
         "--extra-metrics",
@@ -343,6 +343,6 @@ def parse_args():
     )
     args = parser.parse_args()
     args.rouge_only_eval = False
-    args.paper_metric_names = list(FIXED_PAPER_METRIC_NAMES)
+    args.table_metric_names = list(FIXED_table_metric_names)
     args.extra_metric_names = list(FIXED_EXTRA_METRIC_NAMES)
     return args

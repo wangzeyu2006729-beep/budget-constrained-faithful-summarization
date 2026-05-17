@@ -1,7 +1,7 @@
 """
 FactCC 评估工具（用于最终评估阶段）。
 
-遵循 FactCC 原论文的 document-sentence 设置：
+遵循 FactCC 原研究的 document-sentence 设置：
 1. 把生成的摘要拆成单句
 2. 每个句子和原文配对，用 FactCC 判断是否一致
 3. 对所有句子的 CORRECT 概率取平均 → 作为该摘要的 FactCC 分数

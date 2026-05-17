@@ -1,3 +1,0 @@
-method,w_rouge,w_minicheck,w_redundancy,source_file,status
-mbr,0.40,0.60,0.00,tri_metric_selected_weight_mbr_center0p3_validation_n50.csv,consolidated
-mmr,0.00,0.50,0.50,tri_metric_selected_weight_mmr_focus_step0p1_validation_n50.csv,consolidated

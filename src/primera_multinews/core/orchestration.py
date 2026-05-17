@@ -1584,7 +1584,7 @@ def _run_experiment_impl(args) -> str:
     clear_cuda_cache()
 
     eval_suite = "rouge_only" if getattr(args, "rouge_only_eval", False) else "full"
-    paper_metric_names = getattr(args, "paper_metric_names", None)
+    table_metric_names = getattr(args, "table_metric_names", None)
     extra_metric_names = getattr(args, "extra_metric_names", None)
 
     eval_checkpoint = result_file.replace("_results.txt", "_eval_partial.json")
@@ -1599,7 +1599,7 @@ def _run_experiment_impl(args) -> str:
             num_samples,
             rouge_impl=rouge_impl,
             eval_suite=eval_suite,
-            paper_metric_names=paper_metric_names,
+            table_metric_names=table_metric_names,
             extra_metric_names=extra_metric_names,
             sentence_split_for_rouge=rouge_sentence_split,
             eval_batch_size=runtime_profile["eval_batch_size"],
@@ -1707,8 +1707,8 @@ def _run_experiment_impl(args) -> str:
                 f"counts={calibration_meta.get('counts')} "
                 f"path={calibration_meta.get('source_path')}\n"
             )
-    if paper_metric_names is not None or extra_metric_names is not None:
-        config_header += f"Paper metrics: {paper_metric_names or ['rouge']}\n"
+    if table_metric_names is not None or extra_metric_names is not None:
+        config_header += f"Table Metrics: {table_metric_names or ['rouge']}\n"
         config_header += f"Extra metrics: {extra_metric_names or []}\n"
 
     save_results(result_file, metrics, generated_summaries, references, config_header, all_sample_logs)

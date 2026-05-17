@@ -7,11 +7,17 @@ import os
 from assets.loader import ensure_asset_repo_on_sys_path, get_asset_dir
 
 
+ensure_asset_repo_on_sys_path("MiniCheck-main")
+
+from minicheck import inference as minicheck_inference
+from minicheck.minicheck import MiniCheck
+
+
 MINICHECK_MODEL_NAME = "roberta-large"
 MINICHECK_CACHE_DIR = str(get_asset_dir("minicheck_ckpts"))
 
 
-def _disable_minicheck_progress_bars(minicheck_inference) -> None:
+def _disable_minicheck_progress_bars() -> None:
     def _passthrough(iterable, *args, **kwargs):
         return iterable
 
@@ -30,12 +36,8 @@ def load_minicheck_model(
     cache_dir: str = MINICHECK_CACHE_DIR,
 ):
     _ = device
-    ensure_asset_repo_on_sys_path("MiniCheck-main")
-    from minicheck import inference as minicheck_inference
-    from minicheck.minicheck import MiniCheck
-
     if _should_disable_minicheck_progress_bars():
-        _disable_minicheck_progress_bars(minicheck_inference)
+        _disable_minicheck_progress_bars()
     return MiniCheck(model_name=model_name, batch_size=batch_size, cache_dir=cache_dir)
 
 
@@ -46,11 +48,24 @@ def compute_minicheck_sentence_scores(article, summary, scorer, segmenter):
     if not sentences:
         return []
 
-    _, raw_prob, _, _ = scorer.score(
-        docs=[article] * len(sentences),
-        claims=sentences,
-    )
-    return [float(prob) for prob in raw_prob]
+    try:
+        _, raw_prob, _, _ = scorer.score(
+            docs=[article] * len(sentences),
+            claims=sentences,
+        )
+        return [float(prob) for prob in raw_prob]
+    except Exception:
+        # Some generated sentences can tokenize into empty MiniCheck batches.
+        # Retry one sentence at a time so one bad sentence does not drop the
+        # entire full-test metric.
+        results = []
+        for sent in sentences:
+            try:
+                _, raw_prob, _, _ = scorer.score(docs=[article], claims=[sent])
+                results.append(float(raw_prob[0]))
+            except Exception:
+                pass
+        return results
 
 
 def compute_minicheck_summary_scores(generated_summaries, articles, scorer, segmenter):
