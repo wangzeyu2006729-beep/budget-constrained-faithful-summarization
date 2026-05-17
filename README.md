@@ -1,90 +1,78 @@
 # Decoupling Generation and Selection for Budget-Constrained Faithful Summarization
 
-This repository is the reproducibility release for the paper:
+This is the compact reproducibility release for **Decoupling Generation and Selection for Budget-Constrained Faithful Summarization**.
 
-**Decoupling Generation and Selection for Budget-Constrained Faithful Summarization**
+The code follows the paper's final experimental table, not every exploratory run from the original server workspace. The release keeps the runnable source code, the final-table launch scripts, compact result evidence, and table parsing utilities. Large model weights, dataset caches, full logs, and full generation traces are intentionally excluded.
 
-The project studies a generate-then-select framework for abstractive summarization. A generation model first produces one or more candidate summaries. For combinatorial-optimization runs, those candidates are decomposed into sentence-level units, deduplicated, scored for coverage and factuality, penalized for redundancy, and selected under a sentence budget by MMR, ILP, or a DPP-inspired greedy selector.
+## Start Here
 
-This repository is intentionally a compact research release. It includes runnable code, launch scripts, compact result evidence, and table-generation utilities. It does not include full model weights, dataset caches, full generation traces, or the complete local experiment output tree.
+| Need | File |
+| --- | --- |
+| Run the final selected experiments | `scripts/current_runs/run_current_results.sh` |
+| Run one model/method manually | `scripts/run_experiment.sh` |
+| Get real-time logs | `scripts/run_live.sh` |
+| See final parsed metrics | `results/tables/current_metrics.csv` |
+| See selected result files | `results/tables/selected_rows.csv` |
+| See unavailable or pending rows | `results/tables/missing_or_pending.csv` |
 
-## What Is Included
+## Current Final-Table Scope
+
+The committed table currently contains **17 selected rows**.
+
+| Dataset | Included rows |
+| --- | --- |
+| CNN/DailyMail | BART baseline; BART+MMR/ILP/DPP; Qwen3.5-9B, Llama-3-8B, Gemma-4-E4B baselines; Llama-3-8B+MMR/ILP/DPP. |
+| Multi-News | PRIMERA baseline; PRIMERA+MMR/ILP/DPP; Qwen3.5-9B, Llama-3-8B, Gemma-4-E4B baselines. |
+
+Rows that are not in `results/tables/selected_rows.csv` should not be treated as reported paper results. In particular, Multi-News Llama CO rows are pending until completed result files are added and selected.
+
+## Repository Layout
 
 ```text
-.
-├── src/
-│   ├── bart/                 # BART CNN/DailyMail runner
-│   ├── primera_multinews/    # PRIMERA Multi-News runner
-│   ├── llama3_8b/            # Llama-3.1-8B-Instruct runner
-│   ├── qwen3_5_9b/           # Qwen3.5-9B runner
-│   └── gemma4_e4b/           # Gemma-4-E4B-it runner
-├── scripts/
-│   ├── run_live.sh           # real-time logging wrapper
-│   ├── run_experiment.sh     # common experiment launcher
-│   ├── collect_current_metrics.py
-│   ├── validate_static.sh
-│   └── current_runs/
-├── results/
-│   ├── raw/                  # compact result files selected for the paper table
-│   └── tables/
-│       ├── selected_rows.csv
-│       ├── current_metrics.csv
-│       └── missing_or_pending.csv
-├── docs/
-│   ├── alignment_notes.md
-│   ├── dependency_notes.md
-│   ├── result_inventory.md
-│   └── runbook.md
-├── requirements.txt
-└── README.md
+src/                 model-specific runnable code
+scripts/             release wrappers and current-run launchers
+results/raw/         compact evidence files used by the table
+results/tables/      selected rows, parsed metrics, missing/pending notes
+docs/                short dependency, runbook, and alignment notes
+requirements.txt     core Python dependencies
 ```
 
-Important files:
+Model entrypoints:
 
-| File | Purpose |
-| --- | --- |
-| `scripts/run_experiment.sh` | Stable wrapper around model-specific `run.py` entrypoints. |
-| `scripts/run_live.sh` | Runs commands with line-buffered terminal output and a saved log. |
-| `results/tables/selected_rows.csv` | The result evidence selected for the current paper table. |
-| `results/tables/current_metrics.csv` | Parsed metrics generated from the selected result files. |
-| `results/tables/missing_or_pending.csv` | Known incomplete, unavailable, or pending results. |
-| `docs/alignment_notes.md` | Mapping from paper components to implementation locations. |
-| `docs/dependency_notes.md` | Notes on external evaluators and local model assets. |
+```text
+src/bart/run.py
+src/primera_multinews/run.py
+src/llama3_8b/run.py
+src/qwen3_5_9b/run.py
+src/gemma4_e4b/run.py
+```
 
-## Method Summary
+The public CLI is kept consistent across model folders:
 
-The pipeline has three stages.
+```text
+run.py --method {baseline,mmr,ilp,dpp} --dataset {cnn_dailymail,multi_news}
+```
 
-1. Candidate generation
+Use `scripts/run_experiment.sh` instead of calling these directly unless you need low-level control.
 
-   Encoder-decoder models use beam-style generation. Instruction-tuned LLMs use dataset-specific prompts and decoding settings implemented in each model runner.
+## Method in This Code
 
-2. Budgeted candidate selection
+The release implements a generate-then-select summarization pipeline.
 
-   Candidate summaries are split into sentences. Exact duplicates are removed. Sentence-level utility combines coverage and factuality signals, and pairwise redundancy discourages repeated content. The release includes:
+1. A backbone model generates candidate summaries.
+2. CO runs split generated summaries into sentence candidates and remove exact duplicates.
+3. Candidate sentences are scored for coverage and factuality, with pairwise redundancy penalties.
+4. `MMR`, `ILP`, or `DPP` selects a sentence subset under a sentence budget.
+5. Selected sentences are ordered by source similarity and concatenated.
+6. Outputs are evaluated with ROUGE, BERTScore, FactCC, MiniCheck, AlignScore, and FactKB when available.
 
-   | Selector | Implementation note |
-   | --- | --- |
-   | `baseline` | Direct generation output, no sentence-level recombination. |
-   | `mmr` | Greedy relevance-diversity selection. |
-   | `ilp` | Integer linear programming with utility and pairwise redundancy penalty. |
-   | `dpp` | DPP-inspired greedy quality-diversity selection, not a probabilistically exact DPP sampler. |
+## Important Claim Boundaries
 
-3. Summary realization and evaluation
-
-   Selected sentences are ordered by source similarity and concatenated without an additional rewriting model. Outputs are evaluated with ROUGE, BERTScore, FactCC, MiniCheck, AlignScore, and FactKB when the corresponding evaluator is available.
-
-## Claim Boundaries
-
-The release is written to match the current implementation, not to overstate it.
-
-- The budget is a sentence-count budget in the released experiments, not a strict token-level budget.
-- DPP is implemented as a DPP-inspired greedy selector; the release does not claim exact DPP inference or a guaranteed positive semidefinite DPP kernel.
-- Coverage and redundancy are primarily ROUGE-style lexical overlap signals in the current code.
-- MiniCheck is used for factuality utility and evaluation where available.
-- FactGraph support exists as an optional evaluator hook, but current selected results mark it unavailable because the external FactGraph repository is not configured.
-- Some Multi-News LLM baseline MiniCheck values are unavailable in the committed compact evidence; these rows are tracked in `results/tables/missing_or_pending.csv`.
-- Multi-News Llama CO rows are still pending unless completed result files are added to `results/raw/` and selected in `results/tables/selected_rows.csv`.
+- The budget used here is a **sentence-count budget**, not a strict token-level budget.
+- `DPP` is a **DPP-inspired greedy selector**, not exact probabilistic DPP inference.
+- Coverage and redundancy are mainly ROUGE-style lexical overlap signals.
+- FactGraph is not reported in the current table because the external evaluator is not configured.
+- Some Multi-News LLM baseline MiniCheck values are marked unavailable in the committed evidence; see `results/tables/missing_or_pending.csv`.
 
 ## Installation
 
@@ -94,25 +82,13 @@ cd budget-constrained-faithful-summarization
 
 python3 -m venv .venv
 . .venv/bin/activate
-pip install -r requirements.txt
+mkdir -p logs
+PYTHONUNBUFFERED=1 pip install -r requirements.txt 2>&1 | tee logs/install_$(date +%Y%m%d_%H%M%S).log
 ```
 
-Some evaluators download or load large model checkpoints. Local paths can be configured with `NLM_ASSETS_DIR` or an untracked `src/.nlm_assets.json`; see `docs/dependency_notes.md`.
+The runners use Hugging Face `datasets` for `cnn_dailymail` and `multi_news`. Optional factuality evaluators may need local model assets; see `docs/dependency_notes.md`.
 
-## Data
-
-The runners use Hugging Face datasets:
-
-- `cnn_dailymail`
-- `multi_news`
-
-Dataset files are not committed. They are downloaded or loaded through the normal Hugging Face `datasets` cache on the machine running the experiments.
-
-## Running Experiments
-
-All documented commands use `scripts/run_live.sh` so stdout/stderr are printed in real time and saved under `logs/`.
-
-### Small Smoke Run
+## Reproduce a Small Run
 
 ```bash
 PYTHON=python3 scripts/run_live.sh --name smoke_bart_cnn_baseline -- \
@@ -123,7 +99,20 @@ PYTHON=python3 scripts/run_live.sh --name smoke_bart_cnn_baseline -- \
     --num-samples 2
 ```
 
-### Direct Baseline
+## Reproduce the Selected Run Set
+
+This launches the run set corresponding to the rows currently selected for the table.
+
+```bash
+PYTHON=python3 scripts/run_live.sh --name current_selected_runs -- \
+  bash scripts/current_runs/run_current_results.sh
+```
+
+Full runs are expensive and require local GPU/model/dataset cache availability.
+
+## Run One Final-Table Style Experiment
+
+Direct baseline example:
 
 ```bash
 PYTHON=python3 scripts/run_live.sh --name full_bart_cnn_baseline -- \
@@ -136,123 +125,41 @@ PYTHON=python3 scripts/run_live.sh --name full_bart_cnn_baseline -- \
     --output-tag full_bart_cnn_baseline
 ```
 
-`--num-samples 0` means the full selected split for these scripts.
-
-### CO Selection Run
+CO selection example:
 
 ```bash
-PYTHON=python3 scripts/run_live.sh --name full_bart_cnn_ilp -- \
+PYTHON=python3 scripts/run_live.sh --name full_primera_multinews_ilp -- \
   bash scripts/run_experiment.sh \
-    --model bart \
+    --model primera_multinews \
     --method ilp \
-    --dataset cnn_dailymail \
+    --dataset multi_news \
     --num-samples 0 \
-    --beam-size 5 \
-    --output-tag full_bart_cnn_ilp
+    --beam-size 8 \
+    --budget-sentences 8 \
+    --output-tag full_primera_multinews_ilp
 ```
 
-Supported `--method` values:
+`--num-samples 0` means the full selected split in these scripts.
 
-```text
-baseline
-mmr
-ilp
-dpp
-```
+## Regenerate the Table
 
-Supported `--model` values:
-
-```text
-bart
-primera_multinews
-llama3_8b
-qwen3_5_9b
-gemma4_e4b
-```
-
-### Current Selected Run Set
-
-The script below reproduces the run set represented by `results/tables/selected_rows.csv`, subject to GPU memory and local evaluator availability.
-
-```bash
-PYTHON=python3 scripts/run_live.sh --name current_selected_runs -- \
-  bash scripts/current_runs/run_current_results.sh
-```
-
-For expensive full runs, use a machine with a suitable GPU and enough disk space for local model and dataset caches.
-
-## Results
-
-The committed table is generated from compact evidence files:
+Do not edit `results/tables/current_metrics.csv` by hand. It is generated from `selected_rows.csv`.
 
 ```bash
 PYTHON=python3 scripts/run_live.sh --name collect_current_metrics -- \
   python3 scripts/collect_current_metrics.py
 ```
 
-This writes:
+Selected compact evidence lives in `results/raw/`. If a new result should become part of the paper table, add its compact result file under `results/raw/`, add a row to `results/tables/selected_rows.csv`, then regenerate `current_metrics.csv`.
 
-```text
-results/tables/current_metrics.csv
-```
-
-Current selected evidence includes:
-
-| Dataset | Rows currently selected |
-| --- | --- |
-| CNN/DailyMail | BART baseline; BART+MMR/ILP/DPP; Qwen, Llama, Gemma baselines; Llama+MMR/ILP/DPP. |
-| Multi-News | PRIMERA baseline; PRIMERA+MMR/ILP/DPP; Qwen, Llama, Gemma baselines. |
-
-Known missing or unavailable items are tracked in:
-
-```text
-results/tables/missing_or_pending.csv
-```
-
-Do not edit `current_metrics.csv` by hand. Add or remove rows through `selected_rows.csv`, then rerun `scripts/collect_current_metrics.py`.
-
-## Static Validation
-
-Before committing release changes:
+## Static Checks
 
 ```bash
 PYTHON=python3 scripts/run_live.sh --name validate_static -- \
   bash scripts/validate_static.sh
-
-PYTHON=python3 scripts/run_live.sh --name collect_current_metrics -- \
-  python3 scripts/collect_current_metrics.py
 ```
 
-The static validator checks shell syntax, Python syntax, and runner `--help` entrypoints. It does not run full experiments.
-
-## Code-Paper Alignment
-
-| Paper component | Implementation location |
-| --- | --- |
-| Candidate generation | `src/*/core/beam_search.py`, `src/*/core/model_generation.py` |
-| Sentence pool construction | `src/*/core/features.py`, `src/*/core/orchestration.py` |
-| Sentence deduplication | `src/*/core/orchestration.py` |
-| Coverage utility | `src/*/core/features.py` |
-| MiniCheck factuality utility | `src/*/core/features.py`, `src/*/metrics/minicheck_eval_utils.py` |
-| Pairwise redundancy | `src/*/core/features.py` |
-| MMR selection | `src/*/opt_selectors/sentence_level/mmr.py` |
-| ILP selection | `src/*/opt_selectors/sentence_level/ilp.py` |
-| DPP-inspired selection | `src/*/opt_selectors/sentence_level/dpp.py` |
-| Source-similarity ordering | `src/*/core/orchestration.py` |
-| Evaluation | `src/*/metrics/evaluation.py` |
-| Result saving | `src/*/output/result_saver.py` |
-
-Additional alignment notes are in `docs/alignment_notes.md`.
-
-## Adding New Results
-
-1. Run the experiment with `scripts/run_live.sh`.
-2. Copy only compact result evidence into `results/raw/` or keep non-selected evidence outside the release.
-3. Add the result path to `results/tables/selected_rows.csv`.
-4. Regenerate `results/tables/current_metrics.csv`.
-5. Update `results/tables/missing_or_pending.csv` if a metric or row remains unavailable.
-
-Large traces, full outputs, model checkpoints, cache directories, and private local paths should not be committed.
+This checks shell syntax, Python syntax, and runner `--help` imports. It does not run smoke tests or full experiments.
 
 ## Citation
 
