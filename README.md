@@ -74,6 +74,47 @@ The pipeline has three stages.
 
    Selected sentences are ordered by source similarity and concatenated without an additional rewriting model. Outputs are evaluated with ROUGE, BERTScore, FactCC, MiniCheck, AlignScore, and FactKB when the corresponding evaluator is available.
 
+## How to Read the Source Code
+
+The `src/` tree has one runner directory per generator. The directory layouts are intentionally similar, so the same reading path works for BART, PRIMERA, Llama, Qwen, and Gemma. A reviewer who wants to inspect how the methods are computed does not need to read every file; start with the files below.
+
+| What to inspect | Where to look | What it shows |
+| --- | --- | --- |
+| Experiment entrypoint | `scripts/run_experiment.sh` | Maps `--model` and `--method` to the concrete `src/<model>/run.py` command. |
+| Runner arguments | `src/<model>/run.py`, `src/<model>/cli/args.py` | Defines the CLI options, generator name, dataset choice, beam size, budget, and tri-metric flags. |
+| Main pipeline | `src/<model>/core/orchestration.py` | Coordinates candidate generation, sentence-pool construction, utility and redundancy scoring, selector calls, ordering, checkpoints, evaluation, and result writing. |
+| Encoder-decoder beam search | `src/bart/core/beam_search.py`, `src/primera_multinews/core/beam_search.py` | Uses Hugging Face `generate()` with `num_beams` and `num_return_sequences` to return beam candidates and their sequence scores. |
+| LLM generation | `src/{llama3_8b,qwen3_5_9b,gemma4_e4b}/core/model_generation.py` | Defines prompts, truncation, sampling or beam-style candidate generation, stopping criteria, and output cleanup. |
+| Sentence features | `src/<model>/core/features.py` | Builds coverage utility, MiniCheck factuality utility, ROUGE-L redundancy matrices, and tri-metric utility scores. |
+| Selector registry | `src/<model>/opt_selectors/__init__.py` | Exposes the implemented sentence-level methods: `ilp`, `mmr`, and `dpp`. |
+| ILP selection | `src/<model>/opt_selectors/sentence_level/ilp.py` | Implements the hard ILP and tri-metric soft ILP sentence-selection objectives. |
+| MMR selection | `src/<model>/opt_selectors/sentence_level/mmr.py` | Implements greedy relevance-diversity selection. |
+| DPP-inspired selection | `src/<model>/opt_selectors/sentence_level/dpp.py` | Builds a quality-similarity kernel and greedily selects a diverse high-quality subset. |
+| Evaluation and results | `src/<model>/metrics/evaluation.py`, `src/<model>/output/result_saver.py` | Computes ROUGE, BERTScore, factuality metrics, and writes compact result files. |
+
+For the ILP implementation, `x_i` indicates whether sentence `i` is selected and `R_ij` is the pairwise redundancy score. The hard ILP path maximizes:
+
+```text
+max sum_i u_i x_i
+subject to sum_i x_i == budget
+           x_i + x_j <= 1 when R_ij exceeds the redundancy threshold
+```
+
+The tri-metric soft ILP path uses a pairwise penalty:
+
+```text
+max sum_i u_i x_i - alpha sum_{i<j} R_ij y_ij
+subject to 1 <= sum_i x_i <= budget
+           y_ij <= x_i
+           y_ij <= x_j
+           y_ij >= x_i + x_j - 1
+           x_i, y_ij in {0, 1}
+```
+
+Here `y_ij` is the standard linearized indicator for selecting both sentences `i` and `j`. The coefficient `alpha` is derived from the redundancy weight and `--ilp-penalty-scale`.
+
+This release intentionally keeps only the sentence-level `ilp`, `mmr`, and `dpp` code paths used for the current paper tables. Historical local experiments such as LNS, submodular selection, summary-level selectors, and FactGraph wrappers are not part of this release code path.
+
 ## Claim Boundaries
 
 The release is written to match the current implementation, not to overstate it.
