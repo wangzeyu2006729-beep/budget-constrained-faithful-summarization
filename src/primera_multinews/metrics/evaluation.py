@@ -29,7 +29,6 @@ except ImportError:
 SUPPORTED_METRIC_NAMES = {
     "rouge",
     "bertscore",
-    "moverscore",
     "factcc",
     "minicheck",
     "alignscore",
@@ -81,25 +80,6 @@ def _normalize_reference_entry(reference_entry):
     return [reference_text] if reference_text else []
 
 
-def compute_moverscore(generated_summaries, references, device, batch_size: int = 16):
-    ensure_asset_repo_on_sys_path("BARTScore-main", subdir="SUM")
-    from moverscore import get_idf_dict, word_mover_score
-
-    idf_dict_ref = get_idf_dict(references)
-    idf_dict_hyp = get_idf_dict(generated_summaries)
-    scores = word_mover_score(
-        references,
-        generated_summaries,
-        idf_dict_ref,
-        idf_dict_hyp,
-        stop_words=[],
-        n_gram=1,
-        remove_subwords=True,
-        batch_size=batch_size,
-        device=str(device),
-    )
-    return sum(scores) / len(scores) * 100
-
 
 def _resolve_metric_batch_sizes(eval_batch_size: int | None):
     if eval_batch_size is None or eval_batch_size < 1:
@@ -107,7 +87,6 @@ def _resolve_metric_batch_sizes(eval_batch_size: int | None):
 
     return {
         "bertscore": eval_batch_size,
-        "moverscore": eval_batch_size,
         "factcc": eval_batch_size,
         "minicheck": eval_batch_size,
         "alignscore": eval_batch_size,
@@ -289,7 +268,6 @@ def _persist_eval_checkpoint(checkpoint_path, metrics):
 
 METRIC_RESULT_KEYS = {
     "bertscore": ("bert_P", "bert_R", "bert_F"),
-    "moverscore": ("moverscore",),
     "factcc": ("factcc",),
     "minicheck": ("minicheck",),
     "alignscore": ("alignscore",),
@@ -498,32 +476,6 @@ def run_all_evaluations(
                 print(f"  BERTScore unavailable: {exc}")
             finally:
                 _record_metric_seconds(metrics, "bertscore", perf_counter() - metric_started_at)
-                torch.cuda.empty_cache()
-                _persist_eval_checkpoint(checkpoint_path, metrics)
-
-    if "moverscore" in requested_metric_names:
-        print(f"\n{'=' * 60}")
-        print("MoverScore Evaluation")
-        print(f"{'=' * 60}")
-        if _metric_is_complete(metrics, "moverscore"):
-            _print_reused_metric("moverscore", metrics)
-        else:
-            metric_started_at = perf_counter()
-            torch.cuda.empty_cache()
-            try:
-                metrics["moverscore"] = compute_moverscore(
-                    generated_summaries,
-                    references,
-                    device,
-                    batch_size=metric_batch_sizes["moverscore"],
-                )
-                print(f"  MoverScore: {metrics['moverscore']:.2f}%")
-            except Exception as exc:
-                metric_errors = metrics.setdefault("metric_errors", {})
-                metric_errors["moverscore"] = repr(exc)
-                print(f"  MoverScore unavailable: {exc}")
-            finally:
-                _record_metric_seconds(metrics, "moverscore", perf_counter() - metric_started_at)
                 torch.cuda.empty_cache()
                 _persist_eval_checkpoint(checkpoint_path, metrics)
 

@@ -111,17 +111,6 @@ Dataset files are not committed. They are downloaded or loaded through the norma
 
 All documented commands use `scripts/run_live.sh` so stdout/stderr are printed in real time and saved under `logs/`.
 
-### Small Smoke Run
-
-```bash
-PYTHON=python3 scripts/run_live.sh --name smoke_bart_cnn_baseline -- \
-  bash scripts/run_experiment.sh \
-    --model bart \
-    --method baseline \
-    --dataset cnn_dailymail \
-    --num-samples 2
-```
-
 ### Direct Baseline
 
 ```bash

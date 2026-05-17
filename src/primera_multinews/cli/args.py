@@ -108,25 +108,6 @@ def parse_args():
         help="Sentence splitter for ROUGE-Lsum. Fixed to nltk to match the HuggingFace summarization protocol.",
     )
     parser.add_argument(
-        "--rouge-only-eval",
-        action="store_true",
-        help="Skip non-ROUGE metrics and run a fast ROUGE-only evaluation pass.",
-    )
-    parser.add_argument(
-        "--table-metrics",
-        nargs="+",
-        dest="table_metric_names",
-        default=None,
-        help="Metrics to report in the table-metrics block, e.g. rouge bertscore.",
-    )
-    parser.add_argument(
-        "--extra-metrics",
-        nargs="+",
-        dest="extra_metric_names",
-        default=None,
-        help="Extra metrics to evaluate, e.g. minicheck factcc.",
-    )
-    parser.add_argument(
         "--generation-batch-size",
         type=int,
         default=None,
@@ -225,7 +206,7 @@ def parse_args():
             "per_edge: alpha = w_redundancy / (budget - 1)  [default, validated]. "
             "per_sentence: alpha = w_redundancy / budget. "
             "per_pair: alpha = w_redundancy / C(budget, 2). "
-            "Only affects method=ilp under --tri-metric; legacy hard-ILP path unchanged."
+            "Only affects method=ilp under --tri-metric; the default hard-ILP path is unchanged."
         ),
     )
     parser.add_argument(

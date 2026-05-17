@@ -63,7 +63,7 @@ def _resolve_generation_kwargs(model, beam_size: int) -> dict:
     }
 
 
-def _legacy_beam_search_decode(model, encoder_output, encoder_mask, beam_size):
+def _encoder_output_beam_search_decode(model, encoder_output, encoder_mask, beam_size):
     generation_kwargs = _resolve_generation_kwargs(model, beam_size)
     with torch.no_grad():
         generated = model.generate(
@@ -134,7 +134,7 @@ def beam_search_decode(model, *args):
     """Return top beam candidates as `(score, token_ids)` tuples.
 
     Supports both call styles:
-    - legacy main BART path: `(encoder_output, encoder_mask, tokenizer, device, beam_size)`
+    - encoder-output compatibility path: `(encoder_output, encoder_mask, tokenizer, device, beam_size)`
     - reproduction helpers: `(input_ids, attention_mask, beam_size)`
     """
     if len(args) == 5:
@@ -142,7 +142,7 @@ def beam_search_decode(model, *args):
         del tokenizer, device
         if beam_size < 1:
             raise ValueError(f"beam_size must be >= 1, got {beam_size}.")
-        return _legacy_beam_search_decode(model, encoder_output, encoder_mask, beam_size)
+        return _encoder_output_beam_search_decode(model, encoder_output, encoder_mask, beam_size)
 
     if len(args) == 3:
         input_ids, attention_mask, beam_size = args

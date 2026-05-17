@@ -84,36 +84,12 @@ def _write_named_metrics(f, metrics, metric_names, title, num_samples):
                 )
             elif "bertscore" in metric_errors:
                 f.write(f"BERTScore: unavailable ({metric_errors['bertscore']})\n")
-        elif metric_name == "bartscore":
-            if "bartscore_ref2hyp" in metrics:
-                f.write("BARTScore (bart-large-cnn):\n")
-                f.write(f"  ref->hyp: {metrics['bartscore_ref2hyp']:.4f}\n")
-                f.write(f"  hyp->ref: {metrics['bartscore_hyp2ref']:.4f}\n")
-                f.write(f"  src->hyp: {metrics['bartscore_src2hyp']:.4f}\n")
-            elif "bartscore" in metric_errors:
-                f.write(f"BARTScore: unavailable ({metric_errors['bartscore']})\n")
-        elif metric_name == "moverscore":
-            if "moverscore" in metrics:
-                f.write("MoverScore:\n")
-                f.write(f"  MoverScore: {metrics['moverscore']:.2f}%\n")
-            elif "moverscore" in metric_errors:
-                f.write(f"MoverScore: unavailable ({metric_errors['moverscore']})\n")
-        elif metric_name == "faithfulness":
-            if "faithfulness" in metrics:
-                f.write("Faithfulness (NLI, bart-large-mnli):\n")
-                f.write(f"  Entailment: {metrics['faithfulness']:.2f}%\n")
         elif metric_name == "factcc":
             if "factcc" in metrics:
                 f.write("FactCC (manueldeprada/FactCC):\n")
                 f.write(f"  SentenceAvgCorrect: {metrics['factcc']:.2f}%\n")
             elif "factcc" in metric_errors:
                 f.write(f"FactCC: unavailable ({metric_errors['factcc']})\n")
-        elif metric_name == "ent_dae":
-            if "ent_dae" in metrics:
-                f.write("Ent-DAE:\n")
-                f.write(f"  Score={metrics['ent_dae']:.2f}%\n")
-            elif "ent_dae" in metric_errors:
-                f.write(f"Ent-DAE: unavailable ({metric_errors['ent_dae']})\n")
         elif metric_name == "minicheck":
             if "minicheck" in metrics:
                 f.write("MiniCheck (EMNLP 2024, MiniCheck-RoBERTa-Large):\n")
@@ -160,7 +136,7 @@ def _write_runtime_block(f, metrics):
         )
 
     if metric_seconds:
-        ordered = ["rouge", "bertscore", "factcc", "minicheck", "alignscore", "factkb", "moverscore"]
+        ordered = ["rouge", "bertscore", "factcc", "minicheck", "alignscore", "factkb"]
         seen = set()
         formatted = []
         for name in ordered:

@@ -17,12 +17,12 @@ Required:
 Options:
   --dataset DATASET          cnn_dailymail or multi_news
   --split SPLIT              train, validation, or test (default: test)
-  --num-samples N            0 means full split (default: 2 for smoke)
+  --num-samples N            0 means full selected split (default: 0)
   --sample-mode MODE         shuffle or head (default: shuffle)
   --sample-seed SEED         default: 42
   --beam-size N              default: method-specific value
   --budget-sentences N       supported for PRIMERA and instruction-tuned runners
-  --output-tag TAG           default: smoke_TIMESTAMP
+  --output-tag TAG           default: run_TIMESTAMP
   --compute-dtype DTYPE      auto, fp32, fp16, or bf16
 
 Environment:
@@ -34,7 +34,7 @@ MODEL=""
 METHOD=""
 DATASET=""
 SPLIT="test"
-NUM_SAMPLES="2"
+NUM_SAMPLES="0"
 SAMPLE_MODE="shuffle"
 SAMPLE_SEED="42"
 BEAM_SIZE=""
@@ -126,7 +126,7 @@ else
 fi
 
 if [ -z "$OUTPUT_TAG" ]; then
-  OUTPUT_TAG="smoke_$(date +%Y%m%d_%H%M%S)"
+  OUTPUT_TAG="run_$(date +%Y%m%d_%H%M%S)"
 fi
 
 OUTPUT_DIR="$ROOT/results/runs/$DATASET/$MODEL/$METHOD/$OUTPUT_TAG"

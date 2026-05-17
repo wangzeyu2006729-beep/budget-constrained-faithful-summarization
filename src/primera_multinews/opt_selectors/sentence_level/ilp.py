@@ -4,7 +4,7 @@ ILP（整数线性规划）句子选择器。
 把"从候选池中选 k 句组成最优摘要"建模为 0-1 整数规划问题。
 
 两条路径:
-  - legacy / minicheck_* 变体: 硬约束 ILP
+  - default / minicheck_* 变体: 硬约束 ILP
       max Σ u_i x_i
       s.t. Σ x_i == budget
            x_i + x_j <= 1  当 R[i][j] > threshold

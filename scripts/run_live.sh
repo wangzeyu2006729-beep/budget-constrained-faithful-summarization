@@ -10,8 +10,8 @@ Usage:
   scripts/run_live.sh [--name RUN_NAME] [--log-dir DIR] -- command [args...]
 
 Examples:
-  scripts/run_live.sh --name mmr_redundancy -- \
-    bash scripts/run_tri_metric_mmr_redundancy_10pt.sh
+  scripts/run_live.sh --name full_bart_cnn_baseline -- \
+    bash scripts/run_experiment.sh --model bart --method baseline --dataset cnn_dailymail
 
 Behavior:
   - Runs in the foreground.
@@ -58,7 +58,7 @@ fi
 mkdir -p "$LOG_DIR"
 TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
 LOG_FILE="$LOG_DIR/${NAME}_${TIMESTAMP}.log"
-HOLD_FILE="${QWEN_FULL_AFTER_BASELINE_HOLD_FILE:-/home/zeyu/projects/parallel_zeyu/state/hold_qwen_full_after_baseline_for_flux.lock}"
+HOLD_FILE="${QWEN_FULL_AFTER_BASELINE_HOLD_FILE:-}"
 
 export PYTHONUNBUFFERED=1
 
@@ -69,10 +69,12 @@ printf '\n' | tee -a "$LOG_FILE"
 
 case "$NAME" in
   qwen_full_ilp|qwen_full_dpp|qwen_full_mmr)
-    while [ -e "$HOLD_FILE" ]; do
-      echo "[hold] $(date -Is) waiting for FLUX queue to release: $HOLD_FILE" | tee -a "$LOG_FILE"
-      sleep 60
-    done
+    if [ -n "$HOLD_FILE" ]; then
+      while [ -e "$HOLD_FILE" ]; do
+        echo "[hold] $(date -Is) waiting for queue release: $HOLD_FILE" | tee -a "$LOG_FILE"
+        sleep 60
+      done
+    fi
     ;;
 esac
 

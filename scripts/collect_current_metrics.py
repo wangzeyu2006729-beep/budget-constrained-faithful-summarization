@@ -140,10 +140,22 @@ def normalize_method(method: str) -> str:
     return method
 
 
+def normalize_stage1_source(path: str) -> str:
+    path = (path or "").strip()
+    if path in {"", "None", "none", "null"}:
+        return ""
+
+    outputs_marker = "outputs/"
+    if outputs_marker in path:
+        return path[path.index(outputs_marker):]
+    return path
+
+
 def normalize_row(row: dict[str, str]) -> None:
     row["dataset"] = row.get("dataset", "").split(" ", 1)[0].strip()
     row["generator"] = infer_generator(row)
     row["method"] = normalize_method(row.get("method", ""))
+    row["stage1_reuse_source"] = normalize_stage1_source(row.get("stage1_reuse_source", ""))
     if not row.get("candidate_count") and row.get("beam_size"):
         row["candidate_count"] = row["beam_size"]
 

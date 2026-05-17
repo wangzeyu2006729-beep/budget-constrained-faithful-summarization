@@ -9,7 +9,7 @@ PYTHON=python3 \
     --model bart \
     --method baseline \
     --dataset cnn_dailymail \
-    --num-samples 2
+    --num-samples 0
 ```
 
 Supported models:
@@ -31,6 +31,7 @@ Supported methods:
 
 ```bash
 PYTHON=python3 \
+  scripts/run_live.sh --name current_selected_runs -- \
   bash scripts/current_runs/run_current_results.sh
 ```
 
@@ -41,7 +42,9 @@ are added.
 ## Metrics Table
 
 ```bash
-python3 scripts/collect_current_metrics.py
+PYTHON=python3 \
+  scripts/run_live.sh --name collect_current_metrics -- \
+  python3 scripts/collect_current_metrics.py
 ```
 
 The collector reads `results/tables/selected_rows.csv`, parses compact result
