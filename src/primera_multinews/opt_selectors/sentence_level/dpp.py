@@ -1,18 +1,14 @@
 """
-DPP（Determinantal Point Process）句子选择器。
+DPP-inspired greedy sentence selector.
 
-核矩阵 L[i,j] = quality[i] × similarity[i,j] × quality[j]
-DPP 倾向于选出内容不重复的高质量子集。
+Kernel L[i,j] = quality[i] * similarity[i,j] * quality[j]. The current
+release uses a determinant-based greedy MAP-style objective, not exact DPP
+sampling.
 """
 
 import numpy as np
 
-from assets.loader import ensure_asset_repo_on_sys_path
 from opt_selectors.tri_metric import scale_pairwise_matrix
-
-ensure_asset_repo_on_sys_path("DPPy-master")
-
-from dppy.finite_dpps import FiniteDPP
 
 
 def dpp_select(
@@ -24,7 +20,7 @@ def dpp_select(
     utility_mode="legacy",
     tri_metric_weights=None,
 ):
-    """用 DPP 采样同时考虑句子质量和多样性的子集。"""
+    """Use a greedy DPP-inspired determinant objective for quality-diversity selection."""
     M = len(unique_sentences)
     if M <= budget:
         return list(range(M))

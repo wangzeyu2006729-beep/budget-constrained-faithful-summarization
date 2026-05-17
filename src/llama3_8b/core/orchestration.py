@@ -31,7 +31,6 @@ from core.config import (
     TRI_METRIC_WEIGHTS_BY_METHOD,
 )
 from core.features import (
-    build_sentence_pool,
     compute_redundancy_matrix,
     compute_tri_metric_utility_scores,
     compute_utility_scores,

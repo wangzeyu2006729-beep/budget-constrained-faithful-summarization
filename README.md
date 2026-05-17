@@ -83,9 +83,9 @@ The `src/` tree has one runner directory per generator. The directory layouts ar
 | Experiment entrypoint | `scripts/run_experiment.sh` | Maps `--model` and `--method` to the concrete `src/<model>/run.py` command. |
 | Runner arguments | `src/<model>/run.py`, `src/<model>/cli/args.py` | Defines the CLI options, generator name, dataset choice, beam size, budget, and tri-metric flags. |
 | Main pipeline | `src/<model>/core/orchestration.py` | Coordinates candidate generation, sentence-pool construction, utility and redundancy scoring, selector calls, ordering, checkpoints, evaluation, and result writing. |
-| Encoder-decoder beam search | `src/bart/core/beam_search.py`, `src/primera_multinews/core/beam_search.py` | Uses Hugging Face `generate()` with `num_beams` and `num_return_sequences` to return beam candidates and their sequence scores. |
+| Encoder-decoder beam search | `src/bart/core/beam_search.py`, `src/primera_multinews/core/beam_search.py` | Current table runs call `batch_beam_search_decode()`, which uses Hugging Face `generate()` with `num_beams` and `num_return_sequences` to return beam candidates and their sequence scores. |
 | LLM generation | `src/{llama3_8b,qwen3_5_9b,gemma4_e4b}/core/model_generation.py` | Defines prompts, truncation, sampling or beam-style candidate generation, stopping criteria, and output cleanup. |
-| Sentence features | `src/<model>/core/features.py` | Builds coverage utility, MiniCheck factuality utility, ROUGE-L redundancy matrices, and tri-metric utility scores. |
+| Sentence features | `src/<model>/core/features.py` | Computes coverage utility, MiniCheck factuality utility, ROUGE-L redundancy matrices, and tri-metric utility scores. Current sentence-pool tracing is in `core/orchestration.py`. |
 | Selector registry | `src/<model>/opt_selectors/__init__.py` | Exposes the implemented sentence-level methods: `ilp`, `mmr`, and `dpp`. |
 | ILP selection | `src/<model>/opt_selectors/sentence_level/ilp.py` | Implements the hard ILP and tri-metric soft ILP sentence-selection objectives. |
 | MMR selection | `src/<model>/opt_selectors/sentence_level/mmr.py` | Implements greedy relevance-diversity selection. |
@@ -258,8 +258,8 @@ The static validator checks shell syntax, Python syntax, and runner `--help` ent
 
 | Paper component | Implementation location |
 | --- | --- |
-| Candidate generation | `src/*/core/beam_search.py`, `src/*/core/model_generation.py` |
-| Sentence pool construction | `src/*/core/features.py`, `src/*/core/orchestration.py` |
+| Candidate generation | `src/{bart,primera_multinews}/core/beam_search.py::batch_beam_search_decode`, `src/{llama3_8b,qwen3_5_9b,gemma4_e4b}/core/model_generation.py::SummaryGenerator.generate_batch` |
+| Sentence pool construction | `src/*/core/orchestration.py::build_candidate_pool_trace` |
 | Sentence deduplication | `src/*/core/orchestration.py` |
 | Coverage utility | `src/*/core/features.py` |
 | MiniCheck factuality utility | `src/*/core/features.py`, `src/*/metrics/minicheck_eval_utils.py` |
